@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>블로그 - 최이</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2c3e50;
+            --accent: #3498db;
+            --accent-light: #5dade2;
+            --secondary: #7f8c8d;
+            --bg: #ffffff;
+            --bg-light: #f8f9fa;
+            --border: #e0e0e0;
+            --shadow: rgba(0,0,0,0.08);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+            line-height: 1.7;
+            color: var(--primary);
+            background: var(--bg-light);
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+            color: white;
+            padding: 40px 0 30px;
+            margin-bottom: 60px;
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-decoration: none;
+            color: white;
+        }
+
+        nav {
+            display: flex;
+            gap: 24px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 0.95rem;
+            padding: 8px 16px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.15);
+            transition: all 0.3s;
+        }
+
+        nav a:hover, nav a.active {
+            background: rgba(255,255,255,0.25);
+            transform: translateY(-2px);
+        }
+
+        .blog-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .blog-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+            color: var(--primary);
+        }
+
+        .blog-header p {
+            font-size: 1.1rem;
+            color: var(--secondary);
+        }
+
+        /* Filter */
+        .filter-container {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 48px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 10px 24px;
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: 25px;
+            color: var(--secondary);
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            color: white;
+            border-color: transparent;
+        }
+
+        /* Blog Grid */
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 32px;
+            margin-bottom: 80px;
+        }
+
+        .blog-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px var(--shadow);
+            transition: all 0.3s;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+        }
+
+        .blog-thumbnail {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .blog-thumbnail::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="15" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="70" r="20" fill="rgba(255,255,255,0.08)"/></svg>');
+        }
+
+        .blog-thumbnail.research {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .blog-thumbnail.life {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .blog-thumbnail.thoughts {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .blog-thumbnail.tutorial {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        .blog-content {
+            padding: 24px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .blog-meta {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+            align-items: center;
+        }
+
+        .blog-category {
+            padding: 4px 12px;
+            background: var(--bg-light);
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--accent);
+            text-transform: uppercase;
+        }
+
+        .blog-date {
+            font-size: 0.85rem;
+            color: var(--secondary);
+        }
+
+        .blog-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+            color: var(--primary);
+            line-height: 1.4;
+        }
+
+        .blog-excerpt {
+            color: var(--secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 16px;
+            flex: 1;
+        }
+
+        .blog-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: auto;
+        }
+
+        .blog-tag {
+            padding: 4px 10px;
+            background: var(--bg-light);
+            border-radius: 12px;
+            font-size: 0.8rem;
+            color: var(--secondary);
+        }
+
+        .read-more {
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-top: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: var(--secondary);
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+            color: var(--primary);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            color: var(--secondary);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border);
+            background: white;
+            margin-top: 60px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            nav {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .blog-header h1 {
+                font-size: 2rem;
+            }
+
+            .filter-container {
+                gap: 8px;
+            }
+
+            .filter-btn {
+                padding: 8px 16px;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="index_design2_fun.html" class="logo">최이</a>
+                <nav>
+                    <a href="index_design2_fun.html">홈</a>
+                    <a href="blog.html" class="active">블로그</a>
+                    <a href="index_design2_fun.html#contact">연락</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="blog-header">
+            <h1>연구 노트 & 일상</h1>
+            <p>연구 과정, 생각의 조각들, 그리고 일상의 이야기</p>
+        </div>
+
+        <div class="filter-container">
+            <button class="filter-btn active" data-category="all">전체</button>
+            <button class="filter-btn" data-category="research">연구</button>
+            <button class="filter-btn" data-category="life">일상</button>
+            <button class="filter-btn" data-category="thoughts">단상</button>
+            <button class="filter-btn" data-category="tutorial">튜토리얼</button>
+        </div>
+
+        <div class="blog-grid" id="blogGrid">
+            <!-- 연구 포스트 예시 -->
+            <div class="blog-card" data-category="research">
+                <div class="blog-thumbnail research">🧠</div>
+                <div class="blog-content">
+                    <div class="blog-meta">
+                        <span class="blog-category">연구</span>
+                        <span class="blog-date">2024.11.15</span>
+                    </div>
+                    <h3>한방 코퍼스에서 발견한 '양방기전형' 설명 패턴</h3>
+                    <p class="blog-excerpt">
+                        한방 Q&A 데이터를 분석하다가 흥미로운 설명 전략을 발견했습니다. 전문가들이 한방 개념을 설명할 때 양방(서양의학)의 기전을 활용하는 패턴인데, 이것이 일반인과의 어휘 비대칭을 해소하는 주요 전략으로 작용하고 있었어요...
+                    </p>
+                    <div class="blog-tags">
+                        <span class="blog-tag">코퍼스언어학</span>
+                        <span class="blog-tag">담화분석</span>
+                        <span class="blog-tag">설명전략</span>
+                    </div>
+                    <span class="read-more">더 읽기 →</span>
+                </div>
+            </div>
+
+            <!-- 튜토리얼 포스트 예시 -->
+            <div class="blog-card" data-category="tutorial">
+                <div class="blog-thumbnail tutorial">💻</div>
+                <div class="blog-content">
+                    <div class="blog-meta">
+                        <span class="blog-category">튜토리얼</span>
+                        <span class="blog-date">2024.10.28</span>
+                    </div>
+                    <h3>Google Colab에서 faster-whisper로 한국어 음성 전사하기</h3>
+                    <p class="blog-excerpt">
+                        WhisperX와 NeMo가 Python 3.12에서 의존성 문제로 실패한 후, faster-whisper + torchaudio로 성공한 경험을 공유합니다. 화자 분리(diarization)까지 포함한 완전한 워크플로우를 단계별로 설명해요...
+                    </p>
+                    <div class="blog-tags">
+                        <span class="blog-tag">음성인식</span>
+                        <span class="blog-tag">Whisper</span>
+                        <span class="blog-tag">Python</span>
+                    </div>
+                    <span class="read-more">더 읽기 →</span>
+                </div>
+            </div>
+
+            <!-- 일상 포스트 예시 -->
+            <div class="blog-card" data-category="life">
+                <div class="blog-thumbnail life">☕</div>
+                <div class="blog-content">
+                    <div class="blog-meta">
+                        <span class="blog-category">일상</span>
+                        <span class="blog-date">2024.10.15</span>
+                    </div>
+                    <h3>연구실 생활: 조교와 프로젝트 리드 사이에서</h3>
+                    <p class="blog-excerpt">
+                        신경언어학 강의 조교를 하면서 학생들에게 실험 모집 PPT를 만들고, 동시에 한방 코퍼스 프로젝트를 이끌며 연구보조원들과 협업하는 일상. 가끔은 벅차지만, 이 모든 경험이 박사과정을 준비하는 저에게는 소중한 자산이 되고 있어요...
+                    </p>
+                    <div class="blog-tags">
+                        <span class="blog-tag">대학원생활</span>
+                        <span class="blog-tag">LBCLAB</span>
+                    </div>
+                    <span class="read-more">더 읽기 →</span>
+                </div>
+            </div>
+
+            <!-- 단상 포스트 예시 -->
+            <div class="blog-card" data-category="thoughts">
+                <div class="blog-thumbnail thoughts">💭</div>
+                <div class="blog-content">
+                    <div class="blog-meta">
+                        <span class="blog-category">단상</span>
+                        <span class="blog-date">2024.09.20</span>
+                    </div>
+                    <h3>언어공학에서 신경언어학으로: 전환의 의미</h3>
+                    <p class="blog-excerpt">
+                        학부에서 언어의 계산적 측면을 공부했던 저는, 이제 뇌가 언어를 처리하는 방식에 더 관심을 갖게 되었습니다. 이 전환이 제게 의미하는 것은 무엇일까요? 코드에서 뇌파로, 알고리즘에서 인지 메커니즘으로...
+                    </p>
+                    <div class="blog-tags">
+                        <span class="blog-tag">진로</span>
+                        <span class="blog-tag">성찰</span>
+                    </div>
+                    <span class="read-more">더 읽기 →</span>
+                </div>
+            </div>
+
+            <!-- 연구 포스트 예시 2 -->
+            <div class="blog-card" data-category="research">
+                <div class="blog-thumbnail research">📊</div>
+                <div class="blog-content">
+                    <div class="blog-meta">
+                        <span class="blog-category">연구</span>
+                        <span class="blog-date">2024.08.30</span>
+                    </div>
+                    <h3>NPQ 화용론적 분석: 부정극어와 맥락의 상호작용</h3>
+                    <p class="blog-excerpt">
+                        한방 Q&A에서 'NPQ(Negative Polarity Question)'의 화용적 기능을 분석했습니다. 부정극어가 포함된 질문이 어떻게 전문가의 답변 전략에 영향을 미치는지, 그리고 이것이 전문-비전문 담화의 특징을 어떻게 드러내는지...
+                    </p>
+                    <div class="blog-tags">
+                        <span class="blog-tag">화용론</span>
+                        <span class="blog-tag">담화분석</span>
+                        <span class="blog-tag">NPQ</span>
+                    </div>
+                    <span class="read-more">더 읽기 →</span>
+                </div>
+            </div>
+
+            <!-- 일상 포스트 예시 2 -->
+            <div class="blog-card" data-category="life">
+                <div class="blog-thumbnail life">📚</div>
+                <div class="blog-content">
+                    <div class="blog-meta">
+                        <span class="blog-category">일상</span>
+                        <span class="blog-date">2024.07.12</span>
+                    </div>
+                    <h3>Pittner 독일언어학 번역 작업 회고</h3>
+                    <p class="blog-excerpt">
+                        독일어로 쓰인 언어학 교재를 한국어로 옮기는 작업은 생각보다 어려웠습니다. 단순한 번역을 넘어 개념의 정확한 전달, 예시의 현지화까지... 이 과정에서 언어학 개념에 대한 이해가 한층 깊어졌어요.
+                    </p>
+                    <div class="blog-tags">
+                        <span class="blog-tag">번역</span>
+                        <span class="blog-tag">독일언어학</span>
+                    </div>
+                    <span class="read-more">더 읽기 →</span>
+                </div>
+            </div>
+
+            <!-- 튜토리얼 포스트 예시 2 -->
+            <div class="blog-card" data-category="tutorial">
+                <div class="blog-thumbnail tutorial">🔧</div>
+                <div class="blog-content">
+                    <div class="blog-meta">
+                        <span class="blog-category">튜토리얼</span>
+                        <span class="blog-date">2024.06.25</span>
+                    </div>
+                    <h3>한국어 규칙 기반 파서 디버깅 완전 정복</h3>
+                    <p class="blog-excerpt">
+                        동사 결합 규칙(Rule 21/29), AdnP+N' 순서 처리, 소유 수식어 실패 케이스까지... 한국어 파서를 만들며 마주한 온갖 언어학적 챌린지와 그 해결 과정을 정리했습니다. 영논항 처리도 포함!
+                    </p>
+                    <div class="blog-tags">
+                        <span class="blog-tag">NLP</span>
+                        <span class="blog-tag">파싱</span>
+                        <span class="blog-tag">한국어</span>
+                    </div>
+                    <span class="read-more">더 읽기 →</span>
+                </div>
+            </div>
+
+            <!-- 연구 포스트 예시 3 -->
+            <div class="blog-card" data-category="research">
+                <div class="blog-thumbnail research">🎯</div>
+                <div class="blog-content">
+                    <div class="blog-meta">
+                        <span class="blog-category">연구</span>
+                        <span class="blog-date">2024.05.18</span>
+                    </div>
+                    <h3>G*Power로 실험 설계하기: f²와 f의 차이</h3>
+                    <p class="blog-excerpt">
+                        K-EMOTION IRB 제안서를 준비하면서 G*Power 표본 크기 계산에서 많이 헷갈렸던 부분을 정리했습니다. 회귀분석의 f²와 ANOVA의 f는 엄연히 다른 지표예요. HEXACO 친화성 변수 통합 과정도 함께...
+                    </p>
+                    <div class="blog-tags">
+                        <span class="blog-tag">실험설계</span>
+                        <span class="blog-tag">통계</span>
+                        <span class="blog-tag">G*Power</span>
+                    </div>
+                    <span class="read-more">더 읽기 →</span>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="empty-state" id="emptyState" style="display: none;">
+            <div class="empty-state-icon">📝</div>
+            <h3>아직 이 카테고리의 글이 없습니다</h3>
+            <p>곧 새로운 글을 올릴 예정이에요!</p>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2024 최이. 연구와 일상의 기록.</p>
+    </footer>
+
+    <script>
+        // 필터링 기능
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const blogCards = document.querySelectorAll('.blog-card');
+        const emptyState = document.getElementById('emptyState');
+        const blogGrid = document.getElementById('blogGrid');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // 활성 버튼 변경
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const category = btn.dataset.category;
+                let visibleCount = 0;
+
+                blogCards.forEach(card => {
+                    if (category === 'all' || card.dataset.category === category) {
+                        card.style.display = 'flex';
+                        visibleCount++;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+
+                // Empty state 표시
+                if (visibleCount === 0) {
+                    blogGrid.style.display = 'none';
+                    emptyState.style.display = 'block';
+                } else {
+                    blogGrid.style.display = 'grid';
+                    emptyState.style.display = 'none';
+                }
+            });
+        });
+
+        // 카드 클릭 이벤트 (실제로는 개별 포스트 페이지로 이동)
+        blogCards.forEach(card => {
+            card.addEventListener('click', () => {
+                alert('실제 운영 시에는 개별 포스트 페이지로 이동합니다!\n\nMarkdown 파일로 각 포스트를 작성하고,\nJekyll이나 Hugo 같은 정적 사이트 생성기를 사용하면\n쉽게 블로그를 운영할 수 있어요.');
+            });
+        });
+    </script>
+</body>
+</html>
