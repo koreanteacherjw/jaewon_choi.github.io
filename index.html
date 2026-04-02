@@ -47,6 +47,158 @@
             overflow: hidden;
         }
 
+        /* Sticky Navigation Bar */
+        .sticky-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px var(--shadow);
+            z-index: 1000;
+            transform: translateY(-100%);
+            transition: transform 0.3s ease;
+            padding: 12px 0;
+        }
+
+        .sticky-nav.visible {
+            transform: translateY(0);
+        }
+
+        .sticky-nav-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .sticky-nav-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .sticky-nav nav {
+            display: flex;
+            gap: 20px;
+        }
+
+        .sticky-nav nav a {
+            color: var(--secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            padding: 6px 14px;
+            border-radius: 16px;
+            transition: all 0.3s;
+        }
+
+        .sticky-nav nav a:hover {
+            background: var(--bg-light);
+            color: var(--accent);
+        }
+
+        /* Floating Quick Menu */
+        .floating-menu {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 999;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+
+        .floating-menu.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .floating-toggle {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            color: white;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: all 0.3s;
+            margin-left: auto;
+        }
+
+        .floating-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.5);
+        }
+
+        .floating-menu-list {
+            position: absolute;
+            bottom: 70px;
+            right: 0;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px var(--shadow);
+            padding: 12px;
+            min-width: 180px;
+            opacity: 0;
+            transform: translateY(10px);
+            pointer-events: none;
+            transition: all 0.3s;
+        }
+
+        .floating-menu.open .floating-menu-list {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: all;
+        }
+
+        .floating-menu-list a {
+            display: block;
+            padding: 10px 16px;
+            color: var(--secondary);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .floating-menu-list a:hover {
+            background: var(--bg-light);
+            color: var(--accent);
+            transform: translateX(-4px);
+        }
+
+        .scroll-to-top {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid var(--border);
+            color: var(--secondary);
+            cursor: pointer;
+            box-shadow: 0 2px 8px var(--shadow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            transition: all 0.3s;
+            margin-top: 8px;
+            margin-left: auto;
+        }
+
+        .scroll-to-top:hover {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
         header::before {
             content: '';
             position: absolute;
@@ -676,10 +828,76 @@
             .contact-grid {
                 grid-template-columns: 1fr;
             }
+
+            /* Mobile sticky nav */
+            .sticky-nav-content {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .sticky-nav nav {
+                gap: 8px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .sticky-nav nav a {
+                font-size: 0.85rem;
+                padding: 5px 10px;
+            }
+
+            /* Mobile floating menu */
+            .floating-menu {
+                bottom: 20px;
+                right: 20px;
+            }
+
+            .floating-toggle {
+                width: 50px;
+                height: 50px;
+                font-size: 1.3rem;
+            }
+
+            .scroll-to-top {
+                width: 42px;
+                height: 42px;
+                font-size: 1.1rem;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Sticky Navigation Bar -->
+    <div class="sticky-nav" id="stickyNav">
+        <div class="sticky-nav-content">
+            <div class="sticky-nav-name">최재원</div>
+            <nav>
+                <a href="#about">소개</a>
+                <a href="#journey">연혁</a>
+                <a href="#research">연구</a>
+                <a href="#publications">논문</a>
+                <a href="#projects">프로젝트</a>
+                <a href="blog.html">블로그</a>
+                <a href="#contact">연락</a>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Floating Quick Menu -->
+    <div class="floating-menu" id="floatingMenu">
+        <div class="floating-menu-list">
+            <a href="#about">📖 소개</a>
+            <a href="#journey">📅 연혁</a>
+            <a href="#research">🔬 연구</a>
+            <a href="#publications">📄 논문</a>
+            <a href="#projects">💼 프로젝트</a>
+            <a href="blog.html">✍️ 블로그</a>
+            <a href="#contact">📧 연락</a>
+        </div>
+        <button class="floating-toggle" id="floatingToggle">☰</button>
+        <button class="scroll-to-top" id="scrollToTop">↑</button>
+    </div>
+
     <header>
         <div class="container">
             <div class="header-content">
@@ -1080,5 +1298,66 @@
             <p>© 2026 최재원.</p>
         </footer>
     </div>
+
+    <script>
+        // Sticky Navigation
+        const stickyNav = document.getElementById('stickyNav');
+        const floatingMenu = document.getElementById('floatingMenu');
+        const floatingToggle = document.getElementById('floatingToggle');
+        const scrollToTop = document.getElementById('scrollToTop');
+        
+        let lastScroll = 0;
+
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            
+            // Show sticky nav after scrolling down 300px
+            if (currentScroll > 300) {
+                stickyNav.classList.add('visible');
+                floatingMenu.classList.add('visible');
+            } else {
+                stickyNav.classList.remove('visible');
+                floatingMenu.classList.remove('visible');
+            }
+            
+            lastScroll = currentScroll;
+        });
+
+        // Floating menu toggle
+        floatingToggle.addEventListener('click', () => {
+            floatingMenu.classList.toggle('open');
+            floatingToggle.textContent = floatingMenu.classList.contains('open') ? '✕' : '☰';
+        });
+
+        // Scroll to top
+        scrollToTop.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Close floating menu when clicking a link
+        document.querySelectorAll('.floating-menu-list a').forEach(link => {
+            link.addEventListener('click', () => {
+                floatingMenu.classList.remove('open');
+                floatingToggle.textContent = '☰';
+            });
+        });
+
+        // Smooth scroll for all anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 </html>
