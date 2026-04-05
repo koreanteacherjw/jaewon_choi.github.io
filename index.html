@@ -387,6 +387,57 @@
             transform: translateX(-50%);
         }
 
+        /* Timeline start marker */
+        .timeline-line::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 16px;
+            height: 16px;
+            background: var(--accent);
+            border: 4px solid white;
+            border-radius: 50%;
+            box-shadow: 0 0 0 2px var(--accent);
+            z-index: 3;
+        }
+
+        /* Timeline end marker */
+        .timeline-line::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 20px;
+            background: white;
+            border: 4px solid var(--accent);
+            border-radius: 50%;
+            box-shadow: 0 0 0 2px var(--accent);
+            z-index: 3;
+        }
+
+        /* Scroll Progress Indicator */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(14, 74, 132, 0.1);
+            z-index: 9999;
+        }
+
+        .scroll-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+            width: 0%;
+            transition: width 0.1s ease;
+            box-shadow: 0 0 10px rgba(14, 74, 132, 0.5);
+        }
+
         .timeline-item {
             display: grid;
             grid-template-columns: 1fr 80px 1fr;
@@ -851,6 +902,12 @@
                 left: 30px;
             }
 
+            /* Adjust timeline markers for mobile */
+            .timeline-line::before,
+            .timeline-line::after {
+                left: 50%;
+            }
+
             .timeline-item:nth-child(even) .timeline-content:first-child,
             .timeline-item:nth-child(even) .timeline-content:last-child {
                 order: initial;
@@ -918,6 +975,11 @@
     </style>
 </head>
 <body>
+    <!-- Scroll Progress Indicator -->
+    <div class="scroll-progress">
+        <div class="scroll-progress-bar" id="scrollProgressBar"></div>
+    </div>
+
     <!-- Sticky Navigation Bar -->
     <div class="sticky-nav" id="stickyNav">
         <div class="sticky-nav-content">
@@ -1684,11 +1746,17 @@
         const floatingMenu = document.getElementById('floatingMenu');
         const floatingToggle = document.getElementById('floatingToggle');
         const scrollToTop = document.getElementById('scrollToTop');
+        const scrollProgressBar = document.getElementById('scrollProgressBar');
         
         let lastScroll = 0;
 
         window.addEventListener('scroll', () => {
             const currentScroll = window.pageYOffset;
+            
+            // Update scroll progress bar
+            const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (currentScroll / windowHeight) * 100;
+            scrollProgressBar.style.width = scrolled + '%';
             
             // Show sticky nav after scrolling down 300px
             if (currentScroll > 300) {
