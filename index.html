@@ -39,12 +39,20 @@
             line-height: 1.7;
             color: var(--primary);
             background: var(--bg);
+            overflow-x: hidden;
+        }
+
+        /* Ensure minimum spacing from edges for all content */
+        section, h1, h2, h3, p, div {
+            min-width: 0;
         }
 
         .container {
             max-width: 1000px;
             margin: 0 auto;
-            padding: 0 24px;
+            padding: 0 40px;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         /* Header */
@@ -79,7 +87,7 @@
         .sticky-nav-content {
             max-width: 1000px;
             margin: 0 auto;
-            padding: 0 24px;
+            padding: 0 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -268,16 +276,27 @@
 
         /* Sections */
         section {
-            margin-bottom: 100px;
+            margin-bottom: 120px;
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+        }
+
+        section:not(:first-child) {
+            margin-top: 40px;
         }
 
         h2 {
             font-size: 2rem;
             font-weight: 700;
             margin-bottom: 40px;
+            margin-top: 0;
             color: var(--primary);
             position: relative;
             padding-bottom: 16px;
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
 
         h2::after {
@@ -876,6 +895,10 @@
 
         /* Responsive */
         @media (max-width: 768px) {
+            .container {
+                padding: 0 32px;
+            }
+
             header {
                 padding: 60px 0 40px;
             }
@@ -939,6 +962,7 @@
             .sticky-nav-content {
                 flex-direction: column;
                 gap: 12px;
+                padding: 0 32px;
             }
 
             .sticky-nav nav {
@@ -1096,31 +1120,6 @@
             <h3 class="timeline-section-title">🔄 현재 참여 중</h3>
             <div class="timeline-container">
                 <div class="timeline-line"></div>
-
-                <div class="timeline-item ongoing">
-                    <div class="timeline-content">
-                        <div class="timeline-year">2026 - 현재</div>
-                    </div>
-                    <div class="timeline-marker">
-                        <div class="timeline-dot">📊</div>
-                    </div>
-                    <div class="timeline-content">
-                        <div class="timeline-card">
-                            <span class="ongoing-badge">진행 중</span>
-                            <div class="timeline-title">한방 언어 코퍼스 구축</div>
-                            <div class="timeline-desc">
-                                한방 관련 데이터 구축<br>
-                                영상 및 텍스트 데이터 취합 및 전처리 총괄 담당<br>
-                                크롤링 및 전처리, 분석 수행
-                            </div>
-                            <div class="timeline-tags">
-                                <span class="timeline-tag">#데이터베이스</span>
-                                <span class="timeline-tag">#전처리</span>
-                                <span class="timeline-tag">#코퍼스</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 
                 <div class="timeline-item ongoing">
                     <div class="timeline-content">
@@ -1143,6 +1142,31 @@
                                 <span class="timeline-tag">#Eye-tracking</span>
                                 <span class="timeline-tag">#EEG</span>
                                 <span class="timeline-tag">#데이터베이스</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item ongoing">
+                    <div class="timeline-content">
+                        <div class="timeline-year">2026 - 현재</div>
+                    </div>
+                    <div class="timeline-marker">
+                        <div class="timeline-dot">📊</div>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="timeline-card">
+                            <span class="ongoing-badge">진행 중</span>
+                            <div class="timeline-title">한방 언어 코퍼스 구축</div>
+                            <div class="timeline-desc">
+                                한방 관련 데이터 구축<br>
+                                영상 및 텍스트 데이터 취합 및 전처리 총괄 담당<br>
+                                크롤링 및 전처리, 분석 수행
+                            </div>
+                            <div class="timeline-tags">
+                                <span class="timeline-tag">#데이터베이스</span>
+                                <span class="timeline-tag">#전처리</span>
+                                <span class="timeline-tag">#코퍼스</span>
                             </div>
                         </div>
                     </div>
@@ -1434,7 +1458,7 @@
                         <h3>한방 언어 코퍼스 구축</h3>
                         <div class="project-role">
                             데이터 총괄 · 2025–현재<br>
-                            한양대학교, 경희대학교
+                            한양대학교
                         </div>
                     </div>
                     <div class="project-desc">
