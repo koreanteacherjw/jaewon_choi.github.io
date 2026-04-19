@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>블로그 - 최이</title>
+    <title>블로그 - 최재원</title>
     <style>
         * {
             margin: 0;
@@ -346,6 +346,28 @@
         </div>
 
         <div class="blog-grid" id="blogGrid">
+            <!-- 🆕 독일어 학습 앱 카드 추가 -->
+            <div class="blog-card" data-category="tutorial" data-link="german-study.html">
+                <div class="blog-thumbnail tutorial">🇩🇪</div>
+                <div class="blog-content">
+                    <div class="blog-meta">
+                        <span class="blog-category">튜토리얼</span>
+                        <span class="blog-date">2025.04.19</span>
+                    </div>
+                    <h3>기초독문법 중간고사 준비</h3>
+                    <p class="blog-excerpt">
+                        538개 어휘와 87개 동사 활용을 인터랙티브하게 학습할 수 있는 웹 기반 학습 도구. 한→독 번역, 독→한 번역, 관사 맞추기, 복수형, 동사 변환표, 문법 연습 문제 등 9가지 학습 모드 제공. 틀린 문제 자동 추적 및 복습 기능 포함.
+                    </p>
+                    <div class="blog-tags">
+                        <span class="blog-tag">독일어</span>
+                        <span class="blog-tag">어휘학습</span>
+                        <span class="blog-tag">문법</span>
+                        <span class="blog-tag">인터랙티브</span>
+                    </div>
+                    <span class="read-more">학습 시작하기 →</span>
+                </div>
+            </div>
+
             <!-- 연구 포스트 예시 -->
             <div class="blog-card" data-category="research">
                 <div class="blog-thumbnail research">🧠</div>
@@ -560,10 +582,17 @@
             });
         });
 
-        // 카드 클릭 이벤트 (실제로는 개별 포스트 페이지로 이동)
+        // 카드 클릭 이벤트 - 독일어 학습 앱은 실제 페이지로 이동
         blogCards.forEach(card => {
             card.addEventListener('click', () => {
-                alert('실제 운영 시에는 개별 포스트 페이지로 이동합니다!\n\nMarkdown 파일로 각 포스트를 작성하고,\nJekyll이나 Hugo 같은 정적 사이트 생성기를 사용하면\n쉽게 블로그를 운영할 수 있어요.');
+                const link = card.dataset.link;
+                if (link) {
+                    // 독일어 학습 앱으로 이동
+                    window.location.href = link;
+                } else {
+                    // 기존 블로그 포스트
+                    alert('실제 운영 시에는 개별 포스트 페이지로 이동합니다!\n\nMarkdown 파일로 각 포스트를 작성하고,\nJekyll이나 Hugo 같은 정적 사이트 생성기를 사용하면\n쉽게 블로그를 운영할 수 있어요.');
+                }
             });
         });
     </script>
