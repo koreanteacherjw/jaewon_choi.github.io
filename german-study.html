@@ -1595,10 +1595,40 @@ setTimeout(()=>{idx++;renderVerb();},3000);
 }
 
 function getConj(v){
+// 불규칙 동사 변화 (완전한 형태)
+const irregulars={
+'sein':{ich:'bin',du:'bist',er:'ist',wir:'sind',ihr:'seid',sie:'sind'},
+'haben':{ich:'habe',du:'hast',er:'hat',wir:'haben',ihr:'habt',sie:'haben'},
+'werden':{ich:'werde',du:'wirst',er:'wird',wir:'werden',ihr:'werdet',sie:'werden'},
+'geben':{ich:'gebe',du:'gibst',er:'gibt',wir:'geben',ihr:'gebt',sie:'geben'},
+'nehmen':{ich:'nehme',du:'nimmst',er:'nimmt',wir:'nehmen',ihr:'nehmt',sie:'nehmen'},
+'lesen':{ich:'lese',du:'liest',er:'liest',wir:'lesen',ihr:'lest',sie:'lesen'},
+'sehen':{ich:'sehe',du:'siehst',er:'sieht',wir:'sehen',ihr:'seht',sie:'sehen'},
+'essen':{ich:'esse',du:'isst',er:'isst',wir:'essen',ihr:'esst',sie:'essen'},
+'sprechen':{ich:'spreche',du:'sprichst',er:'spricht',wir:'sprechen',ihr:'sprecht',sie:'sprechen'},
+'helfen':{ich:'helfe',du:'hilfst',er:'hilft',wir:'helfen',ihr:'helft',sie:'helfen'},
+'treffen':{ich:'treffe',du:'triffst',er:'trifft',wir:'treffen',ihr:'trefft',sie:'treffen'},
+'fahren':{ich:'fahre',du:'fährst',er:'fährt',wir:'fahren',ihr:'fahrt',sie:'fahren'},
+'fallen':{ich:'falle',du:'fällst',er:'fällt',wir:'fallen',ihr:'fallt',sie:'fallen'},
+'laufen':{ich:'laufe',du:'läufst',er:'läuft',wir:'laufen',ihr:'lauft',sie:'laufen'},
+'schlafen':{ich:'schlafe',du:'schläfst',er:'schläft',wir:'schlafen',ihr:'schlaft',sie:'schlafen'},
+'halten':{ich:'halte',du:'hältst',er:'hält',wir:'halten',ihr:'haltet',sie:'halten'},
+'waschen':{ich:'wasche',du:'wäschst',er:'wäscht',wir:'waschen',ihr:'wascht',sie:'waschen'},
+'tragen':{ich:'trage',du:'trägst',er:'trägt',wir:'tragen',ihr:'tragt',sie:'tragen'},
+'wissen':{ich:'weiß',du:'weißt',er:'weiß',wir:'wissen',ihr:'wisst',sie:'wissen'},
+'können':{ich:'kann',du:'kannst',er:'kann',wir:'können',ihr:'könnt',sie:'können'},
+'müssen':{ich:'muss',du:'musst',er:'muss',wir:'müssen',ihr:'müsst',sie:'müssen'},
+'dürfen':{ich:'darf',du:'darfst',er:'darf',wir:'dürfen',ihr:'dürft',sie:'dürfen'},
+'sollen':{ich:'soll',du:'sollst',er:'soll',wir:'sollen',ihr:'sollt',sie:'sollen'},
+'wollen':{ich:'will',du:'willst',er:'will',wir:'wollen',ihr:'wollt',sie:'wollen'},
+'mögen':{ich:'mag',du:'magst',er:'mag',wir:'mögen',ihr:'mögt',sie:'mögen'}
+};
+
+// 불규칙 동사면 바로 반환
+if(irregulars[v])return irregulars[v];
+
+// 규칙 동사 처리
 const s=v.slice(0,-2);
-if(v==='sein')return{ich:'bin',du:'bist',er:'ist',wir:'sind',ihr:'seid',sie:'sind'};
-if(v==='haben')return{ich:'habe',du:'hast',er:'hat',wir:'haben',ihr:'habt',sie:'haben'};
-if(v==='werden')return{ich:'werde',du:'wirst',er:'wird',wir:'werden',ihr:'werdet',sie:'werden'};
 return{ich:s+'e',du:s+'st',er:s+'t',wir:v,ihr:s+'t',sie:v};
 }
 
