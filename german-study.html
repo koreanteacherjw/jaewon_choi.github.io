@@ -11,7 +11,7 @@ body{font-family:system-ui,-apple-system,sans-serif;background:linear-gradient(1
 .header{text-align:center;color:white;margin-bottom:30px}
 .header h1{font-size:2.5em;margin-bottom:10px;text-shadow:2px 2px 4px rgba(0,0,0,0.2)}
 .header p{font-size:1.1em;opacity:0.9}
-.mode-selector{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:30px}
+.mode-selector{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:30px}
 .mode-card{background:white;border-radius:12px;padding:15px;cursor:pointer;transition:all 0.3s;box-shadow:0 5px 15px rgba(0,0,0,0.2);text-align:center}
 .mode-card:hover{transform:translateY(-5px)}
 .mode-card.active{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:white}
@@ -75,7 +75,7 @@ body{font-family:system-ui,-apple-system,sans-serif;background:linear-gradient(1
 <div class="container">
 <div class="header">
 <h1>🇩🇪 독일어 완전 마스터</h1>
-<p>629개 단어 + 문법 완벽 정복</p>
+<p>629개 단어 + 문법 + 발음 완벽 정복</p>
 </div>
 <div class="mode-selector">
 <div class="mode-card active" onclick="selectMode('flashcard')">
@@ -111,16 +111,1084 @@ body{font-family:system-ui,-apple-system,sans-serif;background:linear-gradient(1
 <div class="mode-card" onclick="selectMode('conjugation')">
 <div class="icon">🔄</div><h2>동사변화</h2><p>12문제</p>
 </div>
+<div class="mode-card" onclick="selectMode('pronunciation')">
+<div class="icon">🎯</div><h2>발음연습</h2><p>156문제</p>
+</div>
 </div>
 <div class="study-area" id="study-area"></div>
 </div>
 <script>
-const vocabData=[{"word": "Abend", "meaning": "저녁", "pos": "명사", "article": "der", "plural": "Abende", "gender": "Masculine"}, {"word": "aber", "meaning": "그러나", "pos": "접속사", "article": "-", "plural": "", "gender": ""}, {"word": "abfahren", "meaning": "출발하다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "absolut", "meaning": "절대적으로", "pos": "부사", "article": "-", "plural": "", "gender": ""}, {"word": "ach", "meaning": "아, 오", "pos": "감탄사", "article": "-", "plural": "", "gender": ""}, {"word": "Achtung", "meaning": "주의", "pos": "명사", "article": "die", "plural": "", "gender": "Feminine"}, {"word": "aggressiv", "meaning": "공격적인", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "Aktion", "meaning": "활동, 행동", "pos": "명사", "article": "die", "plural": "Aktionen", "gender": "Feminine"}, {"word": "allein", "meaning": "혼자", "pos": "형용사/부사", "article": "-", "plural": "", "gender": ""}, {"word": "alles", "meaning": "모든 것", "pos": "대명사", "article": "-", "plural": "", "gender": ""}, {"word": "Alles klar", "meaning": "알겠어", "pos": "구", "article": "-", "plural": "", "gender": ""}, {"word": "alt", "meaning": "늙은", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "Amerikaner", "meaning": "미국인 (남)", "pos": "명사", "article": "der", "plural": "Amerikaner", "gender": "Masculine"}, {"word": "ändern", "meaning": "바꾸다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Anfang", "meaning": "시작", "pos": "명사", "article": "der", "plural": "Anfänge", "gender": "Masculine"}, {"word": "anfangen", "meaning": "시작하다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "anhabe", "meaning": "입고 있다 (1인칭)", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "ankommen", "meaning": "도착하다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Anlage", "meaning": "시설, 설비", "pos": "명사", "article": "die", "plural": "Anlagen", "gender": "Feminine"}, {"word": "Apfel", "meaning": "사과", "pos": "명사", "article": "der", "plural": "Äpfel", "gender": "Masculine"}, {"word": "Arbeit", "meaning": "일, 노동", "pos": "명사", "article": "die", "plural": "Arbeiten", "gender": "Feminine"}, {"word": "arbeiten", "meaning": "일하다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Ärger", "meaning": "화, 짜증", "pos": "명사", "article": "der", "plural": "", "gender": "Masculine"}, {"word": "Argument", "meaning": "논쟁, 주장", "pos": "명사", "article": "das", "plural": "Argumente", "gender": "Neuter"}, {"word": "Arzt", "meaning": "의사 (남)", "pos": "명사", "article": "der", "plural": "Ärzte", "gender": "Masculine"}, {"word": "Ärztin", "meaning": "의사 (여)", "pos": "명사", "article": "die", "plural": "Ärztinnen", "gender": "Feminine"}, {"word": "atmen", "meaning": "숨쉬다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Audi", "meaning": "아우디 (브랜드)", "pos": "고유명사", "article": "der", "plural": "", "gender": "Masculine"}, {"word": "aufsteigen", "meaning": "올라가다, 승진하다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Auge", "meaning": "눈", "pos": "명사", "article": "die", "plural": "Augen", "gender": "Neuter"}, {"word": "ausgebucht", "meaning": "예약 마감된", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "ausgehen", "meaning": "외출하다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Aussage", "meaning": "진술, 말", "pos": "명사", "article": "die", "plural": "Aussagen", "gender": "Feminine"}, {"word": "aussteigen", "meaning": "내리다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Australier", "meaning": "호주인 (남)", "pos": "명사", "article": "der", "plural": "Australier", "gender": "Masculine"}, {"word": "Auto", "meaning": "자동차", "pos": "명사", "article": "das", "plural": "Autos", "gender": "Neuter"}, {"word": "Baby", "meaning": "아기", "pos": "명사", "article": "das", "plural": "Babys", "gender": "Neuter"}, {"word": "Bach", "meaning": "시냇물", "pos": "명사", "article": "der", "plural": "Bäche", "gender": "Masculine"}, {"word": "Bäckerei", "meaning": "제과점", "pos": "명사", "article": "die", "plural": "Bäckereien", "gender": "Feminine"}, {"word": "baden", "meaning": "목욕하다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Bahnhof", "meaning": "기차역", "pos": "명사", "article": "der", "plural": "Bahnhöfe", "gender": "Masculine"}, {"word": "Bald", "meaning": "곧", "pos": "부사", "article": "-", "plural": "", "gender": ""}, {"word": "Bären", "meaning": "곰들", "pos": "명사", "article": "die", "plural": "", "gender": "Masculine"}, {"word": "Baum", "meaning": "나무", "pos": "명사", "article": "der", "plural": "Bäume", "gender": "Masculine"}, {"word": "Bayern", "meaning": "바이에른", "pos": "고유명사", "article": "das", "plural": "", "gender": "Neuter"}, {"word": "Bedeutung", "meaning": "의미", "pos": "명사", "article": "die", "plural": "Bedeutungen", "gender": "Feminine"}, {"word": "befehlen", "meaning": "명령하다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "befiehlt", "meaning": "명령하다 (3인칭)", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "bei", "meaning": "~에, ~에서", "pos": "전치사", "article": "-", "plural": "", "gender": ""}, {"word": "Bein", "meaning": "다리", "pos": "명사", "article": "das", "plural": "Beine", "gender": "Neuter"}, {"word": "bekommen", "meaning": "받다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "bequem", "meaning": "편안한", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "Berlin", "meaning": "베를린", "pos": "고유명사", "article": "das", "plural": "", "gender": "Neuter"}, {"word": "Beruf", "meaning": "직업", "pos": "명사", "article": "der", "plural": "Berufe", "gender": "Masculine"}, {"word": "beruflich", "meaning": "직업적인", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "berühmte", "meaning": "유명한", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "Bestellen", "meaning": "주문하다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "besucht", "meaning": "방문하다 (3인칭)", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Bibel", "meaning": "성경", "pos": "명사", "article": "die", "plural": "Bibeln", "gender": "Feminine"}, {"word": "billig", "meaning": "싼", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "bin", "meaning": "~이다 (1인칭)", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "bist", "meaning": "~이다 (2인칭)", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "bitte", "meaning": "부탁합니다", "pos": "부사", "article": "-", "plural": "", "gender": ""}, {"word": "bitten", "meaning": "부탁하다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Blätter", "meaning": "잎들", "pos": "명사", "article": "die", "plural": "", "gender": "Neuter"}, {"word": "blau", "meaning": "파란색", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "Blume", "meaning": "꽃", "pos": "명사", "article": "die", "plural": "Blumen", "gender": "Feminine"}, {"word": "Bluse", "meaning": "블라우스", "pos": "명사", "article": "die", "plural": "Blusen", "gender": "Feminine"}, {"word": "BMW", "meaning": "BMW (브랜드)", "pos": "고유명사", "article": "der", "plural": "", "gender": "Masculine"}, {"word": "Boot", "meaning": "보트", "pos": "명사", "article": "das", "plural": "Boote", "gender": "Neuter"}, {"word": "braucht", "meaning": "필요하다 (3인칭)", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "braune", "meaning": "갈색의", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "Brav", "meaning": "착한", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "Brille", "meaning": "안경", "pos": "명사", "article": "die", "plural": "Brillen", "gender": "Feminine"}, {"word": "Bruder", "meaning": "형제", "pos": "명사", "article": "der", "plural": "Brüder", "gender": "Masculine"}, {"word": "Buch", "meaning": "책", "pos": "명사", "article": "das", "plural": "Bücher", "gender": "Neuter"}, {"word": "Bücher", "meaning": "책들", "pos": "명사", "article": "die", "plural": "", "gender": "Neuter"}, {"word": "Bücherei", "meaning": "도서관", "pos": "명사", "article": "die", "plural": "Büchereien", "gender": "Feminine"}, {"word": "Bundeswehr", "meaning": "독일 연방군", "pos": "명사", "article": "die", "plural": "", "gender": "Feminine"}, {"word": "Burg", "meaning": "성", "pos": "명사", "article": "die", "plural": "Burgen", "gender": "Feminine"}, {"word": "Bürgermeister", "meaning": "시장", "pos": "명사", "article": "der", "plural": "Bürgermeister", "gender": "Masculine"}, {"word": "Büro", "meaning": "사무실", "pos": "명사", "article": "das", "plural": "Büros", "gender": "Neuter"}, {"word": "Café", "meaning": "카페", "pos": "명사", "article": "das", "plural": "Cafés", "gender": "Neuter"}, {"word": "Cent", "meaning": "센트", "pos": "명사", "article": "der", "plural": "Cents", "gender": "Masculine"}, {"word": "Chef", "meaning": "상사, 책임자", "pos": "명사", "article": "der", "plural": "Chefs", "gender": "Masculine"}, {"word": "Chemie", "meaning": "화학", "pos": "명사", "article": "die", "plural": "", "gender": "Feminine"}, {"word": "circa", "meaning": "약, 대략", "pos": "부사", "article": "-", "plural": "", "gender": ""}, {"word": "Club", "meaning": "클럽", "pos": "명사", "article": "der", "plural": "Clubs", "gender": "Masculine"}, {"word": "Computer", "meaning": "컴퓨터", "pos": "명사", "article": "der", "plural": "Computer", "gender": "Masculine"}, {"word": "Couch", "meaning": "소파", "pos": "명사", "article": "die", "plural": "Couches", "gender": "Feminine"}, {"word": "da", "meaning": "거기에, 그때", "pos": "부사", "article": "-", "plural": "", "gender": ""}, {"word": "Dach", "meaning": "지붕", "pos": "명사", "article": "das", "plural": "Dächer", "gender": "Neuter"}, {"word": "dachte", "meaning": "생각하다 (과거)", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Dame", "meaning": "여사, 부인", "pos": "명사", "article": "die", "plural": "Damen", "gender": "Feminine"}, {"word": "Datum", "meaning": "날짜", "pos": "명사", "article": "das", "plural": "Daten", "gender": "Neuter"}, {"word": "denken", "meaning": "생각하다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Depressionen", "meaning": "우울증", "pos": "명사", "article": "die", "plural": "", "gender": "Feminine"}, {"word": "dessen", "meaning": "그것의", "pos": "관계대명사", "article": "-", "plural": "", "gender": ""}, {"word": "Deutsch", "meaning": "독일어", "pos": "명사", "article": "das", "plural": "", "gender": "Neuter"}, {"word": "Deutschland", "meaning": "독일", "pos": "고유명사", "article": "das", "plural": "", "gender": "Neuter"}, {"word": "dich", "meaning": "너를", "pos": "대명사", "article": "-", "plural": "", "gender": ""}, {"word": "dick", "meaning": "두꺼운, 뚱뚱한", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "Dieb", "meaning": "도둑", "pos": "명사", "article": "der", "plural": "Diebe", "gender": "Masculine"}, {"word": "Diskussion", "meaning": "토론", "pos": "명사", "article": "die", "plural": "Diskussionen", "gender": "Feminine"}, {"word": "doch", "meaning": "그래도", "pos": "부사", "article": "-", "plural": "", "gender": ""}, {"word": "Dokument", "meaning": "문서", "pos": "명사", "article": "das", "plural": "Dokumente", "gender": "Neuter"}, {"word": "Dolmetscher", "meaning": "통역사", "pos": "명사", "article": "der", "plural": "Dolmetscher", "gender": "Masculine"}, {"word": "Dorf", "meaning": "마을", "pos": "명사", "article": "das", "plural": "Dörfer", "gender": "Neuter"}, {"word": "Dort", "meaning": "저기에", "pos": "부사", "article": "-", "plural": "", "gender": ""}, {"word": "Dose", "meaning": "캔", "pos": "명사", "article": "die", "plural": "Dosen", "gender": "Feminine"}, {"word": "draußen", "meaning": "밖에", "pos": "부사", "article": "-", "plural": "", "gender": ""}, {"word": "dunkel", "meaning": "어두운", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "dünn", "meaning": "얇은, 마른", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "durch", "meaning": "~을 통해", "pos": "전치사", "article": "-", "plural": "", "gender": ""}, {"word": "Dynamik", "meaning": "역학, 동역학", "pos": "명사", "article": "die", "plural": "", "gender": "Feminine"}, {"word": "echt", "meaning": "진짜의", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "Ecke", "meaning": "모퉁이", "pos": "명사", "article": "die", "plural": "Ecken", "gender": "Feminine"}, {"word": "Eiche", "meaning": "참나무", "pos": "명사", "article": "die", "plural": "Eichen", "gender": "Feminine"}, {"word": "eigentlich", "meaning": "사실은", "pos": "부사", "article": "-", "plural": "", "gender": ""}, {"word": "Einheit", "meaning": "단위, 통일", "pos": "명사", "article": "die", "plural": "Einheiten", "gender": "Feminine"}, {"word": "einschlafen", "meaning": "잠들다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "einsteigen", "meaning": "타다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Elefant", "meaning": "코끼리", "pos": "명사", "article": "der", "plural": "Elefanten", "gender": "Masculine"}, {"word": "Elster", "meaning": "까치", "pos": "명사", "article": "die", "plural": "Elstern", "gender": "Feminine"}, {"word": "Eltern", "meaning": "부모님", "pos": "명사", "article": "die", "plural": "", "gender": "Plural"}, {"word": "empfehlen", "meaning": "추천하다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Ende", "meaning": "끝", "pos": "명사", "article": "das", "plural": "Enden", "gender": "Neuter"}, {"word": "eng", "meaning": "좁은", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "entdecken", "meaning": "발견하다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Ente", "meaning": "오리", "pos": "명사", "article": "die", "plural": "Enten", "gender": "Feminine"}, {"word": "Erde", "meaning": "지구, 땅", "pos": "명사", "article": "die", "plural": "", "gender": "Feminine"}, {"word": "erzählen", "meaning": "이야기하다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "essen", "meaning": "먹다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Essen", "meaning": "음식, 식사", "pos": "명사", "article": "das", "plural": "", "gender": "Neuter"}, {"word": "etwas", "meaning": "뭔가, 약간", "pos": "대명사/부사", "article": "-", "plural": "", "gender": ""}, {"word": "Europa", "meaning": "유럽", "pos": "고유명사", "article": "das", "plural": "", "gender": "Neuter"}, {"word": "Europäischen", "meaning": "유럽의", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "Existenz", "meaning": "존재", "pos": "명사", "article": "die", "plural": "Existenzen", "gender": "Feminine"}, {"word": "Experiment", "meaning": "실험", "pos": "명사", "article": "das", "plural": "Experimente", "gender": "Neuter"}, {"word": "Fabrik", "meaning": "공장", "pos": "명사", "article": "die", "plural": "Fabriken", "gender": "Feminine"}, {"word": "fahren", "meaning": "운전하다, 타다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Fahrer", "meaning": "운전사", "pos": "명사", "article": "der", "plural": "Fahrer", "gender": "Masculine"}, {"word": "Fahrrad", "meaning": "자전거", "pos": "명사", "article": "das", "plural": "Fahrräder", "gender": "Neuter"}, {"word": "fährt", "meaning": "타다/운전하다 (3인칭)", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "fallen", "meaning": "떨어지다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Familie", "meaning": "가족", "pos": "명사", "article": "die", "plural": "Familien", "gender": "Feminine"}, {"word": "fängt", "meaning": "잡다 (3인칭)", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "fantastisch", "meaning": "환상적인", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "Farbe", "meaning": "색깔", "pos": "명사", "article": "die", "plural": "Farben", "gender": "Feminine"}, {"word": "Farben", "meaning": "색깔들", "pos": "명사", "article": "die", "plural": "", "gender": "Feminine"}, {"word": "fast", "meaning": "거의", "pos": "부사", "article": "-", "plural": "", "gender": ""}, {"word": "Fenster", "meaning": "창문", "pos": "명사", "article": "das", "plural": "Fenster", "gender": "Neuter"}, {"word": "Ferien", "meaning": "방학", "pos": "명사", "article": "die", "plural": "", "gender": "Plural"}, {"word": "Feuerwerk", "meaning": "불꽃놀이", "pos": "명사", "article": "das", "plural": "Feuerwerke", "gender": "Neuter"}, {"word": "Film", "meaning": "영화", "pos": "명사", "article": "der", "plural": "Filme", "gender": "Masculine"}, {"word": "finden", "meaning": "찾다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "findet(stattfinden)", "meaning": "열리다 (3인칭)", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Firma", "meaning": "회사", "pos": "명사", "article": "die", "plural": "Firmen", "gender": "Feminine"}, {"word": "Flasche", "meaning": "병", "pos": "명사", "article": "die", "plural": "Flaschen", "gender": "Feminine"}, {"word": "fleißig", "meaning": "부지런한", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "Flöte", "meaning": "플루트", "pos": "명사", "article": "die", "plural": "Flöten", "gender": "Feminine"}, {"word": "Flug", "meaning": "비행", "pos": "명사", "article": "der", "plural": "Flüge", "gender": "Masculine"}, {"word": "Fluss", "meaning": "강", "pos": "명사", "article": "der", "plural": "Flüsse", "gender": "Masculine"}, {"word": "Ford", "meaning": "포드 (브랜드)", "pos": "고유명사", "article": "der", "plural": "", "gender": "Masculine"}, {"word": "Französisch", "meaning": "프랑스어", "pos": "명사", "article": "das", "plural": "", "gender": "Neuter"}, {"word": "Frau", "meaning": "여자, 부인", "pos": "명사", "article": "die", "plural": "Frauen", "gender": "Feminine"}, {"word": "Fräulein", "meaning": "아가씨 (옛말)", "pos": "명사", "article": "das", "plural": "Fräulein", "gender": "Neuter"}, {"word": "Freiheit", "meaning": "자유", "pos": "명사", "article": "die", "plural": "Freiheiten", "gender": "Feminine"}, {"word": "Freitag", "meaning": "금요일", "pos": "명사", "article": "der", "plural": "Freitage", "gender": "Masculine"}, {"word": "Freund", "meaning": "친구 (남)", "pos": "명사", "article": "der", "plural": "Freunde", "gender": "Masculine"}, {"word": "freundlich", "meaning": "친절한", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "Freundschaft", "meaning": "우정", "pos": "명사", "article": "die", "plural": "Freundschaften", "gender": "Feminine"}, {"word": "Frühjahr", "meaning": "봄", "pos": "명사", "article": "das", "plural": "Frühjahre", "gender": "Neuter"}, {"word": "Frühling", "meaning": "봄", "pos": "명사", "article": "der", "plural": "Frühlinge", "gender": "Masculine"}, {"word": "Fuchs", "meaning": "여우", "pos": "명사", "article": "der", "plural": "Füchse", "gender": "Masculine"}, {"word": "fühlen", "meaning": "느끼다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "füllen", "meaning": "채우다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "für", "meaning": "~을 위해", "pos": "전치사", "article": "-", "plural": "", "gender": ""}, {"word": "Fuß", "meaning": "발", "pos": "명사", "article": "der", "plural": "Füße", "gender": "Masculine"}, {"word": "Fußball", "meaning": "축구", "pos": "명사", "article": "der", "plural": "Fußbälle", "gender": "Masculine"}, {"word": "Gabel", "meaning": "포크", "pos": "명사", "article": "die", "plural": "Gabeln", "gender": "Feminine"}, {"word": "Gans", "meaning": "거위", "pos": "명사", "article": "die", "plural": "Gänse", "gender": "Feminine"}, {"word": "Garten", "meaning": "정원", "pos": "명사", "article": "der", "plural": "Gärten", "gender": "Masculine"}, {"word": "gebe", "meaning": "주다 (1인칭)", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "geben", "meaning": "주다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "gebissen", "meaning": "물다 (과거분사)", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "gefallen", "meaning": "마음에 들다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "gefällt", "meaning": "마음에 들다 (3인칭)", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "gehen", "meaning": "가다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "gehört", "meaning": "속하다 (3인칭)", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Geld", "meaning": "돈", "pos": "명사", "article": "das", "plural": "", "gender": "Neuter"}, {"word": "Gemüse", "meaning": "야채", "pos": "명사", "article": "das", "plural": "", "gender": "Neuter"}, {"word": "General", "meaning": "장군", "pos": "명사", "article": "der", "plural": "Generäle", "gender": "Masculine"}, {"word": "genug", "meaning": "충분한", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "gern", "meaning": "매우", "pos": "부사", "article": "-", "plural": "", "gender": ""}, {"word": "gerne", "meaning": "기꺼이", "pos": "부사", "article": "-", "plural": "", "gender": ""}, {"word": "Geschäft", "meaning": "가게, 상점", "pos": "명사", "article": "das", "plural": "Geschäfte", "gender": "Neuter"}, {"word": "geschehen", "meaning": "일어나다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Geschichte", "meaning": "역사, 이야기", "pos": "명사", "article": "die", "plural": "Geschichten", "gender": "Feminine"}, {"word": "geschickter", "meaning": "더 숙련된", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "gesehen", "meaning": "보다 (과거분사)", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Gesellschaft", "meaning": "사회", "pos": "명사", "article": "die", "plural": "Gesellschaften", "gender": "Feminine"}, {"word": "Gesicht", "meaning": "얼굴", "pos": "명사", "article": "das", "plural": "Gesichter", "gender": "Neuter"}, {"word": "Gestern", "meaning": "어제", "pos": "부사", "article": "-", "plural": "", "gender": ""}, {"word": "Gesundheit", "meaning": "건강", "pos": "명사", "article": "die", "plural": "", "gender": "Feminine"}, {"word": "Getränke", "meaning": "음료들", "pos": "명사", "article": "die", "plural": "", "gender": "Neuter"}, {"word": "getroffen", "meaning": "만나다 (과거분사)", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "gibt", "meaning": "주다 (3인칭)", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Glas", "meaning": "유리, 잔", "pos": "명사", "article": "das", "plural": "Gläser", "gender": "Neuter"}, {"word": "glaube", "meaning": "믿다 (1인칭)", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Glück", "meaning": "행운", "pos": "명사", "article": "das", "plural": "", "gender": "Neuter"}, {"word": "glücklich", "meaning": "행복한", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "Gott", "meaning": "신", "pos": "명사", "article": "der", "plural": "Götter", "gender": "Masculine"}, {"word": "Grammatik", "meaning": "문법", "pos": "명사", "article": "die", "plural": "Grammatiken", "gender": "Feminine"}, {"word": "groß", "meaning": "큰", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "größte", "meaning": "가장 큰", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "Grün", "meaning": "녹색", "pos": "명사", "article": "das", "plural": "", "gender": "Neuter"}, {"word": "gut", "meaning": "좋은", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "gute", "meaning": "좋은", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "Gymnasium", "meaning": "김나지움 (인문계 중고등학교)", "pos": "명사", "article": "das", "plural": "Gymnasien", "gender": "Neuter"}, {"word": "Haar", "meaning": "머리카락", "pos": "명사", "article": "das", "plural": "Haare", "gender": "Neuter"}, {"word": "haben", "meaning": "가지다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "halb", "meaning": "반의", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "hallo", "meaning": "안녕", "pos": "감탄사", "article": "-", "plural": "", "gender": ""}, {"word": "halt", "meaning": "그냥, 멈춰", "pos": "부사/감탄사", "article": "-", "plural": "", "gender": ""}, {"word": "halten", "meaning": "멈추다, 잡다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Hamburg", "meaning": "함부르크", "pos": "고유명사", "article": "das", "plural": "", "gender": "Neuter"}, {"word": "Hand", "meaning": "손", "pos": "명사", "article": "die", "plural": "Hände", "gender": "Feminine"}, {"word": "Handy", "meaning": "휴대폰", "pos": "명사", "article": "das", "plural": "Handys", "gender": "Neuter"}, {"word": "hat", "meaning": "가지다 (3인칭)", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Hauptstadt", "meaning": "수도", "pos": "명사", "article": "die", "plural": "Hauptstädte", "gender": "Feminine"}, {"word": "Haus", "meaning": "집", "pos": "명사", "article": "das", "plural": "Häuser", "gender": "Neuter"}, {"word": "Häuser", "meaning": "집들", "pos": "명사", "article": "die", "plural": "", "gender": "Neuter"}, {"word": "heißen", "meaning": "~라고 불리다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "heißt", "meaning": "~라고 불리다 (3인칭)", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "helfe", "meaning": "돕다 (1인칭)", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "helfen", "meaning": "돕다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "hell", "meaning": "밝은", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "Hemd", "meaning": "셔츠", "pos": "명사", "article": "das", "plural": "Hemden", "gender": "Neuter"}, {"word": "Herr", "meaning": "남자, 씨", "pos": "명사", "article": "der", "plural": "Herren", "gender": "Masculine"}, {"word": "hervorragender", "meaning": "뛰어난", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "Herz", "meaning": "심장, 마음", "pos": "명사", "article": "das", "plural": "Herzen", "gender": "Neuter"}, {"word": "herzlich", "meaning": "진심 어린", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "heute", "meaning": "오늘", "pos": "부사", "article": "-", "plural": "", "gender": ""}, {"word": "heutzutage", "meaning": "요즘", "pos": "부사", "article": "-", "plural": "", "gender": ""}, {"word": "hoch", "meaning": "높은", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "höchst", "meaning": "가장 높은", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "holen", "meaning": "가져오다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "hören", "meaning": "듣다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Hose", "meaning": "바지", "pos": "명사", "article": "die", "plural": "Hosen", "gender": "Feminine"}, {"word": "Hündchen", "meaning": "강아지", "pos": "명사", "article": "das", "plural": "Hündchen", "gender": "Neuter"}, {"word": "Hunger", "meaning": "배고픔", "pos": "명사", "article": "der", "plural": "", "gender": "Masculine"}, {"word": "Hut", "meaning": "모자", "pos": "명사", "article": "der", "plural": "Hüte", "gender": "Masculine"}, {"word": "ich", "meaning": "나", "pos": "대명사", "article": "-", "plural": "", "gender": ""}, {"word": "Idee", "meaning": "아이디어", "pos": "명사", "article": "die", "plural": "Ideen", "gender": "Feminine"}, {"word": "Igel", "meaning": "고슴도치", "pos": "명사", "article": "der", "plural": "Igel", "gender": "Masculine"}, {"word": "immer", "meaning": "항상", "pos": "부사", "article": "-", "plural": "", "gender": ""}, {"word": "Information", "meaning": "정보", "pos": "명사", "article": "die", "plural": "Informationen", "gender": "Feminine"}, {"word": "Inhalt", "meaning": "내용", "pos": "명사", "article": "der", "plural": "Inhalte", "gender": "Masculine"}, {"word": "Instrument", "meaning": "악기, 도구", "pos": "명사", "article": "das", "plural": "Instrumente", "gender": "Neuter"}, {"word": "isst", "meaning": "먹다 (3인칭)", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "ja", "meaning": "네", "pos": "부사", "article": "-", "plural": "", "gender": ""}, {"word": "Jacke", "meaning": "재킷", "pos": "명사", "article": "die", "plural": "Jacken", "gender": "Feminine"}, {"word": "Jäger", "meaning": "사냥꾼", "pos": "명사", "article": "der", "plural": "Jäger", "gender": "Masculine"}, {"word": "Jahr", "meaning": "년", "pos": "명사", "article": "das", "plural": "Jahre", "gender": "Neuter"}, {"word": "jetzt", "meaning": "지금", "pos": "부사", "article": "-", "plural": "", "gender": ""}, {"word": "jubelt", "meaning": "환호하다 (3인칭)", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Junge", "meaning": "소년", "pos": "명사", "article": "der", "plural": "Jungen", "gender": "Masculine"}, {"word": "Kaffee", "meaning": "커피", "pos": "명사", "article": "der", "plural": "Kaffees", "gender": "Masculine"}, {"word": "Kalb", "meaning": "송아지", "pos": "명사", "article": "das", "plural": "Kälber", "gender": "Neuter"}, {"word": "kalt", "meaning": "추운", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "kann", "meaning": "할 수 있다 (1/3인칭)", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "kaputt", "meaning": "고장난", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "karotte", "meaning": "당근", "pos": "명사", "article": "die", "plural": "Karotten", "gender": "Feminine"}, {"word": "Karte", "meaning": "카드(게임)", "pos": "명사", "article": "die", "plural": "Karten", "gender": "Feminine"}, {"word": "Käse", "meaning": "치즈", "pos": "명사", "article": "der", "plural": "Käse", "gender": "Masculine"}, {"word": "Kätzchen", "meaning": "새끼 고양이", "pos": "명사", "article": "das", "plural": "Kätzchen", "gender": "Neuter"}, {"word": "Katze", "meaning": "고양이", "pos": "명사", "article": "die", "plural": "Katzen", "gender": "Feminine"}, {"word": "kaufen", "meaning": "사다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Käufer", "meaning": "구매자", "pos": "명사", "article": "der", "plural": "Käufer", "gender": "Masculine"}, {"word": "Kaufhaus", "meaning": "백화점", "pos": "명사", "article": "das", "plural": "Kaufhäuser", "gender": "Neuter"}, {"word": "kein", "meaning": "아무도 ~없다", "pos": "부정관사", "article": "-", "plural": "", "gender": ""}, {"word": "Kellerin", "meaning": "웨이트리스", "pos": "명사", "article": "die", "plural": "Kellerinnen", "gender": "Feminine"}, {"word": "Kellner", "meaning": "웨이터", "pos": "명사", "article": "der", "plural": "Kellner", "gender": "Masculine"}, {"word": "kenne", "meaning": "알다 (1인칭)", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "kennen", "meaning": "알다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "kennenzulernen", "meaning": "알게 되다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Kennst", "meaning": "알다 (2인칭)", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Kind", "meaning": "아이", "pos": "명사", "article": "das", "plural": "Kinder", "gender": "Neuter"}, {"word": "Kino", "meaning": "영화관", "pos": "명사", "article": "das", "plural": "Kinos", "gender": "Neuter"}, {"word": "Klarinette", "meaning": "클라리넷", "pos": "명사", "article": "die", "plural": "Klarinetten", "gender": "Feminine"}, {"word": "klein", "meaning": "작은", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "Koch", "meaning": "요리사 (남)", "pos": "명사", "article": "der", "plural": "Köche", "gender": "Masculine"}, {"word": "Kocht", "meaning": "요리하다 (3인칭)", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Köln", "meaning": "쾰른", "pos": "고유명사", "article": "das", "plural": "", "gender": "Neuter"}, {"word": "komme", "meaning": "오다 (1인칭)", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "kommen", "meaning": "오다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "kommt", "meaning": "오다 (3인칭)", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "kompetent", "meaning": "유능한", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "Komplex", "meaning": "복합체", "pos": "명사", "article": "der", "plural": "Komplexe", "gender": "Masculine"}, {"word": "Komponisten", "meaning": "작곡가들", "pos": "명사", "article": "die", "plural": "", "gender": "Masculine"}, {"word": "Konditorei", "meaning": "제과점", "pos": "명사", "article": "die", "plural": "Konditoreien", "gender": "Feminine"}, {"word": "Können", "meaning": "할 수 있다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Könnte", "meaning": "~할 수 있다 (접속법)", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Konto", "meaning": "계좌", "pos": "명사", "article": "das", "plural": "Konten", "gender": "Neuter"}, {"word": "Konzert", "meaning": "콘서트", "pos": "명사", "article": "das", "plural": "Konzerte", "gender": "Neuter"}, {"word": "Kosten", "meaning": "비용", "pos": "명사", "article": "die", "plural": "", "gender": "Plural"}, {"word": "Kreis", "meaning": "원, 지역", "pos": "명사", "article": "der", "plural": "Kreise", "gender": "Masculine"}, {"word": "Kugelschreiber", "meaning": "볼펜", "pos": "명사", "article": "der", "plural": "Kugelschreiber", "gender": "Masculine"}, {"word": "Kuli", "meaning": "볼펜", "pos": "명사", "article": "der", "plural": "Kulis", "gender": "Masculine"}, {"word": "Kunde", "meaning": "고객", "pos": "명사", "article": "der", "plural": "Kunden", "gender": "Masculine"}, {"word": "kurz", "meaning": "짧은", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "kurze", "meaning": "짧은", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "Kuss", "meaning": "키스", "pos": "명사", "article": "der", "plural": "Küsse", "gender": "Masculine"}, {"word": "Lager", "meaning": "창고, 캠프", "pos": "명사", "article": "das", "plural": "Lager", "gender": "Neuter"}, {"word": "Laib", "meaning": "덩어리 (빵)", "pos": "명사", "article": "der", "plural": "Laibe", "gender": "Masculine"}, {"word": "Lamm", "meaning": "양", "pos": "명사", "article": "das", "plural": "Lämmer", "gender": "Neuter"}, {"word": "Lampe", "meaning": "램프", "pos": "명사", "article": "die", "plural": "Lampen", "gender": "Feminine"}, {"word": "Land", "meaning": "나라, 땅", "pos": "명사", "article": "das", "plural": "Länder", "gender": "Neuter"}, {"word": "laufen", "meaning": "달리다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Laune", "meaning": "기분", "pos": "명사", "article": "die", "plural": "Launen", "gender": "Feminine"}, {"word": "laut", "meaning": "시끄러운", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "leben", "meaning": "살다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "lehren", "meaning": "가르치다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Lehrer", "meaning": "교사 (남)", "pos": "명사", "article": "der", "plural": "Lehrer", "gender": "Masculine"}, {"word": "Lehrerin", "meaning": "교사 (여)", "pos": "명사", "article": "die", "plural": "Lehrerinnen", "gender": "Feminine"}, {"word": "leider", "meaning": "유감스럽게도", "pos": "부사", "article": "-", "plural": "", "gender": ""}, {"word": "Leine", "meaning": "줄", "pos": "명사", "article": "die", "plural": "Leinen", "gender": "Feminine"}, {"word": "lernen", "meaning": "배우다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "lesen", "meaning": "읽다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "lesen", "meaning": "읽다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "lest", "meaning": "읽다 (2인칭 복수)", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Leute", "meaning": "사람들", "pos": "명사", "article": "die", "plural": "", "gender": "Plural"}, {"word": "lieb", "meaning": "사랑스러운", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "lieben", "meaning": "사랑하다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Linguistik", "meaning": "언어학", "pos": "명사", "article": "die", "plural": "", "gender": "Feminine"}, {"word": "Literatur", "meaning": "문학", "pos": "명사", "article": "die", "plural": "Literaturen", "gender": "Feminine"}, {"word": "Löffel", "meaning": "숟가락", "pos": "명사", "article": "der", "plural": "Löffel", "gender": "Masculine"}, {"word": "Logik", "meaning": "논리", "pos": "명사", "article": "die", "plural": "", "gender": "Feminine"}, {"word": "Luft", "meaning": "공기", "pos": "명사", "article": "die", "plural": "Lüfte", "gender": "Feminine"}, {"word": "Lügen", "meaning": "거짓말들", "pos": "명사", "article": "die", "plural": "", "gender": "Feminine"}, {"word": "Lust", "meaning": "욕구, 하고싶음", "pos": "명사", "article": "die", "plural": "", "gender": "Feminine"}, {"word": "Lutheranerin", "meaning": "루터교도 (여)", "pos": "명사", "article": "die", "plural": "Lutheranerinnen", "gender": "Feminine"}, {"word": "machen", "meaning": "만들다, 하다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Mädchen", "meaning": "소녀", "pos": "명사", "article": "das", "plural": "Mädchen", "gender": "Neuter"}, {"word": "mag", "meaning": "좋아하다 (1/3인칭)", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Magen", "meaning": "위", "pos": "명사", "article": "der", "plural": "Mägen", "gender": "Masculine"}, {"word": "Mai", "meaning": "5월", "pos": "명사", "article": "der", "plural": "", "gender": "Masculine"}, {"word": "Mann", "meaning": "남자", "pos": "명사", "article": "der", "plural": "Männer", "gender": "Masculine"}, {"word": "Mantel", "meaning": "코트", "pos": "명사", "article": "der", "plural": "Mäntel", "gender": "Masculine"}, {"word": "Markus", "meaning": "마르쿠스 (이름)", "pos": "고유명사", "article": "-", "plural": "", "gender": ""}, {"word": "Maß", "meaning": "척도, 리터", "pos": "명사", "article": "das", "plural": "Maße", "gender": "Neuter"}, {"word": "Maus", "meaning": "쥐", "pos": "명사", "article": "die", "plural": "Mäuse", "gender": "Feminine"}, {"word": "meinst", "meaning": "의미하다 (2인칭)", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "meistens", "meaning": "대부분", "pos": "부사", "article": "-", "plural": "", "gender": ""}, {"word": "Messer", "meaning": "칼", "pos": "명사", "article": "das", "plural": "Messer", "gender": "Neuter"}, {"word": "Metzgerei", "meaning": "정육점", "pos": "명사", "article": "die", "plural": "Metzgereien", "gender": "Feminine"}, {"word": "Meyer", "meaning": "마이어 (성)", "pos": "고유명사", "article": "-", "plural": "", "gender": ""}, {"word": "Miete", "meaning": "임대료", "pos": "명사", "article": "die", "plural": "Mieten", "gender": "Feminine"}, {"word": "Milch", "meaning": "우유", "pos": "명사", "article": "die", "plural": "", "gender": "Feminine"}, {"word": "mit", "meaning": "~와 함께", "pos": "전치사", "article": "-", "plural": "", "gender": ""}, {"word": "mitfahren", "meaning": "함께 타다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Mitte", "meaning": "중간", "pos": "명사", "article": "die", "plural": "Mitten", "gender": "Feminine"}, {"word": "Mittelalter", "meaning": "중세", "pos": "명사", "article": "das", "plural": "", "gender": "Neuter"}, {"word": "Möbel", "meaning": "가구", "pos": "명사", "article": "das", "plural": "Möbel", "gender": "Neuter"}, {"word": "möchte", "meaning": "~하고 싶다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Möglichkeit", "meaning": "가능성", "pos": "명사", "article": "die", "plural": "Möglichkeiten", "gender": "Feminine"}, {"word": "Moment", "meaning": "순간", "pos": "명사", "article": "der", "plural": "Momente", "gender": "Masculine"}, {"word": "morgen", "meaning": "내일", "pos": "부사", "article": "-", "plural": "", "gender": ""}, {"word": "müde", "meaning": "피곤한", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "Mülleimer", "meaning": "쓰레기통", "pos": "명사", "article": "der", "plural": "Mülleimer", "gender": "Masculine"}, {"word": "München", "meaning": "뮌헨", "pos": "고유명사", "article": "das", "plural": "", "gender": "Neuter"}, {"word": "Mund", "meaning": "입", "pos": "명사", "article": "der", "plural": "Münder", "gender": "Masculine"}, {"word": "muß", "meaning": "~해야 한다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "müssen", "meaning": "~해야 한다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Mutter", "meaning": "어머니", "pos": "명사", "article": "die", "plural": "Mütter", "gender": "Feminine"}, {"word": "Muttersprache", "meaning": "모국어", "pos": "명사", "article": "die", "plural": "Muttersprachen", "gender": "Feminine"}, {"word": "Nachmittag", "meaning": "오후", "pos": "명사", "article": "der", "plural": "Nachmittage", "gender": "Masculine"}, {"word": "Nähe", "meaning": "근처", "pos": "명사", "article": "die", "plural": "", "gender": "Feminine"}, {"word": "naiv", "meaning": "순진한", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "Name", "meaning": "이름", "pos": "명사", "article": "der", "plural": "Namen", "gender": "Masculine"}, {"word": "Nase", "meaning": "코", "pos": "명사", "article": "die", "plural": "Nasen", "gender": "Feminine"}, {"word": "Nation", "meaning": "국가", "pos": "명사", "article": "die", "plural": "Nationen", "gender": "Feminine"}, {"word": "Natur", "meaning": "자연", "pos": "명사", "article": "die", "plural": "", "gender": "Feminine"}, {"word": "Nebenjob", "meaning": "부업", "pos": "명사", "article": "der", "plural": "Nebenjobs", "gender": "Masculine"}, {"word": "nehmen", "meaning": "가지다, 먹다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "nein", "meaning": "아니오", "pos": "부사", "article": "-", "plural": "", "gender": ""}, {"word": "nett", "meaning": "친절한", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "neue", "meaning": "새로운", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "Neuseeländer", "meaning": "뉴질랜드인", "pos": "명사", "article": "der", "plural": "Neuseeländer", "gender": "Masculine"}, {"word": "nichts", "meaning": "아무것도 ~없다", "pos": "대명사", "article": "-", "plural": "", "gender": ""}, {"word": "Nord", "meaning": "북쪽", "pos": "명사", "article": "der", "plural": "", "gender": "Masculine"}, {"word": "Nuss", "meaning": "견과류", "pos": "명사", "article": "die", "plural": "Nüsse", "gender": "Feminine"}, {"word": "Obst", "meaning": "과일", "pos": "명사", "article": "das", "plural": "", "gender": "Neuter"}, {"word": "offen", "meaning": "열린", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "öffnen", "meaning": "열다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "ohne", "meaning": "~없이", "pos": "전치사", "article": "-", "plural": "", "gender": ""}, {"word": "Ökonomie", "meaning": "경제학", "pos": "명사", "article": "die", "plural": "Ökonomien", "gender": "Feminine"}, {"word": "Öl", "meaning": "기름", "pos": "명사", "article": "das", "plural": "Öle", "gender": "Neuter"}, {"word": "Olympiahalle", "meaning": "올림픽 홀", "pos": "명사", "article": "die", "plural": "Olympiahallen", "gender": "Feminine"}, {"word": "Onkel", "meaning": "삼촌", "pos": "명사", "article": "der", "plural": "Onkel", "gender": "Masculine"}, {"word": "Ort", "meaning": "장소", "pos": "명사", "article": "der", "plural": "Orte", "gender": "Masculine"}, {"word": "Ost", "meaning": "동쪽", "pos": "명사", "article": "der", "plural": "", "gender": "Masculine"}, {"word": "Österreich", "meaning": "오스트리아", "pos": "고유명사", "article": "das", "plural": "", "gender": "Neuter"}, {"word": "Paket", "meaning": "소포", "pos": "명사", "article": "das", "plural": "Pakete", "gender": "Neuter"}, {"word": "Papier", "meaning": "종이", "pos": "명사", "article": "das", "plural": "Papiere", "gender": "Neuter"}, {"word": "Pass", "meaning": "여권, 패스", "pos": "명사", "article": "der", "plural": "Pässe", "gender": "Masculine"}, {"word": "Pferd", "meaning": "말", "pos": "명사", "article": "das", "plural": "Pferde", "gender": "Neuter"}, {"word": "Pianist", "meaning": "피아니스트", "pos": "명사", "article": "der", "plural": "Pianisten", "gender": "Masculine"}, {"word": "Piano", "meaning": "피아노", "pos": "명사", "article": "das", "plural": "Pianos", "gender": "Neuter"}, {"word": "Platz", "meaning": "장소, 광장", "pos": "명사", "article": "der", "plural": "Plätze", "gender": "Masculine"}, {"word": "Politik", "meaning": "정치", "pos": "명사", "article": "die", "plural": "", "gender": "Feminine"}, {"word": "Politiker", "meaning": "정치인", "pos": "명사", "article": "der", "plural": "Politiker", "gender": "Masculine"}, {"word": "Polizei", "meaning": "경찰", "pos": "명사", "article": "die", "plural": "", "gender": "Feminine"}, {"word": "Polizist", "meaning": "경찰", "pos": "명사", "article": "der", "plural": "Polizisten", "gender": "Masculine"}, {"word": "Porsche", "meaning": "포르쉐 (브랜드)", "pos": "고유명사", "article": "der", "plural": "", "gender": "Masculine"}, {"word": "Post", "meaning": "우편", "pos": "명사", "article": "die", "plural": "", "gender": "Feminine"}, {"word": "Problem", "meaning": "문제", "pos": "명사", "article": "das", "plural": "Probleme", "gender": "Neuter"}, {"word": "Professor", "meaning": "교수 (남)", "pos": "명사", "article": "der", "plural": "Professoren", "gender": "Masculine"}, {"word": "Professorin", "meaning": "교수 (여)", "pos": "명사", "article": "die", "plural": "Professorinnen", "gender": "Feminine"}, {"word": "Prüfung", "meaning": "시험", "pos": "명사", "article": "die", "plural": "Prüfungen", "gender": "Feminine"}, {"word": "Qualität", "meaning": "품질", "pos": "명사", "article": "die", "plural": "Qualitäten", "gender": "Feminine"}, {"word": "Quantität", "meaning": "양", "pos": "명사", "article": "die", "plural": "Quantitäten", "gender": "Feminine"}, {"word": "Quelle", "meaning": "원천, 샘", "pos": "명사", "article": "die", "plural": "Quellen", "gender": "Feminine"}, {"word": "Quintett", "meaning": "5중주", "pos": "명사", "article": "das", "plural": "Quintette", "gender": "Neuter"}, {"word": "Radio", "meaning": "라디오", "pos": "명사", "article": "das", "plural": "Radios", "gender": "Neuter"}, {"word": "Rat", "meaning": "조언", "pos": "명사", "article": "der", "plural": "Ratschläge", "gender": "Masculine"}, {"word": "Räuber", "meaning": "강도", "pos": "명사", "article": "der", "plural": "Räuber", "gender": "Masculine"}, {"word": "rechnen", "meaning": "계산하다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Recht", "meaning": "권리, 법", "pos": "명사", "article": "das", "plural": "Rechte", "gender": "Neuter"}, {"word": "rechts", "meaning": "오른쪽으로", "pos": "부사", "article": "-", "plural": "", "gender": ""}, {"word": "Regenschirm", "meaning": "우산", "pos": "명사", "article": "der", "plural": "Regenschirme", "gender": "Masculine"}, {"word": "Region", "meaning": "지역", "pos": "명사", "article": "die", "plural": "Regionen", "gender": "Feminine"}, {"word": "Reise", "meaning": "여행", "pos": "명사", "article": "die", "plural": "Reisen", "gender": "Feminine"}, {"word": "reisen", "meaning": "여행하다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "relativ", "meaning": "상대적으로", "pos": "부사", "article": "-", "plural": "", "gender": ""}, {"word": "Relligion", "meaning": "종교", "pos": "명사", "article": "die", "plural": "Religionen", "gender": "Feminine"}, {"word": "Rose", "meaning": "장미", "pos": "명사", "article": "die", "plural": "Rosen", "gender": "Feminine"}, {"word": "Rot", "meaning": "빨간색", "pos": "명사", "article": "das", "plural": "", "gender": "Neuter"}, {"word": "rot", "meaning": "빨간색", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "rufen", "meaning": "부르다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "ruhig", "meaning": "조용한", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "Russland", "meaning": "러시아", "pos": "고유명사", "article": "das", "plural": "", "gender": "Neuter"}, {"word": "sagen", "meaning": "말하다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "sammeln", "meaning": "모으다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Sauberkeit", "meaning": "청결", "pos": "명사", "article": "die", "plural": "", "gender": "Feminine"}, {"word": "Saxophon", "meaning": "색소폰", "pos": "명사", "article": "das", "plural": "Saxophone", "gender": "Neuter"}, {"word": "scharf", "meaning": "날카로운, 매운", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "scheint", "meaning": "빛나다/~인 것 같다 (3인칭)", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Schere", "meaning": "가위", "pos": "명사", "article": "die", "plural": "Scheren", "gender": "Feminine"}, {"word": "Schiff", "meaning": "배", "pos": "명사", "article": "das", "plural": "Schiffe", "gender": "Neuter"}, {"word": "schlafen", "meaning": "자다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "schläft", "meaning": "자다 (3인칭)", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Schle", "meaning": "[의미 불명]", "pos": "-", "article": "-", "plural": "", "gender": ""}, {"word": "Schloss", "meaning": "성, 자물쇠", "pos": "명사", "article": "das", "plural": "Schlösser", "gender": "Neuter"}, {"word": "schmeckt", "meaning": "맛이 나다 (3인칭)", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Schmidt", "meaning": "슈미트 (성)", "pos": "고유명사", "article": "-", "plural": "", "gender": ""}, {"word": "Schokolade", "meaning": "초콜릿", "pos": "명사", "article": "die", "plural": "Schokoladen", "gender": "Feminine"}, {"word": "schön", "meaning": "아름다운", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "Schuh", "meaning": "신발", "pos": "명사", "article": "die", "plural": "Schuhe", "gender": "Masculine"}, {"word": "Schule", "meaning": "학교", "pos": "명사", "article": "die", "plural": "Schulen", "gender": "Feminine"}, {"word": "Schüler", "meaning": "학생 (남, 중고등)", "pos": "명사", "article": "der", "plural": "Schüler", "gender": "Masculine"}, {"word": "Schülerin", "meaning": "학생 (여, 중고등)", "pos": "명사", "article": "die", "plural": "Schülerinnen", "gender": "Feminine"}, {"word": "Schwarz", "meaning": "검은색", "pos": "형용사/명사", "article": "das", "plural": "", "gender": "Neuter"}, {"word": "schwarze", "meaning": "검은", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "Schweiz", "meaning": "스위스", "pos": "고유명사", "article": "die", "plural": "", "gender": "Feminine"}, {"word": "Schwester", "meaning": "자매", "pos": "명사", "article": "die", "plural": "Schwestern", "gender": "Feminine"}, {"word": "schwimmen", "meaning": "수영하다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Schwimmen", "meaning": "수영", "pos": "명사", "article": "das", "plural": "", "gender": "Neuter"}, {"word": "Schwimmkurs", "meaning": "수영 강습", "pos": "명사", "article": "der", "plural": "Schwimmkurse", "gender": "Masculine"}, {"word": "schwmmen", "meaning": "수영하다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "sechs", "meaning": "6", "pos": "숫자", "article": "-", "plural": "", "gender": ""}, {"word": "See", "meaning": "호수/바다", "pos": "명사", "article": "der/die", "plural": "Seen", "gender": "Masculine/Feminine"}, {"word": "Sehen", "meaning": "보다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "seinem", "meaning": "그의", "pos": "소유대명사", "article": "-", "plural": "", "gender": ""}, {"word": "selbst", "meaning": "스스로", "pos": "부사/대명사", "article": "-", "plural": "", "gender": ""}, {"word": "selbstisch", "meaning": "이기적인", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "Shon", "meaning": "아들", "pos": "명사", "article": "der", "plural": "Söhne", "gender": "Masculine"}, {"word": "Siehst", "meaning": "보다 (2인칭)", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Sind", "meaning": "~이다 (복수/존댓말)", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "singen", "meaning": "노래하다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "sitzen", "meaning": "앉다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Skifahren", "meaning": "스키타기", "pos": "명사", "article": "das", "plural": "", "gender": "Neuter"}, {"word": "sollst", "meaning": "~해야 한다 (2인칭)", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Sommer", "meaning": "여름", "pos": "명사", "article": "der", "plural": "Sommer", "gender": "Masculine"}, {"word": "Sonne", "meaning": "태양", "pos": "명사", "article": "die", "plural": "Sonnen", "gender": "Feminine"}, {"word": "Sonnenbrille", "meaning": "선글라스", "pos": "명사", "article": "die", "plural": "Sonnenbrillen", "gender": "Feminine"}, {"word": "Sozialismus", "meaning": "사회주의", "pos": "명사", "article": "der", "plural": "", "gender": "Masculine"}, {"word": "Spaß", "meaning": "즐거움", "pos": "명사", "article": "der", "plural": "Späße", "gender": "Masculine"}, {"word": "später", "meaning": "나중에", "pos": "부사", "article": "-", "plural": "", "gender": ""}, {"word": "spazieren", "meaning": "산책하다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Spezialist", "meaning": "전문가", "pos": "명사", "article": "der", "plural": "Spezialisten", "gender": "Masculine"}, {"word": "spiele", "meaning": "놀다/연주하다 (1인칭)", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "spielen", "meaning": "놀다, 연주하다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "spielt", "meaning": "놀다/연주하다 (3인칭)", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Sport", "meaning": "스포츠", "pos": "명사", "article": "der", "plural": "", "gender": "Masculine"}, {"word": "Sprache", "meaning": "언어", "pos": "명사", "article": "die", "plural": "Sprachen", "gender": "Feminine"}, {"word": "sprechen", "meaning": "말하다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "spricht", "meaning": "말하다 (3인칭)", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Staat", "meaning": "국가", "pos": "명사", "article": "die", "plural": "staaten", "gender": "Masculine"}, {"word": "Stadt", "meaning": "도시", "pos": "명사", "article": "die", "plural": "Städte", "gender": "Feminine"}, {"word": "Stadtmitte", "meaning": "도심", "pos": "명사", "article": "die", "plural": "Stadtmitten", "gender": "Feminine"}, {"word": "Statistik", "meaning": "통계", "pos": "명사", "article": "die", "plural": "Statistiken", "gender": "Feminine"}, {"word": "statt(stattfinden)", "meaning": "대신에", "pos": "전치사", "article": "-", "plural": "", "gender": ""}, {"word": "Stehen", "meaning": "서다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Straße", "meaning": "거리", "pos": "명사", "article": "die", "plural": "Straßen", "gender": "Feminine"}, {"word": "Student", "meaning": "학생 (남)", "pos": "명사", "article": "der", "plural": "Studenten", "gender": "Masculine"}, {"word": "Studentin", "meaning": "학생 (여)", "pos": "명사", "article": "die", "plural": "Studentinnen", "gender": "Feminine"}, {"word": "Studentinnen", "meaning": "여학생들", "pos": "명사", "article": "die", "plural": "", "gender": "Feminine"}, {"word": "studieren", "meaning": "공부하다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "studierende", "meaning": "공부하는 사람들", "pos": "명사/형용사", "article": "die", "plural": "", "gender": "Plural"}, {"word": "Studium", "meaning": "학업", "pos": "명사", "article": "das", "plural": "Studien", "gender": "Neuter"}, {"word": "Stuhl", "meaning": "의자", "pos": "명사", "article": "der", "plural": "Stühle", "gender": "Masculine"}, {"word": "Stunde", "meaning": "시간", "pos": "명사", "article": "die", "plural": "Stunden", "gender": "Feminine"}, {"word": "Substanz", "meaning": "물질", "pos": "명사", "article": "die", "plural": "Substanzen", "gender": "Feminine"}, {"word": "Süd", "meaning": "남쪽", "pos": "명사", "article": "der", "plural": "", "gender": "Masculine"}, {"word": "süß", "meaning": "달콤한", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "Tag", "meaning": "날", "pos": "명사", "article": "der", "plural": "Tage", "gender": "Masculine"}, {"word": "Tages", "meaning": "날의 (속격)", "pos": "명사", "article": "des", "plural": "", "gender": "Masculine"}, {"word": "Tasche", "meaning": "가방", "pos": "명사", "article": "die", "plural": "Taschen", "gender": "Feminine"}, {"word": "Taschentuch", "meaning": "손수건", "pos": "명사", "article": "das", "plural": "Taschentücher", "gender": "Neuter"}, {"word": "Tasse", "meaning": "컵", "pos": "명사", "article": "die", "plural": "Tassen", "gender": "Feminine"}, {"word": "Tastatur", "meaning": "키보드", "pos": "명사", "article": "die", "plural": "Tastaturen", "gender": "Feminine"}, {"word": "Taxi", "meaning": "택시", "pos": "명사", "article": "das", "plural": "Taxis", "gender": "Neuter"}, {"word": "Technik", "meaning": "기술", "pos": "명사", "article": "die", "plural": "Techniken", "gender": "Feminine"}, {"word": "Teller", "meaning": "접시", "pos": "명사", "article": "der", "plural": "Teller", "gender": "Masculine"}, {"word": "Tennisspieler", "meaning": "테니스 선수", "pos": "명사", "article": "der", "plural": "Tennisspieler", "gender": "Masculine"}, {"word": "Teppich", "meaning": "카펫", "pos": "명사", "article": "der", "plural": "Teppiche", "gender": "Masculine"}, {"word": "Theater", "meaning": "극장", "pos": "명사", "article": "das", "plural": "Theater", "gender": "Neuter"}, {"word": "Tiger", "meaning": "호랑이", "pos": "명사", "article": "der", "plural": "Tiger", "gender": "Masculine"}, {"word": "Tisch", "meaning": "책상, 테이블", "pos": "명사", "article": "der", "plural": "Tische", "gender": "Masculine"}, {"word": "Tochter", "meaning": "딸", "pos": "명사", "article": "die", "plural": "Töchter", "gender": "Feminine"}, {"word": "Töchter", "meaning": "딸들", "pos": "명사", "article": "die", "plural": "", "gender": "Feminine"}, {"word": "Toilette", "meaning": "화장실", "pos": "명사", "article": "die", "plural": "Toiletten", "gender": "Feminine"}, {"word": "Torte", "meaning": "케이크", "pos": "명사", "article": "die", "plural": "Torten", "gender": "Feminine"}, {"word": "tragen", "meaning": "입다, 나르다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "treffen", "meaning": "만나다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "trefft", "meaning": "만나다 (2인칭 복수)", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "trinke", "meaning": "마시다 (1인칭)", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "trinken", "meaning": "마시다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "trocknen", "meaning": "말리다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Trompete", "meaning": "트럼펫", "pos": "명사", "article": "die", "plural": "Trompeten", "gender": "Feminine"}, {"word": "tschüs", "meaning": "안녕 (작별)", "pos": "감탄사", "article": "-", "plural": "", "gender": ""}, {"word": "tun", "meaning": "하다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "übel", "meaning": "나쁜, 메스꺼운", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "über", "meaning": "~위에, ~에 대해", "pos": "전치사", "article": "-", "plural": "", "gender": ""}, {"word": "Übung", "meaning": "연습", "pos": "명사", "article": "die", "plural": "Übungen", "gender": "Feminine"}, {"word": "Uhr", "meaning": "시계", "pos": "명사", "article": "die", "plural": "Uhren", "gender": "Feminine"}, {"word": "um", "meaning": "~주위에", "pos": "전치사", "article": "-", "plural": "", "gender": ""}, {"word": "Umgebung", "meaning": "환경, 주변", "pos": "명사", "article": "die", "plural": "Umgebungen", "gender": "Feminine"}, {"word": "und", "meaning": "그리고", "pos": "접속사", "article": "-", "plural": "", "gender": ""}, {"word": "Union", "meaning": "연합", "pos": "명사", "article": "die", "plural": "Unionen", "gender": "Feminine"}, {"word": "Universität", "meaning": "대학교", "pos": "명사", "article": "die", "plural": "Universitäten", "gender": "Feminine"}, {"word": "unter", "meaning": "아래", "pos": "전치사", "article": "-", "plural": "", "gender": ""}, {"word": "Urasche", "meaning": "[의미 불명]", "pos": "-", "article": "-", "plural": "", "gender": ""}, {"word": "Vase", "meaning": "꽃병", "pos": "명사", "article": "die", "plural": "Vasen", "gender": "Feminine"}, {"word": "Vater", "meaning": "아버지", "pos": "명사", "article": "der", "plural": "Väter", "gender": "Masculine"}, {"word": "Verb", "meaning": "동사", "pos": "명사", "article": "das", "plural": "Verben", "gender": "Neuter"}, {"word": "verboten", "meaning": "금지된", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "Vereinigten", "meaning": "연합된", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "Vereinigten Staaten", "meaning": "미국 (합중국)", "pos": "고유명사", "article": "die", "plural": "", "gender": "Plural"}, {"word": "vergisst", "meaning": "잊다 (3인칭)", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "verkaufen", "meaning": "팔다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "vermissen", "meaning": "그리워하다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "verstehen", "meaning": "이해하다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "viel", "meaning": "많은", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "Visum", "meaning": "비자", "pos": "명사", "article": "das", "plural": "Visa", "gender": "Neuter"}, {"word": "Vogel", "meaning": "새", "pos": "명사", "article": "der", "plural": "Vögel", "gender": "Masculine"}, {"word": "Volk", "meaning": "민족", "pos": "명사", "article": "das", "plural": "Völker", "gender": "Neuter"}, {"word": "Volkswirtschaft", "meaning": "국민경제", "pos": "명사", "article": "die", "plural": "Volkswirtschaften", "gender": "Feminine"}, {"word": "voll", "meaning": "가득 찬", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "von", "meaning": "~로부터", "pos": "전치사", "article": "-", "plural": "", "gender": ""}, {"word": "vorbei", "meaning": "지나가서", "pos": "부사", "article": "-", "plural": "", "gender": ""}, {"word": "Vormittag", "meaning": "오전", "pos": "명사", "article": "der", "plural": "Vormittage", "gender": "Masculine"}, {"word": "vorstellen", "meaning": "소개하다, 상상하다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "warten", "meaning": "기다리다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "was", "meaning": "무엇", "pos": "의문사", "article": "-", "plural": "", "gender": ""}, {"word": "waschen", "meaning": "씻다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Wein", "meaning": "와인", "pos": "명사", "article": "der", "plural": "Weine", "gender": "Masculine"}, {"word": "welken", "meaning": "시들다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Welle", "meaning": "파도", "pos": "명사", "article": "die", "plural": "Wellen", "gender": "Feminine"}, {"word": "Welt", "meaning": "세계", "pos": "명사", "article": "die", "plural": "Welten", "gender": "Feminine"}, {"word": "wenig", "meaning": "적은", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "werden", "meaning": "~이 되다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Merecedes", "meaning": "메르세데스", "pos": "고유명사", "article": "der", "plural": "", "gender": "Masculine"}, {"word": "Wetter", "meaning": "날씨", "pos": "명사", "article": "das", "plural": "", "gender": "Neuter"}, {"word": "willkommen", "meaning": "환영합니다", "pos": "형용사/감탄사", "article": "-", "plural": "", "gender": ""}, {"word": "Wind", "meaning": "바람", "pos": "명사", "article": "der", "plural": "Winde", "gender": "Masculine"}, {"word": "wirft", "meaning": "던지다 (3인칭)", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "wirklich", "meaning": "정말로", "pos": "부사", "article": "-", "plural": "", "gender": ""}, {"word": "wissen", "meaning": "알다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Wissen", "meaning": "지식", "pos": "명사", "article": "das", "plural": "", "gender": "Neuter"}, {"word": "Wissenschaft", "meaning": "과학", "pos": "명사", "article": "die", "plural": "Wissenschaften", "gender": "Feminine"}, {"word": "Woher", "meaning": "어디서", "pos": "부사", "article": "-", "plural": "", "gender": ""}, {"word": "Wohin", "meaning": "어디로", "pos": "부사", "article": "-", "plural": "", "gender": ""}, {"word": "wohnen", "meaning": "살다 (거주)", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Wohnung", "meaning": "아파트, 주택", "pos": "명사", "article": "die", "plural": "Wohnungen", "gender": "Feminine"}, {"word": "Wohnzimmer", "meaning": "거실", "pos": "명사", "article": "das", "plural": "Wohnzimmer", "gender": "Neuter"}, {"word": "Wörter", "meaning": "단어들", "pos": "명사", "article": "die", "plural": "", "gender": "Neuter"}, {"word": "Wörterbuch", "meaning": "사전", "pos": "명사", "article": "das", "plural": "Wörterbücher", "gender": "Neuter"}, {"word": "wunderbar", "meaning": "멋진", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "Xylofon", "meaning": "실로폰", "pos": "명사", "article": "das", "plural": "Xylofone", "gender": "Neuter"}, {"word": "Yacht", "meaning": "요트", "pos": "명사", "article": "die", "plural": "Yachten", "gender": "Feminine"}, {"word": "Yoga", "meaning": "요가", "pos": "명사", "article": "das", "plural": "", "gender": "Neuter"}, {"word": "Ypsilon", "meaning": "그리스 문자 Y", "pos": "명사", "article": "das", "plural": "Ypsilons", "gender": "Neuter"}, {"word": "Zahl", "meaning": "숫자", "pos": "명사", "article": "die", "plural": "Zahlen", "gender": "Feminine"}, {"word": "Zeit", "meaning": "시간", "pos": "명사", "article": "die", "plural": "Zeiten", "gender": "Feminine"}, {"word": "Zeitung", "meaning": "신문", "pos": "명사", "article": "die", "plural": "Zeitungen", "gender": "Feminine"}, {"word": "Zermatt", "meaning": "체르마트 (스위스 도시)", "pos": "고유명사", "article": "das", "plural": "", "gender": "Neuter"}, {"word": "Zermatt", "meaning": "파괴하다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "Zoo", "meaning": "동물원", "pos": "명사", "article": "der", "plural": "Zoos", "gender": "Masculine"}, {"word": "zu", "meaning": "~에게, 너무", "pos": "전치사/부사", "article": "-", "plural": "", "gender": ""}, {"word": "zuerst", "meaning": "먼저", "pos": "부사", "article": "-", "plural": "", "gender": ""}, {"word": "Zug", "meaning": "기차", "pos": "명사", "article": "der", "plural": "Züge", "gender": "Masculine"}, {"word": "zur", "meaning": "~로 (zu+der)", "pos": "전치사+관사", "article": "-", "plural": "", "gender": ""}, {"word": "zurück", "meaning": "돌아가서", "pos": "부사", "article": "-", "plural": "", "gender": ""}, {"word": "zusagen", "meaning": "승낙하다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "zusammen", "meaning": "함께", "pos": "부사", "article": "-", "plural": "", "gender": ""}, {"word": "Zuschauer", "meaning": "관중", "pos": "명사", "article": "der", "plural": "Zuschauer", "gender": "Masculine"}, {"word": "zweifelhaft", "meaning": "의심스러운", "pos": "형용사", "article": "-", "plural": "", "gender": ""}, {"word": "nach", "meaning": "~후에", "pos": "전치사", "article": "-", "plural": "", "gender": ""}, {"word": "ins", "meaning": "~안으로", "pos": "전치사+관사", "article": "-", "plural": "", "gender": ""}, {"word": "Wie", "meaning": "어떻게", "pos": "부사", "article": "-", "plural": "", "gender": ""}, {"word": "seit", "meaning": "~이래로", "pos": "전치사", "article": "-", "plural": "", "gender": ""}, {"word": "Supermarkt", "meaning": "슈퍼마켓", "pos": "명사", "article": "der", "plural": "Supermärkte", "gender": "Masculine"}, {"word": "backen", "meaning": "굽다", "pos": "동사", "article": "-", "plural": "", "gender": ""}, {"word": "alleine", "meaning": "혼자", "pos": "부사", "article": "-", "plural": "", "gender": ""}, {"word": "als", "meaning": "~보다, ~로서", "pos": "접속사/전치사", "article": "-", "plural": "", "gender": ""}, {"word": "tanzen", "meaning": "춤추다", "pos": "동사", "article": "-", "plural": "", "gender": ""}];
+const vocabData=[{"word": "Abend", "meaning": "저녁", "pos": "명사", "article": "der", "plural": "Abende", "gender": "Masculine"}, {"word": "aber", "meaning": "그러나", "pos": "접속사", "article": "-", "plural": "-", "gender": "-"}, {"word": "abfahren", "meaning": "출발하다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "absolut", "meaning": "절대적으로", "pos": "부사", "article": "-", "plural": "-", "gender": "-"}, {"word": "ach", "meaning": "아, 오", "pos": "감탄사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Achtung", "meaning": "주의", "pos": "명사", "article": "die", "plural": "-", "gender": "Feminine"}, {"word": "aggressiv", "meaning": "공격적인", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Aktion", "meaning": "활동, 행동", "pos": "명사", "article": "die", "plural": "Aktionen", "gender": "Feminine"}, {"word": "allein", "meaning": "혼자", "pos": "형용사/부사", "article": "-", "plural": "-", "gender": "-"}, {"word": "alles", "meaning": "모든 것", "pos": "대명사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Alles klar", "meaning": "알겠어", "pos": "구", "article": "-", "plural": "-", "gender": "-"}, {"word": "alt", "meaning": "늙은", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Amerikaner", "meaning": "미국인 (남)", "pos": "명사", "article": "der", "plural": "Amerikaner", "gender": "Masculine"}, {"word": "ändern", "meaning": "바꾸다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Anfang", "meaning": "시작", "pos": "명사", "article": "der", "plural": "Anfänge", "gender": "Masculine"}, {"word": "anfangen", "meaning": "시작하다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "anhabe", "meaning": "입고 있다 (1인칭)", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "ankommen", "meaning": "도착하다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Anlage", "meaning": "시설, 설비", "pos": "명사", "article": "die", "plural": "Anlagen", "gender": "Feminine"}, {"word": "Apfel", "meaning": "사과", "pos": "명사", "article": "der", "plural": "Äpfel", "gender": "Masculine"}, {"word": "Arbeit", "meaning": "일, 노동", "pos": "명사", "article": "die", "plural": "Arbeiten", "gender": "Feminine"}, {"word": "arbeiten", "meaning": "일하다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Ärger", "meaning": "화, 짜증", "pos": "명사", "article": "der", "plural": "-", "gender": "Masculine"}, {"word": "Argument", "meaning": "논쟁, 주장", "pos": "명사", "article": "das", "plural": "Argumente", "gender": "Neuter"}, {"word": "Arzt", "meaning": "의사 (남)", "pos": "명사", "article": "der", "plural": "Ärzte", "gender": "Masculine"}, {"word": "Ärztin", "meaning": "의사 (여)", "pos": "명사", "article": "die", "plural": "Ärztinnen", "gender": "Feminine"}, {"word": "atmen", "meaning": "숨쉬다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Audi", "meaning": "아우디 (브랜드)", "pos": "고유명사", "article": "der", "plural": "-", "gender": "Masculine"}, {"word": "aufsteigen", "meaning": "올라가다, 승진하다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Auge", "meaning": "눈", "pos": "명사", "article": "die", "plural": "Augen", "gender": "Neuter"}, {"word": "ausgebucht", "meaning": "예약 마감된", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "ausgehen", "meaning": "외출하다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Aussage", "meaning": "진술, 말", "pos": "명사", "article": "die", "plural": "Aussagen", "gender": "Feminine"}, {"word": "aussteigen", "meaning": "내리다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Australier", "meaning": "호주인 (남)", "pos": "명사", "article": "der", "plural": "Australier", "gender": "Masculine"}, {"word": "Auto", "meaning": "자동차", "pos": "명사", "article": "das", "plural": "Autos", "gender": "Neuter"}, {"word": "Baby", "meaning": "아기", "pos": "명사", "article": "das", "plural": "Babys", "gender": "Neuter"}, {"word": "Bach", "meaning": "시냇물", "pos": "명사", "article": "der", "plural": "Bäche", "gender": "Masculine"}, {"word": "Bäckerei", "meaning": "제과점", "pos": "명사", "article": "die", "plural": "Bäckereien", "gender": "Feminine"}, {"word": "baden", "meaning": "목욕하다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Bahnhof", "meaning": "기차역", "pos": "명사", "article": "der", "plural": "Bahnhöfe", "gender": "Masculine"}, {"word": "Bald", "meaning": "곧", "pos": "부사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Bären", "meaning": "곰들", "pos": "명사", "article": "die", "plural": "-", "gender": "Masculine"}, {"word": "Baum", "meaning": "나무", "pos": "명사", "article": "der", "plural": "Bäume", "gender": "Masculine"}, {"word": "Bayern", "meaning": "바이에른", "pos": "고유명사", "article": "das", "plural": "-", "gender": "Neuter"}, {"word": "Bedeutung", "meaning": "의미", "pos": "명사", "article": "die", "plural": "Bedeutungen", "gender": "Feminine"}, {"word": "befehlen", "meaning": "명령하다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "befiehlt", "meaning": "명령하다 (3인칭)", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "bei", "meaning": "~에, ~에서", "pos": "전치사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Bein", "meaning": "다리", "pos": "명사", "article": "das", "plural": "Beine", "gender": "Neuter"}, {"word": "bekommen", "meaning": "받다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "bequem", "meaning": "편안한", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Berlin", "meaning": "베를린", "pos": "고유명사", "article": "das", "plural": "-", "gender": "Neuter"}, {"word": "Beruf", "meaning": "직업", "pos": "명사", "article": "der", "plural": "Berufe", "gender": "Masculine"}, {"word": "beruflich", "meaning": "직업적인", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "berühmte", "meaning": "유명한", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Bestellen", "meaning": "주문하다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "besucht", "meaning": "방문하다 (3인칭)", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Bibel", "meaning": "성경", "pos": "명사", "article": "die", "plural": "Bibeln", "gender": "Feminine"}, {"word": "billig", "meaning": "싼", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "bin", "meaning": "~이다 (1인칭)", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "bist", "meaning": "~이다 (2인칭)", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "bitte", "meaning": "부탁합니다", "pos": "부사", "article": "-", "plural": "-", "gender": "-"}, {"word": "bitten", "meaning": "부탁하다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Blätter", "meaning": "잎들", "pos": "명사", "article": "die", "plural": "-", "gender": "Neuter"}, {"word": "blau", "meaning": "파란색", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Blume", "meaning": "꽃", "pos": "명사", "article": "die", "plural": "Blumen", "gender": "Feminine"}, {"word": "Bluse", "meaning": "블라우스", "pos": "명사", "article": "die", "plural": "Blusen", "gender": "Feminine"}, {"word": "BMW", "meaning": "BMW (브랜드)", "pos": "고유명사", "article": "der", "plural": "-", "gender": "Masculine"}, {"word": "Boot", "meaning": "보트", "pos": "명사", "article": "das", "plural": "Boote", "gender": "Neuter"}, {"word": "braucht", "meaning": "필요하다 (3인칭)", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "braune", "meaning": "갈색의", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Brav", "meaning": "착한", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Brille", "meaning": "안경", "pos": "명사", "article": "die", "plural": "Brillen", "gender": "Feminine"}, {"word": "Bruder", "meaning": "형제", "pos": "명사", "article": "der", "plural": "Brüder", "gender": "Masculine"}, {"word": "Buch", "meaning": "책", "pos": "명사", "article": "das", "plural": "Bücher", "gender": "Neuter"}, {"word": "Bücher", "meaning": "책들", "pos": "명사", "article": "die", "plural": "-", "gender": "Neuter"}, {"word": "Bücherei", "meaning": "도서관", "pos": "명사", "article": "die", "plural": "Büchereien", "gender": "Feminine"}, {"word": "Bundeswehr", "meaning": "독일 연방군", "pos": "명사", "article": "die", "plural": "-", "gender": "Feminine"}, {"word": "Burg", "meaning": "성", "pos": "명사", "article": "die", "plural": "Burgen", "gender": "Feminine"}, {"word": "Bürgermeister", "meaning": "시장", "pos": "명사", "article": "der", "plural": "Bürgermeister", "gender": "Masculine"}, {"word": "Büro", "meaning": "사무실", "pos": "명사", "article": "das", "plural": "Büros", "gender": "Neuter"}, {"word": "Café", "meaning": "카페", "pos": "명사", "article": "das", "plural": "Cafés", "gender": "Neuter"}, {"word": "Cent", "meaning": "센트", "pos": "명사", "article": "der", "plural": "Cents", "gender": "Masculine"}, {"word": "Chef", "meaning": "상사, 책임자", "pos": "명사", "article": "der", "plural": "Chefs", "gender": "Masculine"}, {"word": "Chemie", "meaning": "화학", "pos": "명사", "article": "die", "plural": "-", "gender": "Feminine"}, {"word": "circa", "meaning": "약, 대략", "pos": "부사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Club", "meaning": "클럽", "pos": "명사", "article": "der", "plural": "Clubs", "gender": "Masculine"}, {"word": "Computer", "meaning": "컴퓨터", "pos": "명사", "article": "der", "plural": "Computer", "gender": "Masculine"}, {"word": "Couch", "meaning": "소파", "pos": "명사", "article": "die", "plural": "Couches", "gender": "Feminine"}, {"word": "da", "meaning": "거기에, 그때", "pos": "부사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Dach", "meaning": "지붕", "pos": "명사", "article": "das", "plural": "Dächer", "gender": "Neuter"}, {"word": "dachte", "meaning": "생각하다 (과거)", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Dame", "meaning": "여사, 부인", "pos": "명사", "article": "die", "plural": "Damen", "gender": "Feminine"}, {"word": "Datum", "meaning": "날짜", "pos": "명사", "article": "das", "plural": "Daten", "gender": "Neuter"}, {"word": "denken", "meaning": "생각하다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Depressionen", "meaning": "우울증", "pos": "명사", "article": "die", "plural": "-", "gender": "Feminine"}, {"word": "dessen", "meaning": "그것의", "pos": "관계대명사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Deutsch", "meaning": "독일어", "pos": "명사", "article": "das", "plural": "-", "gender": "Neuter"}, {"word": "Deutschland", "meaning": "독일", "pos": "고유명사", "article": "das", "plural": "-", "gender": "Neuter"}, {"word": "dich", "meaning": "너를", "pos": "대명사", "article": "-", "plural": "-", "gender": "-"}, {"word": "dick", "meaning": "두꺼운, 뚱뚱한", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Dieb", "meaning": "도둑", "pos": "명사", "article": "der", "plural": "Diebe", "gender": "Masculine"}, {"word": "Diskussion", "meaning": "토론", "pos": "명사", "article": "die", "plural": "Diskussionen", "gender": "Feminine"}, {"word": "doch", "meaning": "그래도", "pos": "부사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Dokument", "meaning": "문서", "pos": "명사", "article": "das", "plural": "Dokumente", "gender": "Neuter"}, {"word": "Dolmetscher", "meaning": "통역사", "pos": "명사", "article": "der", "plural": "Dolmetscher", "gender": "Masculine"}, {"word": "Dorf", "meaning": "마을", "pos": "명사", "article": "das", "plural": "Dörfer", "gender": "Neuter"}, {"word": "Dort", "meaning": "저기에", "pos": "부사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Dose", "meaning": "캔", "pos": "명사", "article": "die", "plural": "Dosen", "gender": "Feminine"}, {"word": "draußen", "meaning": "밖에", "pos": "부사", "article": "-", "plural": "-", "gender": "-"}, {"word": "dunkel", "meaning": "어두운", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "dünn", "meaning": "얇은, 마른", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "durch", "meaning": "~을 통해", "pos": "전치사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Dynamik", "meaning": "역학, 동역학", "pos": "명사", "article": "die", "plural": "-", "gender": "Feminine"}, {"word": "echt", "meaning": "진짜의", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Ecke", "meaning": "모퉁이", "pos": "명사", "article": "die", "plural": "Ecken", "gender": "Feminine"}, {"word": "Eiche", "meaning": "참나무", "pos": "명사", "article": "die", "plural": "Eichen", "gender": "Feminine"}, {"word": "eigentlich", "meaning": "사실은", "pos": "부사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Einheit", "meaning": "단위, 통일", "pos": "명사", "article": "die", "plural": "Einheiten", "gender": "Feminine"}, {"word": "einschlafen", "meaning": "잠들다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "einsteigen", "meaning": "타다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Elefant", "meaning": "코끼리", "pos": "명사", "article": "der", "plural": "Elefanten", "gender": "Masculine"}, {"word": "Elster", "meaning": "까치", "pos": "명사", "article": "die", "plural": "Elstern", "gender": "Feminine"}, {"word": "Eltern", "meaning": "부모님", "pos": "명사", "article": "die", "plural": "-", "gender": "Plural"}, {"word": "empfehlen", "meaning": "추천하다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Ende", "meaning": "끝", "pos": "명사", "article": "das", "plural": "Enden", "gender": "Neuter"}, {"word": "eng", "meaning": "좁은", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "entdecken", "meaning": "발견하다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Ente", "meaning": "오리", "pos": "명사", "article": "die", "plural": "Enten", "gender": "Feminine"}, {"word": "Erde", "meaning": "지구, 땅", "pos": "명사", "article": "die", "plural": "-", "gender": "Feminine"}, {"word": "erzählen", "meaning": "이야기하다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "essen", "meaning": "먹다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Essen", "meaning": "음식, 식사", "pos": "명사", "article": "das", "plural": "-", "gender": "Neuter"}, {"word": "etwas", "meaning": "뭔가, 약간", "pos": "대명사/부사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Europa", "meaning": "유럽", "pos": "고유명사", "article": "das", "plural": "-", "gender": "Neuter"}, {"word": "Europäischen", "meaning": "유럽의", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Existenz", "meaning": "존재", "pos": "명사", "article": "die", "plural": "Existenzen", "gender": "Feminine"}, {"word": "Experiment", "meaning": "실험", "pos": "명사", "article": "das", "plural": "Experimente", "gender": "Neuter"}, {"word": "Fabrik", "meaning": "공장", "pos": "명사", "article": "die", "plural": "Fabriken", "gender": "Feminine"}, {"word": "fahren", "meaning": "운전하다, 타다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Fahrer", "meaning": "운전사", "pos": "명사", "article": "der", "plural": "Fahrer", "gender": "Masculine"}, {"word": "Fahrrad", "meaning": "자전거", "pos": "명사", "article": "das", "plural": "Fahrräder", "gender": "Neuter"}, {"word": "fährt", "meaning": "타다/운전하다 (3인칭)", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "fallen", "meaning": "떨어지다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Familie", "meaning": "가족", "pos": "명사", "article": "die", "plural": "Familien", "gender": "Feminine"}, {"word": "fängt", "meaning": "잡다 (3인칭)", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "fantastisch", "meaning": "환상적인", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Farbe", "meaning": "색깔", "pos": "명사", "article": "die", "plural": "Farben", "gender": "Feminine"}, {"word": "Farben", "meaning": "색깔들", "pos": "명사", "article": "die", "plural": "-", "gender": "Feminine"}, {"word": "fast", "meaning": "거의", "pos": "부사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Fenster", "meaning": "창문", "pos": "명사", "article": "das", "plural": "Fenster", "gender": "Neuter"}, {"word": "Ferien", "meaning": "방학", "pos": "명사", "article": "die", "plural": "-", "gender": "Plural"}, {"word": "Feuerwerk", "meaning": "불꽃놀이", "pos": "명사", "article": "das", "plural": "Feuerwerke", "gender": "Neuter"}, {"word": "Film", "meaning": "영화", "pos": "명사", "article": "der", "plural": "Filme", "gender": "Masculine"}, {"word": "finden", "meaning": "찾다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "findet(stattfinden)", "meaning": "열리다 (3인칭)", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Firma", "meaning": "회사", "pos": "명사", "article": "die", "plural": "Firmen", "gender": "Feminine"}, {"word": "Flasche", "meaning": "병", "pos": "명사", "article": "die", "plural": "Flaschen", "gender": "Feminine"}, {"word": "fleißig", "meaning": "부지런한", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Flöte", "meaning": "플루트", "pos": "명사", "article": "die", "plural": "Flöten", "gender": "Feminine"}, {"word": "Flug", "meaning": "비행", "pos": "명사", "article": "der", "plural": "Flüge", "gender": "Masculine"}, {"word": "Fluss", "meaning": "강", "pos": "명사", "article": "der", "plural": "Flüsse", "gender": "Masculine"}, {"word": "Ford", "meaning": "포드 (브랜드)", "pos": "고유명사", "article": "der", "plural": "-", "gender": "Masculine"}, {"word": "Französisch", "meaning": "프랑스어", "pos": "명사", "article": "das", "plural": "-", "gender": "Neuter"}, {"word": "Frau", "meaning": "여자, 부인", "pos": "명사", "article": "die", "plural": "Frauen", "gender": "Feminine"}, {"word": "Fräulein", "meaning": "아가씨 (옛말)", "pos": "명사", "article": "das", "plural": "Fräulein", "gender": "Neuter"}, {"word": "Freiheit", "meaning": "자유", "pos": "명사", "article": "die", "plural": "Freiheiten", "gender": "Feminine"}, {"word": "Freitag", "meaning": "금요일", "pos": "명사", "article": "der", "plural": "Freitage", "gender": "Masculine"}, {"word": "Freund", "meaning": "친구 (남)", "pos": "명사", "article": "der", "plural": "Freunde", "gender": "Masculine"}, {"word": "freundlich", "meaning": "친절한", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Freundschaft", "meaning": "우정", "pos": "명사", "article": "die", "plural": "Freundschaften", "gender": "Feminine"}, {"word": "Frühjahr", "meaning": "봄", "pos": "명사", "article": "das", "plural": "Frühjahre", "gender": "Neuter"}, {"word": "Frühling", "meaning": "봄", "pos": "명사", "article": "der", "plural": "Frühlinge", "gender": "Masculine"}, {"word": "Fuchs", "meaning": "여우", "pos": "명사", "article": "der", "plural": "Füchse", "gender": "Masculine"}, {"word": "fühlen", "meaning": "느끼다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "füllen", "meaning": "채우다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "für", "meaning": "~을 위해", "pos": "전치사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Fuß", "meaning": "발", "pos": "명사", "article": "der", "plural": "Füße", "gender": "Masculine"}, {"word": "Fußball", "meaning": "축구", "pos": "명사", "article": "der", "plural": "Fußbälle", "gender": "Masculine"}, {"word": "Gabel", "meaning": "포크", "pos": "명사", "article": "die", "plural": "Gabeln", "gender": "Feminine"}, {"word": "Gans", "meaning": "거위", "pos": "명사", "article": "die", "plural": "Gänse", "gender": "Feminine"}, {"word": "Garten", "meaning": "정원", "pos": "명사", "article": "der", "plural": "Gärten", "gender": "Masculine"}, {"word": "gebe", "meaning": "주다 (1인칭)", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "geben", "meaning": "주다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "gebissen", "meaning": "물다 (과거분사)", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "gefallen", "meaning": "마음에 들다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "gefällt", "meaning": "마음에 들다 (3인칭)", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "gehen", "meaning": "가다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "gehört", "meaning": "속하다 (3인칭)", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Geld", "meaning": "돈", "pos": "명사", "article": "das", "plural": "-", "gender": "Neuter"}, {"word": "Gemüse", "meaning": "야채", "pos": "명사", "article": "das", "plural": "-", "gender": "Neuter"}, {"word": "General", "meaning": "장군", "pos": "명사", "article": "der", "plural": "Generäle", "gender": "Masculine"}, {"word": "genug", "meaning": "충분한", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "gern", "meaning": "매우", "pos": "부사", "article": "-", "plural": "-", "gender": "-"}, {"word": "gerne", "meaning": "기꺼이", "pos": "부사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Geschäft", "meaning": "가게, 상점", "pos": "명사", "article": "das", "plural": "Geschäfte", "gender": "Neuter"}, {"word": "geschehen", "meaning": "일어나다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Geschichte", "meaning": "역사, 이야기", "pos": "명사", "article": "die", "plural": "Geschichten", "gender": "Feminine"}, {"word": "geschickter", "meaning": "더 숙련된", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "gesehen", "meaning": "보다 (과거분사)", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Gesellschaft", "meaning": "사회", "pos": "명사", "article": "die", "plural": "Gesellschaften", "gender": "Feminine"}, {"word": "Gesicht", "meaning": "얼굴", "pos": "명사", "article": "das", "plural": "Gesichter", "gender": "Neuter"}, {"word": "Gestern", "meaning": "어제", "pos": "부사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Gesundheit", "meaning": "건강", "pos": "명사", "article": "die", "plural": "-", "gender": "Feminine"}, {"word": "Getränke", "meaning": "음료들", "pos": "명사", "article": "die", "plural": "-", "gender": "Neuter"}, {"word": "getroffen", "meaning": "만나다 (과거분사)", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "gibt", "meaning": "주다 (3인칭)", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Glas", "meaning": "유리, 잔", "pos": "명사", "article": "das", "plural": "Gläser", "gender": "Neuter"}, {"word": "glaube", "meaning": "믿다 (1인칭)", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Glück", "meaning": "행운", "pos": "명사", "article": "das", "plural": "-", "gender": "Neuter"}, {"word": "glücklich", "meaning": "행복한", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Gott", "meaning": "신", "pos": "명사", "article": "der", "plural": "Götter", "gender": "Masculine"}, {"word": "Grammatik", "meaning": "문법", "pos": "명사", "article": "die", "plural": "Grammatiken", "gender": "Feminine"}, {"word": "groß", "meaning": "큰", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "größte", "meaning": "가장 큰", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Grün", "meaning": "녹색", "pos": "명사", "article": "das", "plural": "-", "gender": "Neuter"}, {"word": "gut", "meaning": "좋은", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "gute", "meaning": "좋은", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Gymnasium", "meaning": "김나지움 (인문계 중고등학교)", "pos": "명사", "article": "das", "plural": "Gymnasien", "gender": "Neuter"}, {"word": "Haar", "meaning": "머리카락", "pos": "명사", "article": "das", "plural": "Haare", "gender": "Neuter"}, {"word": "haben", "meaning": "가지다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "halb", "meaning": "반의", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "hallo", "meaning": "안녕", "pos": "감탄사", "article": "-", "plural": "-", "gender": "-"}, {"word": "halt", "meaning": "그냥, 멈춰", "pos": "부사/감탄사", "article": "-", "plural": "-", "gender": "-"}, {"word": "halten", "meaning": "멈추다, 잡다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Hamburg", "meaning": "함부르크", "pos": "고유명사", "article": "das", "plural": "-", "gender": "Neuter"}, {"word": "Hand", "meaning": "손", "pos": "명사", "article": "die", "plural": "Hände", "gender": "Feminine"}, {"word": "Handy", "meaning": "휴대폰", "pos": "명사", "article": "das", "plural": "Handys", "gender": "Neuter"}, {"word": "hat", "meaning": "가지다 (3인칭)", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Hauptstadt", "meaning": "수도", "pos": "명사", "article": "die", "plural": "Hauptstädte", "gender": "Feminine"}, {"word": "Haus", "meaning": "집", "pos": "명사", "article": "das", "plural": "Häuser", "gender": "Neuter"}, {"word": "Häuser", "meaning": "집들", "pos": "명사", "article": "die", "plural": "-", "gender": "Neuter"}, {"word": "heißen", "meaning": "~라고 불리다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "heißt", "meaning": "~라고 불리다 (3인칭)", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "helfe", "meaning": "돕다 (1인칭)", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "helfen", "meaning": "돕다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "hell", "meaning": "밝은", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Hemd", "meaning": "셔츠", "pos": "명사", "article": "das", "plural": "Hemden", "gender": "Neuter"}, {"word": "Herr", "meaning": "남자, 씨", "pos": "명사", "article": "der", "plural": "Herren", "gender": "Masculine"}, {"word": "hervorragender", "meaning": "뛰어난", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Herz", "meaning": "심장, 마음", "pos": "명사", "article": "das", "plural": "Herzen", "gender": "Neuter"}, {"word": "herzlich", "meaning": "진심 어린", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "heute", "meaning": "오늘", "pos": "부사", "article": "-", "plural": "-", "gender": "-"}, {"word": "heutzutage", "meaning": "요즘", "pos": "부사", "article": "-", "plural": "-", "gender": "-"}, {"word": "hoch", "meaning": "높은", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "höchst", "meaning": "가장 높은", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "holen", "meaning": "가져오다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "hören", "meaning": "듣다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Hose", "meaning": "바지", "pos": "명사", "article": "die", "plural": "Hosen", "gender": "Feminine"}, {"word": "Hündchen", "meaning": "강아지", "pos": "명사", "article": "das", "plural": "Hündchen", "gender": "Neuter"}, {"word": "Hunger", "meaning": "배고픔", "pos": "명사", "article": "der", "plural": "-", "gender": "Masculine"}, {"word": "Hut", "meaning": "모자", "pos": "명사", "article": "der", "plural": "Hüte", "gender": "Masculine"}, {"word": "ich", "meaning": "나", "pos": "대명사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Idee", "meaning": "아이디어", "pos": "명사", "article": "die", "plural": "Ideen", "gender": "Feminine"}, {"word": "Igel", "meaning": "고슴도치", "pos": "명사", "article": "der", "plural": "Igel", "gender": "Masculine"}, {"word": "immer", "meaning": "항상", "pos": "부사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Information", "meaning": "정보", "pos": "명사", "article": "die", "plural": "Informationen", "gender": "Feminine"}, {"word": "Inhalt", "meaning": "내용", "pos": "명사", "article": "der", "plural": "Inhalte", "gender": "Masculine"}, {"word": "Instrument", "meaning": "악기, 도구", "pos": "명사", "article": "das", "plural": "Instrumente", "gender": "Neuter"}, {"word": "isst", "meaning": "먹다 (3인칭)", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "ja", "meaning": "네", "pos": "부사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Jacke", "meaning": "재킷", "pos": "명사", "article": "die", "plural": "Jacken", "gender": "Feminine"}, {"word": "Jäger", "meaning": "사냥꾼", "pos": "명사", "article": "der", "plural": "Jäger", "gender": "Masculine"}, {"word": "Jahr", "meaning": "년", "pos": "명사", "article": "das", "plural": "Jahre", "gender": "Neuter"}, {"word": "jetzt", "meaning": "지금", "pos": "부사", "article": "-", "plural": "-", "gender": "-"}, {"word": "jubelt", "meaning": "환호하다 (3인칭)", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Junge", "meaning": "소년", "pos": "명사", "article": "der", "plural": "Jungen", "gender": "Masculine"}, {"word": "Kaffee", "meaning": "커피", "pos": "명사", "article": "der", "plural": "Kaffees", "gender": "Masculine"}, {"word": "Kalb", "meaning": "송아지", "pos": "명사", "article": "das", "plural": "Kälber", "gender": "Neuter"}, {"word": "kalt", "meaning": "추운", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "kann", "meaning": "할 수 있다 (1/3인칭)", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "kaputt", "meaning": "고장난", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "karotte", "meaning": "당근", "pos": "명사", "article": "die", "plural": "Karotten", "gender": "Feminine"}, {"word": "Karte", "meaning": "카드(게임)", "pos": "명사", "article": "die", "plural": "Karten", "gender": "Feminine"}, {"word": "Käse", "meaning": "치즈", "pos": "명사", "article": "der", "plural": "Käse", "gender": "Masculine"}, {"word": "Kätzchen", "meaning": "새끼 고양이", "pos": "명사", "article": "das", "plural": "Kätzchen", "gender": "Neuter"}, {"word": "Katze", "meaning": "고양이", "pos": "명사", "article": "die", "plural": "Katzen", "gender": "Feminine"}, {"word": "kaufen", "meaning": "사다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Käufer", "meaning": "구매자", "pos": "명사", "article": "der", "plural": "Käufer", "gender": "Masculine"}, {"word": "Kaufhaus", "meaning": "백화점", "pos": "명사", "article": "das", "plural": "Kaufhäuser", "gender": "Neuter"}, {"word": "kein", "meaning": "아무도 ~없다", "pos": "부정관사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Kellerin", "meaning": "웨이트리스", "pos": "명사", "article": "die", "plural": "Kellerinnen", "gender": "Feminine"}, {"word": "Kellner", "meaning": "웨이터", "pos": "명사", "article": "der", "plural": "Kellner", "gender": "Masculine"}, {"word": "kenne", "meaning": "알다 (1인칭)", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "kennen", "meaning": "알다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "kennenzulernen", "meaning": "알게 되다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Kennst", "meaning": "알다 (2인칭)", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Kind", "meaning": "아이", "pos": "명사", "article": "das", "plural": "Kinder", "gender": "Neuter"}, {"word": "Kino", "meaning": "영화관", "pos": "명사", "article": "das", "plural": "Kinos", "gender": "Neuter"}, {"word": "Klarinette", "meaning": "클라리넷", "pos": "명사", "article": "die", "plural": "Klarinetten", "gender": "Feminine"}, {"word": "klein", "meaning": "작은", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Koch", "meaning": "요리사 (남)", "pos": "명사", "article": "der", "plural": "Köche", "gender": "Masculine"}, {"word": "Kocht", "meaning": "요리하다 (3인칭)", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Köln", "meaning": "쾰른", "pos": "고유명사", "article": "das", "plural": "-", "gender": "Neuter"}, {"word": "komme", "meaning": "오다 (1인칭)", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "kommen", "meaning": "오다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "kommt", "meaning": "오다 (3인칭)", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "kompetent", "meaning": "유능한", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Komplex", "meaning": "복합체", "pos": "명사", "article": "der", "plural": "Komplexe", "gender": "Masculine"}, {"word": "Komponisten", "meaning": "작곡가들", "pos": "명사", "article": "die", "plural": "-", "gender": "Masculine"}, {"word": "Konditorei", "meaning": "제과점", "pos": "명사", "article": "die", "plural": "Konditoreien", "gender": "Feminine"}, {"word": "Können", "meaning": "할 수 있다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Könnte", "meaning": "~할 수 있다 (접속법)", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Konto", "meaning": "계좌", "pos": "명사", "article": "das", "plural": "Konten", "gender": "Neuter"}, {"word": "Konzert", "meaning": "콘서트", "pos": "명사", "article": "das", "plural": "Konzerte", "gender": "Neuter"}, {"word": "Kosten", "meaning": "비용", "pos": "명사", "article": "die", "plural": "-", "gender": "Plural"}, {"word": "Kreis", "meaning": "원, 지역", "pos": "명사", "article": "der", "plural": "Kreise", "gender": "Masculine"}, {"word": "Kugelschreiber", "meaning": "볼펜", "pos": "명사", "article": "der", "plural": "Kugelschreiber", "gender": "Masculine"}, {"word": "Kuli", "meaning": "볼펜", "pos": "명사", "article": "der", "plural": "Kulis", "gender": "Masculine"}, {"word": "Kunde", "meaning": "고객", "pos": "명사", "article": "der", "plural": "Kunden", "gender": "Masculine"}, {"word": "kurz", "meaning": "짧은", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "kurze", "meaning": "짧은", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Kuss", "meaning": "키스", "pos": "명사", "article": "der", "plural": "Küsse", "gender": "Masculine"}, {"word": "Lager", "meaning": "창고, 캠프", "pos": "명사", "article": "das", "plural": "Lager", "gender": "Neuter"}, {"word": "Laib", "meaning": "덩어리 (빵)", "pos": "명사", "article": "der", "plural": "Laibe", "gender": "Masculine"}, {"word": "Lamm", "meaning": "양", "pos": "명사", "article": "das", "plural": "Lämmer", "gender": "Neuter"}, {"word": "Lampe", "meaning": "램프", "pos": "명사", "article": "die", "plural": "Lampen", "gender": "Feminine"}, {"word": "Land", "meaning": "나라, 땅", "pos": "명사", "article": "das", "plural": "Länder", "gender": "Neuter"}, {"word": "laufen", "meaning": "달리다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Laune", "meaning": "기분", "pos": "명사", "article": "die", "plural": "Launen", "gender": "Feminine"}, {"word": "laut", "meaning": "시끄러운", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "leben", "meaning": "살다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "lehren", "meaning": "가르치다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Lehrer", "meaning": "교사 (남)", "pos": "명사", "article": "der", "plural": "Lehrer", "gender": "Masculine"}, {"word": "Lehrerin", "meaning": "교사 (여)", "pos": "명사", "article": "die", "plural": "Lehrerinnen", "gender": "Feminine"}, {"word": "leider", "meaning": "유감스럽게도", "pos": "부사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Leine", "meaning": "줄", "pos": "명사", "article": "die", "plural": "Leinen", "gender": "Feminine"}, {"word": "lernen", "meaning": "배우다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "lesen", "meaning": "읽다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "lest", "meaning": "읽다 (2인칭 복수)", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Leute", "meaning": "사람들", "pos": "명사", "article": "die", "plural": "-", "gender": "Plural"}, {"word": "lieb", "meaning": "사랑스러운", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "lieben", "meaning": "사랑하다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Linguistik", "meaning": "언어학", "pos": "명사", "article": "die", "plural": "-", "gender": "Feminine"}, {"word": "Literatur", "meaning": "문학", "pos": "명사", "article": "die", "plural": "Literaturen", "gender": "Feminine"}, {"word": "Löffel", "meaning": "숟가락", "pos": "명사", "article": "der", "plural": "Löffel", "gender": "Masculine"}, {"word": "Logik", "meaning": "논리", "pos": "명사", "article": "die", "plural": "-", "gender": "Feminine"}, {"word": "Luft", "meaning": "공기", "pos": "명사", "article": "die", "plural": "Lüfte", "gender": "Feminine"}, {"word": "Lüge", "meaning": "거짓말", "pos": "명사", "article": "die", "plural": "Lügen", "gender": "Feminine"}, {"word": "Lust", "meaning": "욕구, 하고싶음", "pos": "명사", "article": "die", "plural": "-", "gender": "Feminine"}, {"word": "Lutheranerin", "meaning": "루터교도 (여)", "pos": "명사", "article": "die", "plural": "Lutheranerinnen", "gender": "Feminine"}, {"word": "machen", "meaning": "만들다, 하다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Mädchen", "meaning": "소녀", "pos": "명사", "article": "das", "plural": "Mädchen", "gender": "Neuter"}, {"word": "mag", "meaning": "좋아하다 (1/3인칭)", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Magen", "meaning": "위", "pos": "명사", "article": "der", "plural": "Mägen", "gender": "Masculine"}, {"word": "Mai", "meaning": "5월", "pos": "명사", "article": "der", "plural": "-", "gender": "Masculine"}, {"word": "Mann", "meaning": "남자", "pos": "명사", "article": "der", "plural": "Männer", "gender": "Masculine"}, {"word": "Mantel", "meaning": "코트", "pos": "명사", "article": "der", "plural": "Mäntel", "gender": "Masculine"}, {"word": "Maß", "meaning": "척도, 리터", "pos": "명사", "article": "das", "plural": "Maße", "gender": "Neuter"}, {"word": "Maus", "meaning": "쥐", "pos": "명사", "article": "die", "plural": "Mäuse", "gender": "Feminine"}, {"word": "meinst", "meaning": "의미하다 (2인칭)", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "meistens", "meaning": "대부분", "pos": "부사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Messer", "meaning": "칼", "pos": "명사", "article": "das", "plural": "Messer", "gender": "Neuter"}, {"word": "Metzgerei", "meaning": "정육점", "pos": "명사", "article": "die", "plural": "Metzgereien", "gender": "Feminine"}, {"word": "Meyer", "meaning": "마이어 (성)", "pos": "고유명사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Miete", "meaning": "임대료", "pos": "명사", "article": "die", "plural": "Mieten", "gender": "Feminine"}, {"word": "Milch", "meaning": "우유", "pos": "명사", "article": "die", "plural": "-", "gender": "Feminine"}, {"word": "mit", "meaning": "~와 함께", "pos": "전치사", "article": "-", "plural": "-", "gender": "-"}, {"word": "mitfahren", "meaning": "함께 타다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Mitte", "meaning": "중간", "pos": "명사", "article": "die", "plural": "Mitten", "gender": "Feminine"}, {"word": "Mittelalter", "meaning": "중세", "pos": "명사", "article": "das", "plural": "-", "gender": "Neuter"}, {"word": "Möbel", "meaning": "가구", "pos": "명사", "article": "das", "plural": "Möbel", "gender": "Neuter"}, {"word": "möchte", "meaning": "~하고 싶다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Möglichkeit", "meaning": "가능성", "pos": "명사", "article": "die", "plural": "Möglichkeiten", "gender": "Feminine"}, {"word": "Moment", "meaning": "순간", "pos": "명사", "article": "der", "plural": "Momente", "gender": "Masculine"}, {"word": "morgen", "meaning": "내일", "pos": "부사", "article": "-", "plural": "-", "gender": "-"}, {"word": "müde", "meaning": "피곤한", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Mülleimer", "meaning": "쓰레기통", "pos": "명사", "article": "der", "plural": "Mülleimer", "gender": "Masculine"}, {"word": "München", "meaning": "뮌헨", "pos": "고유명사", "article": "das", "plural": "-", "gender": "Neuter"}, {"word": "Mund", "meaning": "입", "pos": "명사", "article": "der", "plural": "Münder", "gender": "Masculine"}, {"word": "muß", "meaning": "~해야 한다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "müssen", "meaning": "~해야 한다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Mutter", "meaning": "어머니", "pos": "명사", "article": "die", "plural": "Mütter", "gender": "Feminine"}, {"word": "Muttersprache", "meaning": "모국어", "pos": "명사", "article": "die", "plural": "Muttersprachen", "gender": "Feminine"}, {"word": "Nachmittag", "meaning": "오후", "pos": "명사", "article": "der", "plural": "Nachmittage", "gender": "Masculine"}, {"word": "Nähe", "meaning": "근처", "pos": "명사", "article": "die", "plural": "-", "gender": "Feminine"}, {"word": "naiv", "meaning": "순진한", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Name", "meaning": "이름", "pos": "명사", "article": "der", "plural": "Namen", "gender": "Masculine"}, {"word": "Nase", "meaning": "코", "pos": "명사", "article": "die", "plural": "Nasen", "gender": "Feminine"}, {"word": "Nation", "meaning": "국가", "pos": "명사", "article": "die", "plural": "Nationen", "gender": "Feminine"}, {"word": "Natur", "meaning": "자연", "pos": "명사", "article": "die", "plural": "-", "gender": "Feminine"}, {"word": "Nebenjob", "meaning": "부업", "pos": "명사", "article": "der", "plural": "Nebenjobs", "gender": "Masculine"}, {"word": "nehmen", "meaning": "가지다, 먹다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "nein", "meaning": "아니오", "pos": "부사", "article": "-", "plural": "-", "gender": "-"}, {"word": "nett", "meaning": "친절한", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "neue", "meaning": "새로운", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Neuseeländer", "meaning": "뉴질랜드인", "pos": "명사", "article": "der", "plural": "Neuseeländer", "gender": "Masculine"}, {"word": "nichts", "meaning": "아무것도 ~없다", "pos": "대명사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Nord", "meaning": "북쪽", "pos": "명사", "article": "der", "plural": "-", "gender": "Masculine"}, {"word": "Nuss", "meaning": "견과류", "pos": "명사", "article": "die", "plural": "Nüsse", "gender": "Feminine"}, {"word": "Obst", "meaning": "과일", "pos": "명사", "article": "das", "plural": "-", "gender": "Neuter"}, {"word": "offen", "meaning": "열린", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "öffnen", "meaning": "열다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "ohne", "meaning": "~없이", "pos": "전치사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Ökonomie", "meaning": "경제학", "pos": "명사", "article": "die", "plural": "Ökonomien", "gender": "Feminine"}, {"word": "Öl", "meaning": "기름", "pos": "명사", "article": "das", "plural": "Öle", "gender": "Neuter"}, {"word": "Olympiahalle", "meaning": "올림픽 홀", "pos": "명사", "article": "die", "plural": "Olympiahallen", "gender": "Feminine"}, {"word": "Onkel", "meaning": "삼촌", "pos": "명사", "article": "der", "plural": "Onkel", "gender": "Masculine"}, {"word": "Ort", "meaning": "장소", "pos": "명사", "article": "der", "plural": "Orte", "gender": "Masculine"}, {"word": "Ost", "meaning": "동쪽", "pos": "명사", "article": "der", "plural": "-", "gender": "Masculine"}, {"word": "Österreich", "meaning": "오스트리아", "pos": "고유명사", "article": "das", "plural": "-", "gender": "Neuter"}, {"word": "Paket", "meaning": "소포", "pos": "명사", "article": "das", "plural": "Pakete", "gender": "Neuter"}, {"word": "Papier", "meaning": "종이", "pos": "명사", "article": "das", "plural": "Papiere", "gender": "Neuter"}, {"word": "Pass", "meaning": "여권, 패스", "pos": "명사", "article": "der", "plural": "Pässe", "gender": "Masculine"}, {"word": "Pferd", "meaning": "말", "pos": "명사", "article": "das", "plural": "Pferde", "gender": "Neuter"}, {"word": "Pianist", "meaning": "피아니스트", "pos": "명사", "article": "der", "plural": "Pianisten", "gender": "Masculine"}, {"word": "Piano", "meaning": "피아노", "pos": "명사", "article": "das", "plural": "Pianos", "gender": "Neuter"}, {"word": "Platz", "meaning": "장소, 광장", "pos": "명사", "article": "der", "plural": "Plätze", "gender": "Masculine"}, {"word": "Politik", "meaning": "정치", "pos": "명사", "article": "die", "plural": "-", "gender": "Feminine"}, {"word": "Politiker", "meaning": "정치인", "pos": "명사", "article": "der", "plural": "Politiker", "gender": "Masculine"}, {"word": "Polizei", "meaning": "경찰", "pos": "명사", "article": "die", "plural": "-", "gender": "Feminine"}, {"word": "Polizist", "meaning": "경찰", "pos": "명사", "article": "der", "plural": "Polizisten", "gender": "Masculine"}, {"word": "Porsche", "meaning": "포르쉐 (브랜드)", "pos": "고유명사", "article": "der", "plural": "-", "gender": "Masculine"}, {"word": "Post", "meaning": "우편", "pos": "명사", "article": "die", "plural": "-", "gender": "Feminine"}, {"word": "Problem", "meaning": "문제", "pos": "명사", "article": "das", "plural": "Probleme", "gender": "Neuter"}, {"word": "Professor", "meaning": "교수 (남)", "pos": "명사", "article": "der", "plural": "Professoren", "gender": "Masculine"}, {"word": "Professorin", "meaning": "교수 (여)", "pos": "명사", "article": "die", "plural": "Professorinnen", "gender": "Feminine"}, {"word": "Prüfung", "meaning": "시험", "pos": "명사", "article": "die", "plural": "Prüfungen", "gender": "Feminine"}, {"word": "Qualität", "meaning": "품질", "pos": "명사", "article": "die", "plural": "Qualitäten", "gender": "Feminine"}, {"word": "Quantität", "meaning": "양", "pos": "명사", "article": "die", "plural": "Quantitäten", "gender": "Feminine"}, {"word": "Quelle", "meaning": "원천, 샘", "pos": "명사", "article": "die", "plural": "Quellen", "gender": "Feminine"}, {"word": "Quintett", "meaning": "5중주", "pos": "명사", "article": "das", "plural": "Quintette", "gender": "Neuter"}, {"word": "Radio", "meaning": "라디오", "pos": "명사", "article": "das", "plural": "Radios", "gender": "Neuter"}, {"word": "Rat", "meaning": "조언", "pos": "명사", "article": "der", "plural": "Ratschläge", "gender": "Masculine"}, {"word": "Räuber", "meaning": "강도", "pos": "명사", "article": "der", "plural": "Räuber", "gender": "Masculine"}, {"word": "rechnen", "meaning": "계산하다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Recht", "meaning": "권리, 법", "pos": "명사", "article": "das", "plural": "Rechte", "gender": "Neuter"}, {"word": "rechts", "meaning": "오른쪽으로", "pos": "부사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Regenschirm", "meaning": "우산", "pos": "명사", "article": "der", "plural": "Regenschirme", "gender": "Masculine"}, {"word": "Region", "meaning": "지역", "pos": "명사", "article": "die", "plural": "Regionen", "gender": "Feminine"}, {"word": "Reise", "meaning": "여행", "pos": "명사", "article": "die", "plural": "Reisen", "gender": "Feminine"}, {"word": "reisen", "meaning": "여행하다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "relativ", "meaning": "상대적으로", "pos": "부사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Relligion", "meaning": "종교", "pos": "명사", "article": "die", "plural": "Religionen", "gender": "Feminine"}, {"word": "Rose", "meaning": "장미", "pos": "명사", "article": "die", "plural": "Rosen", "gender": "Feminine"}, {"word": "Rot", "meaning": "빨간색", "pos": "명사", "article": "das", "plural": "-", "gender": "Neuter"}, {"word": "rot", "meaning": "빨간색", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "rufen", "meaning": "부르다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "ruhig", "meaning": "조용한", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Russland", "meaning": "러시아", "pos": "고유명사", "article": "das", "plural": "-", "gender": "Neuter"}, {"word": "sagen", "meaning": "말하다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "sammeln", "meaning": "모으다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Sauberkeit", "meaning": "청결", "pos": "명사", "article": "die", "plural": "-", "gender": "Feminine"}, {"word": "Saxophon", "meaning": "색소폰", "pos": "명사", "article": "das", "plural": "Saxophone", "gender": "Neuter"}, {"word": "scharf", "meaning": "날카로운, 매운", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "scheint", "meaning": "빛나다/~인 것 같다 (3인칭)", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Schere", "meaning": "가위", "pos": "명사", "article": "die", "plural": "Scheren", "gender": "Feminine"}, {"word": "Schiff", "meaning": "배", "pos": "명사", "article": "das", "plural": "Schiffe", "gender": "Neuter"}, {"word": "schlafen", "meaning": "자다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "schläft", "meaning": "자다 (3인칭)", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Schle", "meaning": "[의미 불명]", "pos": "-", "article": "-", "plural": "-", "gender": "-"}, {"word": "Schloss", "meaning": "성, 자물쇠", "pos": "명사", "article": "das", "plural": "Schlösser", "gender": "Neuter"}, {"word": "schmeckt", "meaning": "맛이 나다 (3인칭)", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Schmidt", "meaning": "슈미트 (성)", "pos": "고유명사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Schokolade", "meaning": "초콜릿", "pos": "명사", "article": "die", "plural": "Schokoladen", "gender": "Feminine"}, {"word": "schön", "meaning": "아름다운", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Schuh", "meaning": "신발", "pos": "명사", "article": "die", "plural": "Schuhe", "gender": "Masculine"}, {"word": "Schule", "meaning": "학교", "pos": "명사", "article": "die", "plural": "Schulen", "gender": "Feminine"}, {"word": "Schüler", "meaning": "학생 (남, 중고등)", "pos": "명사", "article": "der", "plural": "Schüler", "gender": "Masculine"}, {"word": "Schülerin", "meaning": "학생 (여, 중고등)", "pos": "명사", "article": "die", "plural": "Schülerinnen", "gender": "Feminine"}, {"word": "Schwarz", "meaning": "검은색", "pos": "형용사/명사", "article": "das", "plural": "-", "gender": "Neuter"}, {"word": "schwarze", "meaning": "검은", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Schweiz", "meaning": "스위스", "pos": "고유명사", "article": "die", "plural": "-", "gender": "Feminine"}, {"word": "Schwester", "meaning": "자매", "pos": "명사", "article": "die", "plural": "Schwestern", "gender": "Feminine"}, {"word": "schwimmen", "meaning": "수영하다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Schwimmen", "meaning": "수영", "pos": "명사", "article": "das", "plural": "-", "gender": "Neuter"}, {"word": "Schwimmkurs", "meaning": "수영 강습", "pos": "명사", "article": "der", "plural": "Schwimmkurse", "gender": "Masculine"}, {"word": "schwmmen", "meaning": "수영하다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "sechs", "meaning": "6", "pos": "숫자", "article": "-", "plural": "-", "gender": "-"}, {"word": "See", "meaning": "호수/바다", "pos": "명사", "article": "der/die", "plural": "Seen", "gender": "Masculine/Feminine"}, {"word": "Sehen", "meaning": "보다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "seinem", "meaning": "그의", "pos": "소유대명사", "article": "-", "plural": "-", "gender": "-"}, {"word": "selbst", "meaning": "스스로", "pos": "부사/대명사", "article": "-", "plural": "-", "gender": "-"}, {"word": "selbstisch", "meaning": "이기적인", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Shon", "meaning": "아들", "pos": "명사", "article": "der", "plural": "Söhne", "gender": "Masculine"}, {"word": "Siehst", "meaning": "보다 (2인칭)", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Sind", "meaning": "~이다 (복수/존댓말)", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "singen", "meaning": "노래하다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "sitzen", "meaning": "앉다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Skifahren", "meaning": "스키타기", "pos": "명사", "article": "das", "plural": "-", "gender": "Neuter"}, {"word": "sollst", "meaning": "~해야 한다 (2인칭)", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Sommer", "meaning": "여름", "pos": "명사", "article": "der", "plural": "Sommer", "gender": "Masculine"}, {"word": "Sonne", "meaning": "태양", "pos": "명사", "article": "die", "plural": "Sonnen", "gender": "Feminine"}, {"word": "Sonnenbrille", "meaning": "선글라스", "pos": "명사", "article": "die", "plural": "Sonnenbrillen", "gender": "Feminine"}, {"word": "Sozialismus", "meaning": "사회주의", "pos": "명사", "article": "der", "plural": "-", "gender": "Masculine"}, {"word": "Spaß", "meaning": "즐거움", "pos": "명사", "article": "der", "plural": "Späße", "gender": "Masculine"}, {"word": "später", "meaning": "나중에", "pos": "부사", "article": "-", "plural": "-", "gender": "-"}, {"word": "spazieren", "meaning": "산책하다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Spezialist", "meaning": "전문가", "pos": "명사", "article": "der", "plural": "Spezialisten", "gender": "Masculine"}, {"word": "spiele", "meaning": "놀다/연주하다 (1인칭)", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "spielen", "meaning": "놀다, 연주하다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "spielt", "meaning": "놀다/연주하다 (3인칭)", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Sport", "meaning": "스포츠", "pos": "명사", "article": "der", "plural": "-", "gender": "Masculine"}, {"word": "Sprache", "meaning": "언어", "pos": "명사", "article": "die", "plural": "Sprachen", "gender": "Feminine"}, {"word": "sprechen", "meaning": "말하다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "spricht", "meaning": "말하다 (3인칭)", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Staat", "meaning": "국가", "pos": "명사", "article": "die", "plural": "staaten", "gender": "Masculine"}, {"word": "Stadt", "meaning": "도시", "pos": "명사", "article": "die", "plural": "Städte", "gender": "Feminine"}, {"word": "Stadtmitte", "meaning": "도심", "pos": "명사", "article": "die", "plural": "Stadtmitten", "gender": "Feminine"}, {"word": "Statistik", "meaning": "통계", "pos": "명사", "article": "die", "plural": "Statistiken", "gender": "Feminine"}, {"word": "statt(stattfinden)", "meaning": "대신에", "pos": "전치사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Stehen", "meaning": "서다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Straße", "meaning": "거리", "pos": "명사", "article": "die", "plural": "Straßen", "gender": "Feminine"}, {"word": "Student", "meaning": "학생 (남)", "pos": "명사", "article": "der", "plural": "Studenten", "gender": "Masculine"}, {"word": "Studentin", "meaning": "학생 (여)", "pos": "명사", "article": "die", "plural": "Studentinnen", "gender": "Feminine"}, {"word": "Studentinnen", "meaning": "여학생들", "pos": "명사", "article": "die", "plural": "-", "gender": "Feminine"}, {"word": "studieren", "meaning": "공부하다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "studierende", "meaning": "공부하는 사람들", "pos": "명사/형용사", "article": "die", "plural": "-", "gender": "Plural"}, {"word": "Studium", "meaning": "학업", "pos": "명사", "article": "das", "plural": "Studien", "gender": "Neuter"}, {"word": "Stuhl", "meaning": "의자", "pos": "명사", "article": "der", "plural": "Stühle", "gender": "Masculine"}, {"word": "Stunde", "meaning": "시간", "pos": "명사", "article": "die", "plural": "Stunden", "gender": "Feminine"}, {"word": "Substanz", "meaning": "물질", "pos": "명사", "article": "die", "plural": "Substanzen", "gender": "Feminine"}, {"word": "Süd", "meaning": "남쪽", "pos": "명사", "article": "der", "plural": "-", "gender": "Masculine"}, {"word": "süß", "meaning": "달콤한", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Tag", "meaning": "날", "pos": "명사", "article": "der", "plural": "Tage", "gender": "Masculine"}, {"word": "Tages", "meaning": "날의 (속격)", "pos": "명사", "article": "des", "plural": "-", "gender": "Masculine"}, {"word": "Tasche", "meaning": "가방", "pos": "명사", "article": "die", "plural": "Taschen", "gender": "Feminine"}, {"word": "Taschentuch", "meaning": "손수건", "pos": "명사", "article": "das", "plural": "Taschentücher", "gender": "Neuter"}, {"word": "Tasse", "meaning": "컵", "pos": "명사", "article": "die", "plural": "Tassen", "gender": "Feminine"}, {"word": "Tastatur", "meaning": "키보드", "pos": "명사", "article": "die", "plural": "Tastaturen", "gender": "Feminine"}, {"word": "Taxi", "meaning": "택시", "pos": "명사", "article": "das", "plural": "Taxis", "gender": "Neuter"}, {"word": "Technik", "meaning": "기술", "pos": "명사", "article": "die", "plural": "Techniken", "gender": "Feminine"}, {"word": "Teller", "meaning": "접시", "pos": "명사", "article": "der", "plural": "Teller", "gender": "Masculine"}, {"word": "Tennisspieler", "meaning": "테니스 선수", "pos": "명사", "article": "der", "plural": "Tennisspieler", "gender": "Masculine"}, {"word": "Teppich", "meaning": "카펫", "pos": "명사", "article": "der", "plural": "Teppiche", "gender": "Masculine"}, {"word": "Theater", "meaning": "극장", "pos": "명사", "article": "das", "plural": "Theater", "gender": "Neuter"}, {"word": "Tiger", "meaning": "호랑이", "pos": "명사", "article": "der", "plural": "Tiger", "gender": "Masculine"}, {"word": "Tisch", "meaning": "책상, 테이블", "pos": "명사", "article": "der", "plural": "Tische", "gender": "Masculine"}, {"word": "Tochter", "meaning": "딸", "pos": "명사", "article": "die", "plural": "Töchter", "gender": "Feminine"}, {"word": "Töchter", "meaning": "딸들", "pos": "명사", "article": "die", "plural": "-", "gender": "Feminine"}, {"word": "Toilette", "meaning": "화장실", "pos": "명사", "article": "die", "plural": "Toiletten", "gender": "Feminine"}, {"word": "Torte", "meaning": "케이크", "pos": "명사", "article": "die", "plural": "Torten", "gender": "Feminine"}, {"word": "tragen", "meaning": "입다, 나르다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "treffen", "meaning": "만나다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "trefft", "meaning": "만나다 (2인칭 복수)", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "trinke", "meaning": "마시다 (1인칭)", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "trinken", "meaning": "마시다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "trocknen", "meaning": "말리다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Trompete", "meaning": "트럼펫", "pos": "명사", "article": "die", "plural": "Trompeten", "gender": "Feminine"}, {"word": "tschüs", "meaning": "안녕 (작별)", "pos": "감탄사", "article": "-", "plural": "-", "gender": "-"}, {"word": "tun", "meaning": "하다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "übel", "meaning": "나쁜, 메스꺼운", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "über", "meaning": "~위에, ~에 대해", "pos": "전치사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Übung", "meaning": "연습", "pos": "명사", "article": "die", "plural": "Übungen", "gender": "Feminine"}, {"word": "Uhr", "meaning": "시계", "pos": "명사", "article": "die", "plural": "Uhren", "gender": "Feminine"}, {"word": "um", "meaning": "~주위에", "pos": "전치사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Umgebung", "meaning": "환경, 주변", "pos": "명사", "article": "die", "plural": "Umgebungen", "gender": "Feminine"}, {"word": "und", "meaning": "그리고", "pos": "접속사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Union", "meaning": "연합", "pos": "명사", "article": "die", "plural": "Unionen", "gender": "Feminine"}, {"word": "Universität", "meaning": "대학교", "pos": "명사", "article": "die", "plural": "Universitäten", "gender": "Feminine"}, {"word": "unter", "meaning": "아래", "pos": "전치사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Urasche", "meaning": "[의미 불명]", "pos": "-", "article": "-", "plural": "-", "gender": "-"}, {"word": "Vase", "meaning": "꽃병", "pos": "명사", "article": "die", "plural": "Vasen", "gender": "Feminine"}, {"word": "Vater", "meaning": "아버지", "pos": "명사", "article": "der", "plural": "Väter", "gender": "Masculine"}, {"word": "Verb", "meaning": "동사", "pos": "명사", "article": "das", "plural": "Verben", "gender": "Neuter"}, {"word": "verboten", "meaning": "금지된", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Vereinigten", "meaning": "연합된", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Vereinigten Staaten", "meaning": "미국 (합중국)", "pos": "고유명사", "article": "die", "plural": "-", "gender": "Plural"}, {"word": "vergisst", "meaning": "잊다 (3인칭)", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "verkaufen", "meaning": "팔다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "vermissen", "meaning": "그리워하다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "verstehen", "meaning": "이해하다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "viel", "meaning": "많은", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Visum", "meaning": "비자", "pos": "명사", "article": "das", "plural": "Visa", "gender": "Neuter"}, {"word": "Vogel", "meaning": "새", "pos": "명사", "article": "der", "plural": "Vögel", "gender": "Masculine"}, {"word": "Volk", "meaning": "민족", "pos": "명사", "article": "das", "plural": "Völker", "gender": "Neuter"}, {"word": "Volkswirtschaft", "meaning": "국민경제", "pos": "명사", "article": "die", "plural": "Volkswirtschaften", "gender": "Feminine"}, {"word": "voll", "meaning": "가득 찬", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "von", "meaning": "~로부터", "pos": "전치사", "article": "-", "plural": "-", "gender": "-"}, {"word": "vorbei", "meaning": "지나가서", "pos": "부사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Vormittag", "meaning": "오전", "pos": "명사", "article": "der", "plural": "Vormittage", "gender": "Masculine"}, {"word": "vorstellen", "meaning": "소개하다, 상상하다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "warten", "meaning": "기다리다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "was", "meaning": "무엇", "pos": "의문사", "article": "-", "plural": "-", "gender": "-"}, {"word": "waschen", "meaning": "씻다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Wein", "meaning": "와인", "pos": "명사", "article": "der", "plural": "Weine", "gender": "Masculine"}, {"word": "welken", "meaning": "시들다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Welle", "meaning": "파도", "pos": "명사", "article": "die", "plural": "Wellen", "gender": "Feminine"}, {"word": "Welt", "meaning": "세계", "pos": "명사", "article": "die", "plural": "Welten", "gender": "Feminine"}, {"word": "wenig", "meaning": "적은", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "werden", "meaning": "~이 되다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Merecedes", "meaning": "메르세데스", "pos": "고유명사", "article": "der", "plural": "-", "gender": "Masculine"}, {"word": "Wetter", "meaning": "날씨", "pos": "명사", "article": "das", "plural": "-", "gender": "Neuter"}, {"word": "willkommen", "meaning": "환영합니다", "pos": "형용사/감탄사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Wind", "meaning": "바람", "pos": "명사", "article": "der", "plural": "Winde", "gender": "Masculine"}, {"word": "wirft", "meaning": "던지다 (3인칭)", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "wirklich", "meaning": "정말로", "pos": "부사", "article": "-", "plural": "-", "gender": "-"}, {"word": "wissen", "meaning": "알다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Wissen", "meaning": "지식", "pos": "명사", "article": "das", "plural": "-", "gender": "Neuter"}, {"word": "Wissenschaft", "meaning": "과학", "pos": "명사", "article": "die", "plural": "Wissenschaften", "gender": "Feminine"}, {"word": "Woher", "meaning": "어디서", "pos": "부사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Wohin", "meaning": "어디로", "pos": "부사", "article": "-", "plural": "-", "gender": "-"}, {"word": "wohnen", "meaning": "살다 (거주)", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Wohnung", "meaning": "아파트, 주택", "pos": "명사", "article": "die", "plural": "Wohnungen", "gender": "Feminine"}, {"word": "Wohnzimmer", "meaning": "거실", "pos": "명사", "article": "das", "plural": "Wohnzimmer", "gender": "Neuter"}, {"word": "Wörter", "meaning": "단어들", "pos": "명사", "article": "die", "plural": "-", "gender": "Neuter"}, {"word": "Wörterbuch", "meaning": "사전", "pos": "명사", "article": "das", "plural": "Wörterbücher", "gender": "Neuter"}, {"word": "wunderbar", "meaning": "멋진", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Xylofon", "meaning": "실로폰", "pos": "명사", "article": "das", "plural": "Xylofone", "gender": "Neuter"}, {"word": "Yacht", "meaning": "요트", "pos": "명사", "article": "die", "plural": "Yachten", "gender": "Feminine"}, {"word": "Yoga", "meaning": "요가", "pos": "명사", "article": "das", "plural": "-", "gender": "Neuter"}, {"word": "Ypsilon", "meaning": "그리스 문자 Y", "pos": "명사", "article": "das", "plural": "Ypsilons", "gender": "Neuter"}, {"word": "Zahl", "meaning": "숫자", "pos": "명사", "article": "die", "plural": "Zahlen", "gender": "Feminine"}, {"word": "Zeit", "meaning": "시간", "pos": "명사", "article": "die", "plural": "Zeiten", "gender": "Feminine"}, {"word": "Zeitung", "meaning": "신문", "pos": "명사", "article": "die", "plural": "Zeitungen", "gender": "Feminine"}, {"word": "Zermatt", "meaning": "체르마트 (스위스 도시)", "pos": "고유명사", "article": "das", "plural": "-", "gender": "Neuter"}, {"word": "Zermatt", "meaning": "파괴하다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Zoo", "meaning": "동물원", "pos": "명사", "article": "der", "plural": "Zoos", "gender": "Masculine"}, {"word": "zu", "meaning": "~에게, 너무", "pos": "전치사/부사", "article": "-", "plural": "-", "gender": "-"}, {"word": "zuerst", "meaning": "먼저", "pos": "부사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Zug", "meaning": "기차", "pos": "명사", "article": "der", "plural": "Züge", "gender": "Masculine"}, {"word": "zur", "meaning": "~로 (zu+der)", "pos": "전치사+관사", "article": "-", "plural": "-", "gender": "-"}, {"word": "zurück", "meaning": "돌아가서", "pos": "부사", "article": "-", "plural": "-", "gender": "-"}, {"word": "zusagen", "meaning": "승낙하다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "zusammen", "meaning": "함께", "pos": "부사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Zuschauer", "meaning": "관중", "pos": "명사", "article": "der", "plural": "Zuschauer", "gender": "Masculine"}, {"word": "zweifelhaft", "meaning": "의심스러운", "pos": "형용사", "article": "-", "plural": "-", "gender": "-"}, {"word": "nach", "meaning": "~후에", "pos": "전치사", "article": "-", "plural": "-", "gender": "-"}, {"word": "ins", "meaning": "~안으로", "pos": "전치사+관사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Wie", "meaning": "어떻게", "pos": "부사", "article": "-", "plural": "-", "gender": "-"}, {"word": "seit", "meaning": "~이래로", "pos": "전치사", "article": "-", "plural": "-", "gender": "-"}, {"word": "Supermarkt", "meaning": "슈퍼마켓", "pos": "명사", "article": "der", "plural": "Supermärkte", "gender": "Masculine"}, {"word": "backen", "meaning": "굽다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}, {"word": "alleine", "meaning": "혼자", "pos": "부사", "article": "-", "plural": "-", "gender": "-"}, {"word": "als", "meaning": "~보다, ~로서", "pos": "접속사/전치사", "article": "-", "plural": "-", "gender": "-"}, {"word": "tanzen", "meaning": "춤추다", "pos": "동사", "article": "-", "plural": "-", "gender": "-"}];
+const pronunciationQuizData = {
+  "vowel_length": [
+    {
+      "word": "fahren",
+      "vowel": "a",
+      "type": "vowel_length",
+      "question": "\"fahren\"의 \"a\"는?",
+      "answer": "long"
+    },
+    {
+      "word": "Haar",
+      "vowel": "a",
+      "type": "vowel_length",
+      "question": "\"Haar\"의 \"a\"는?",
+      "answer": "long"
+    },
+    {
+      "word": "halb",
+      "vowel": "a",
+      "type": "vowel_length",
+      "question": "\"halb\"의 \"a\"는?",
+      "answer": "short"
+    },
+    {
+      "word": "Hand",
+      "vowel": "a",
+      "type": "vowel_length",
+      "question": "\"Hand\"의 \"a\"는?",
+      "answer": "short"
+    },
+    {
+      "word": "Kaffee",
+      "vowel": "a",
+      "type": "vowel_length",
+      "question": "\"Kaffee\"의 \"a\"는?",
+      "answer": "long"
+    },
+    {
+      "word": "Vater",
+      "vowel": "a",
+      "type": "vowel_length",
+      "question": "\"Vater\"의 \"a\"는?",
+      "answer": "long"
+    },
+    {
+      "word": "geben",
+      "vowel": "e",
+      "type": "vowel_length",
+      "question": "\"geben\"의 \"e\"는?",
+      "answer": "long"
+    },
+    {
+      "word": "jetzt",
+      "vowel": "e",
+      "type": "vowel_length",
+      "question": "\"jetzt\"의 \"e\"는?",
+      "answer": "short"
+    },
+    {
+      "word": "lehren",
+      "vowel": "e",
+      "type": "vowel_length",
+      "question": "\"lehren\"의 \"e\"는?",
+      "answer": "long"
+    },
+    {
+      "word": "lernen",
+      "vowel": "e",
+      "type": "vowel_length",
+      "question": "\"lernen\"의 \"e\"는?",
+      "answer": "short"
+    },
+    {
+      "word": "Berlin",
+      "vowel": "i",
+      "type": "vowel_length",
+      "question": "\"Berlin\"의 \"i\"는?",
+      "answer": "long"
+    },
+    {
+      "word": "Bibel",
+      "vowel": "i",
+      "type": "vowel_length",
+      "question": "\"Bibel\"의 \"i\"는?",
+      "answer": "long"
+    },
+    {
+      "word": "bitte",
+      "vowel": "i",
+      "type": "vowel_length",
+      "question": "\"bitte\"의 \"i\"는?",
+      "answer": "short"
+    },
+    {
+      "word": "Film",
+      "vowel": "i",
+      "type": "vowel_length",
+      "question": "\"Film\"의 \"i\"는?",
+      "answer": "short"
+    },
+    {
+      "word": "Miete",
+      "vowel": "i",
+      "type": "vowel_length",
+      "question": "\"Miete\"의 \"i\"는?",
+      "answer": "long"
+    },
+    {
+      "word": "sitzen",
+      "vowel": "i",
+      "type": "vowel_length",
+      "question": "\"sitzen\"의 \"i\"는?",
+      "answer": "short"
+    },
+    {
+      "word": "holen",
+      "vowel": "o",
+      "type": "vowel_length",
+      "question": "\"holen\"의 \"o\"는?",
+      "answer": "long"
+    },
+    {
+      "word": "kommen",
+      "vowel": "o",
+      "type": "vowel_length",
+      "question": "\"kommen\"의 \"o\"는?",
+      "answer": "short"
+    },
+    {
+      "word": "offen",
+      "vowel": "o",
+      "type": "vowel_length",
+      "question": "\"offen\"의 \"o\"는?",
+      "answer": "short"
+    },
+    {
+      "word": "rot",
+      "vowel": "o",
+      "type": "vowel_length",
+      "question": "\"rot\"의 \"o\"는?",
+      "answer": "long"
+    },
+    {
+      "word": "Sohn",
+      "vowel": "o",
+      "type": "vowel_length",
+      "question": "\"Sohn\"의 \"o\"는?",
+      "answer": "long"
+    },
+    {
+      "word": "Sonne",
+      "vowel": "o",
+      "type": "vowel_length",
+      "question": "\"Sonne\"의 \"o\"는?",
+      "answer": "short"
+    },
+    {
+      "word": "Buch",
+      "vowel": "u",
+      "type": "vowel_length",
+      "question": "\"Buch\"의 \"u\"는?",
+      "answer": "long"
+    },
+    {
+      "word": "Fuß",
+      "vowel": "u",
+      "type": "vowel_length",
+      "question": "\"Fuß\"의 \"u\"는?",
+      "answer": "long"
+    },
+    {
+      "word": "gut",
+      "vowel": "u",
+      "type": "vowel_length",
+      "question": "\"gut\"의 \"u\"는?",
+      "answer": "long"
+    },
+    {
+      "word": "Luft",
+      "vowel": "u",
+      "type": "vowel_length",
+      "question": "\"Luft\"의 \"u\"는?",
+      "answer": "short"
+    },
+    {
+      "word": "Mutter",
+      "vowel": "u",
+      "type": "vowel_length",
+      "question": "\"Mutter\"의 \"u\"는?",
+      "answer": "short"
+    },
+    {
+      "word": "und",
+      "vowel": "u",
+      "type": "vowel_length",
+      "question": "\"und\"의 \"u\"는?",
+      "answer": "short"
+    },
+    {
+      "word": "Abend",
+      "vowel": "a",
+      "type": "vowel_length",
+      "question": "\"Abend\"의 \"a\"는?",
+      "answer": "long"
+    },
+    {
+      "word": "Name",
+      "vowel": "a",
+      "type": "vowel_length",
+      "question": "\"Name\"의 \"a\"는?",
+      "answer": "long"
+    },
+    {
+      "word": "Tag",
+      "vowel": "a",
+      "type": "vowel_length",
+      "question": "\"Tag\"의 \"a\"는?",
+      "answer": "long"
+    },
+    {
+      "word": "gut",
+      "vowel": "u",
+      "type": "vowel_length",
+      "question": "\"gut\"의 \"u\"는?",
+      "answer": "long"
+    },
+    {
+      "word": "Straße",
+      "vowel": "a",
+      "type": "vowel_length",
+      "question": "\"Straße\"의 \"a\"는?",
+      "answer": "long"
+    },
+    {
+      "word": "schön",
+      "vowel": "ö",
+      "type": "vowel_length",
+      "question": "\"schön\"의 \"ö\"는?",
+      "answer": "long"
+    },
+    {
+      "word": "kommen",
+      "vowel": "o",
+      "type": "vowel_length",
+      "question": "\"kommen\"의 \"o\"는?",
+      "answer": "short"
+    },
+    {
+      "word": "Stadt",
+      "vowel": "a",
+      "type": "vowel_length",
+      "question": "\"Stadt\"의 \"a\"는?",
+      "answer": "short"
+    },
+    {
+      "word": "Mutter",
+      "vowel": "u",
+      "type": "vowel_length",
+      "question": "\"Mutter\"의 \"u\"는?",
+      "answer": "short"
+    }
+  ],
+  "voiced_voiceless": [
+    {
+      "word": "Baum",
+      "consonant": "b",
+      "type": "voiced_voiceless",
+      "question": "\"Baum\"의 \"b\"는?",
+      "answer": "voiced"
+    },
+    {
+      "word": "Bruder",
+      "consonant": "b",
+      "type": "voiced_voiceless",
+      "question": "\"Bruder\"의 \"b\"는?",
+      "answer": "voiced"
+    },
+    {
+      "word": "Dieb",
+      "consonant": "b",
+      "type": "voiced_voiceless",
+      "question": "\"Dieb\"의 \"b\"는?",
+      "answer": "voiceless"
+    },
+    {
+      "word": "halb",
+      "consonant": "b",
+      "type": "voiced_voiceless",
+      "question": "\"halb\"의 \"b\"는?",
+      "answer": "voiceless"
+    },
+    {
+      "word": "leben",
+      "consonant": "b",
+      "type": "voiced_voiceless",
+      "question": "\"leben\"의 \"b\"는?",
+      "answer": "voiced"
+    },
+    {
+      "word": "selbst",
+      "consonant": "b",
+      "type": "voiced_voiceless",
+      "question": "\"selbst\"의 \"b\"는?",
+      "answer": "voiceless"
+    },
+    {
+      "word": "Deutsch",
+      "consonant": "d",
+      "type": "voiced_voiceless",
+      "question": "\"Deutsch\"의 \"d\"는?",
+      "answer": "voiced"
+    },
+    {
+      "word": "finden",
+      "consonant": "d",
+      "type": "voiced_voiceless",
+      "question": "\"finden\"의 \"d\"는?",
+      "answer": "voiced"
+    },
+    {
+      "word": "Hand",
+      "consonant": "d",
+      "type": "voiced_voiceless",
+      "question": "\"Hand\"의 \"d\"는?",
+      "answer": "voiceless"
+    },
+    {
+      "word": "Land",
+      "consonant": "d",
+      "type": "voiced_voiceless",
+      "question": "\"Land\"의 \"d\"는?",
+      "answer": "voiceless"
+    },
+    {
+      "word": "Mund",
+      "consonant": "d",
+      "type": "voiced_voiceless",
+      "question": "\"Mund\"의 \"d\"는?",
+      "answer": "voiceless"
+    },
+    {
+      "word": "Wind",
+      "consonant": "d",
+      "type": "voiced_voiceless",
+      "question": "\"Wind\"의 \"d\"는?",
+      "answer": "voiceless"
+    },
+    {
+      "word": "Burg",
+      "consonant": "g",
+      "type": "voiced_voiceless",
+      "question": "\"Burg\"의 \"g\"는?",
+      "answer": "voiceless"
+    },
+    {
+      "word": "geben",
+      "consonant": "g",
+      "type": "voiced_voiceless",
+      "question": "\"geben\"의 \"g\"는?",
+      "answer": "voiced"
+    },
+    {
+      "word": "Gott",
+      "consonant": "g",
+      "type": "voiced_voiceless",
+      "question": "\"Gott\"의 \"g\"는?",
+      "answer": "voiced"
+    },
+    {
+      "word": "sagen",
+      "consonant": "g",
+      "type": "voiced_voiceless",
+      "question": "\"sagen\"의 \"g\"는?",
+      "answer": "voiced"
+    },
+    {
+      "word": "Tages",
+      "consonant": "g",
+      "type": "voiced_voiceless",
+      "question": "\"Tages\"의 \"g\"는?",
+      "answer": "voiced"
+    },
+    {
+      "word": "Zug",
+      "consonant": "g",
+      "type": "voiced_voiceless",
+      "question": "\"Zug\"의 \"g\"는?",
+      "answer": "voiceless"
+    },
+    {
+      "word": "Glas",
+      "consonant": "s",
+      "type": "voiced_voiceless",
+      "question": "\"Glas\"의 \"s\"는?",
+      "answer": "voiceless"
+    },
+    {
+      "word": "Haus",
+      "consonant": "s",
+      "type": "voiced_voiceless",
+      "question": "\"Haus\"의 \"s\"는?",
+      "answer": "voiceless"
+    },
+    {
+      "word": "Häuser",
+      "consonant": "s",
+      "type": "voiced_voiceless",
+      "question": "\"Häuser\"의 \"s\"는?",
+      "answer": "voiced"
+    },
+    {
+      "word": "Nase",
+      "consonant": "s",
+      "type": "voiced_voiceless",
+      "question": "\"Nase\"의 \"s\"는?",
+      "answer": "voiced"
+    },
+    {
+      "word": "sagen",
+      "consonant": "s",
+      "type": "voiced_voiceless",
+      "question": "\"sagen\"의 \"s\"는?",
+      "answer": "voiced"
+    },
+    {
+      "word": "Sommer",
+      "consonant": "s",
+      "type": "voiced_voiceless",
+      "question": "\"Sommer\"의 \"s\"는?",
+      "answer": "voiced"
+    },
+    {
+      "word": "brav",
+      "consonant": "v",
+      "type": "voiced_voiceless",
+      "question": "\"brav\"의 \"v\"는?",
+      "answer": "voiceless"
+    },
+    {
+      "word": "naiv",
+      "consonant": "v",
+      "type": "voiced_voiceless",
+      "question": "\"naiv\"의 \"v\"는?",
+      "answer": "voiceless"
+    },
+    {
+      "word": "Vase",
+      "consonant": "v",
+      "type": "voiced_voiceless",
+      "question": "\"Vase\"의 \"v\"는?",
+      "answer": "voiceless"
+    },
+    {
+      "word": "Vater",
+      "consonant": "v",
+      "type": "voiced_voiceless",
+      "question": "\"Vater\"의 \"v\"는?",
+      "answer": "voiceless"
+    },
+    {
+      "word": "Verb",
+      "consonant": "v",
+      "type": "voiced_voiceless",
+      "question": "\"Verb\"의 \"v\"는?",
+      "answer": "voiced"
+    },
+    {
+      "word": "von",
+      "consonant": "v",
+      "type": "voiced_voiceless",
+      "question": "\"von\"의 \"v\"는?",
+      "answer": "voiceless"
+    },
+    {
+      "word": "Buch",
+      "consonant": "b",
+      "type": "voiced_voiceless",
+      "question": "\"Buch\"의 \"b\"는?",
+      "answer": "voiced"
+    },
+    {
+      "word": "Beruf",
+      "consonant": "b",
+      "type": "voiced_voiceless",
+      "question": "\"Beruf\"의 \"b\"는?",
+      "answer": "voiced"
+    },
+    {
+      "word": "lieb",
+      "consonant": "b",
+      "type": "voiced_voiceless",
+      "question": "\"lieb\"의 \"b\"는?",
+      "answer": "voiceless"
+    }
+  ],
+  "diphthong": [
+    {
+      "word": "Frau",
+      "diphthong": "au",
+      "type": "diphthong",
+      "question": "\"Frau\"의 \"au\"는?",
+      "answer": "au"
+    },
+    {
+      "word": "Fräulein",
+      "diphthong": "äu",
+      "type": "diphthong",
+      "question": "\"Fräulein\"의 \"äu\"는?",
+      "answer": "ɔy"
+    },
+    {
+      "word": "Haus",
+      "diphthong": "au",
+      "type": "diphthong",
+      "question": "\"Haus\"의 \"au\"는?",
+      "answer": "au"
+    },
+    {
+      "word": "Häuser",
+      "diphthong": "äu",
+      "type": "diphthong",
+      "question": "\"Häuser\"의 \"äu\"는?",
+      "answer": "ɔy"
+    },
+    {
+      "word": "heute",
+      "diphthong": "eu",
+      "type": "diphthong",
+      "question": "\"heute\"의 \"eu\"는?",
+      "answer": "ɔy"
+    },
+    {
+      "word": "Räuber",
+      "diphthong": "äu",
+      "type": "diphthong",
+      "question": "\"Räuber\"의 \"äu\"는?",
+      "answer": "ɔy"
+    },
+    {
+      "word": "allein",
+      "diphthong": "ei",
+      "type": "diphthong",
+      "question": "\"allein\"의 \"ei\"는?",
+      "answer": "ai"
+    },
+    {
+      "word": "Bayern",
+      "diphthong": "ay",
+      "type": "diphthong",
+      "question": "\"Bayern\"의 \"ay\"는?",
+      "answer": "ai"
+    },
+    {
+      "word": "Bein",
+      "diphthong": "ei",
+      "type": "diphthong",
+      "question": "\"Bein\"의 \"ei\"는?",
+      "answer": "ai"
+    },
+    {
+      "word": "Deutsch",
+      "diphthong": "eu",
+      "type": "diphthong",
+      "question": "\"Deutsch\"의 \"eu\"는?",
+      "answer": "ɔy"
+    },
+    {
+      "word": "Freund",
+      "diphthong": "eu",
+      "type": "diphthong",
+      "question": "\"Freund\"의 \"eu\"는?",
+      "answer": "ɔy"
+    },
+    {
+      "word": "leider",
+      "diphthong": "ei",
+      "type": "diphthong",
+      "question": "\"leider\"의 \"ei\"는?",
+      "answer": "ai"
+    },
+    {
+      "word": "Frau",
+      "diphthong": "au",
+      "type": "diphthong",
+      "question": "\"Frau\"의 \"au\"는?",
+      "answer": "au"
+    },
+    {
+      "word": "Baum",
+      "diphthong": "au",
+      "type": "diphthong",
+      "question": "\"Baum\"의 \"au\"는?",
+      "answer": "au"
+    },
+    {
+      "word": "laufen",
+      "diphthong": "au",
+      "type": "diphthong",
+      "question": "\"laufen\"의 \"au\"는?",
+      "answer": "au"
+    },
+    {
+      "word": "kaufen",
+      "diphthong": "au",
+      "type": "diphthong",
+      "question": "\"kaufen\"의 \"au\"는?",
+      "answer": "au"
+    },
+    {
+      "word": "Leute",
+      "diphthong": "eu",
+      "type": "diphthong",
+      "question": "\"Leute\"의 \"eu\"는?",
+      "answer": "ɔy"
+    },
+    {
+      "word": "Deutschland",
+      "diphthong": "eu",
+      "type": "diphthong",
+      "question": "\"Deutschland\"의 \"eu\"는?",
+      "answer": "ɔy"
+    },
+    {
+      "word": "heute",
+      "diphthong": "eu",
+      "type": "diphthong",
+      "question": "\"heute\"의 \"eu\"는?",
+      "answer": "ɔy"
+    },
+    {
+      "word": "Freund",
+      "diphthong": "eu",
+      "type": "diphthong",
+      "question": "\"Freund\"의 \"eu\"는?",
+      "answer": "ɔy"
+    },
+    {
+      "word": "nein",
+      "diphthong": "ei",
+      "type": "diphthong",
+      "question": "\"nein\"의 \"ei\"는?",
+      "answer": "ai"
+    },
+    {
+      "word": "Zeit",
+      "diphthong": "ei",
+      "type": "diphthong",
+      "question": "\"Zeit\"의 \"ei\"는?",
+      "answer": "ai"
+    },
+    {
+      "word": "Arbeit",
+      "diphthong": "ei",
+      "type": "diphthong",
+      "question": "\"Arbeit\"의 \"ei\"는?",
+      "answer": "ai"
+    },
+    {
+      "word": "allein",
+      "diphthong": "ei",
+      "type": "diphthong",
+      "question": "\"allein\"의 \"ei\"는?",
+      "answer": "ai"
+    }
+  ],
+  "ch_sound": [
+    {
+      "word": "ach",
+      "type": "ch_sound",
+      "question": "\"ach\"의 \"ch\"는?",
+      "answer": "x"
+    },
+    {
+      "word": "Buch",
+      "type": "ch_sound",
+      "question": "\"Buch\"의 \"ch\"는?",
+      "answer": "x"
+    },
+    {
+      "word": "dich",
+      "type": "ch_sound",
+      "question": "\"dich\"의 \"ch\"는?",
+      "answer": "ç"
+    },
+    {
+      "word": "doch",
+      "type": "ch_sound",
+      "question": "\"doch\"의 \"ch\"는?",
+      "answer": "x"
+    },
+    {
+      "word": "echt",
+      "type": "ch_sound",
+      "question": "\"echt\"의 \"ch\"는?",
+      "answer": "ç"
+    },
+    {
+      "word": "hoch",
+      "type": "ch_sound",
+      "question": "\"hoch\"의 \"ch\"는?",
+      "answer": "x"
+    },
+    {
+      "word": "höchst",
+      "type": "ch_sound",
+      "question": "\"höchst\"의 \"ch\"는?",
+      "answer": "ç"
+    },
+    {
+      "word": "Chemie",
+      "type": "ch_sound",
+      "question": "\"Chemie\"의 \"ch\"는?",
+      "answer": "ç"
+    },
+    {
+      "word": "durch",
+      "type": "ch_sound",
+      "question": "\"durch\"의 \"ch\"는?",
+      "answer": "ç"
+    },
+    {
+      "word": "Koch",
+      "type": "ch_sound",
+      "question": "\"Koch\"의 \"ch\"는?",
+      "answer": "x"
+    },
+    {
+      "word": "Milch",
+      "type": "ch_sound",
+      "question": "\"Milch\"의 \"ch\"는?",
+      "answer": "ç"
+    },
+    {
+      "word": "München",
+      "type": "ch_sound",
+      "question": "\"München\"의 \"ch\"는?",
+      "answer": "ç"
+    },
+    {
+      "word": "solch",
+      "type": "ch_sound",
+      "question": "\"solch\"의 \"ch\"는?",
+      "answer": "x"
+    },
+    {
+      "word": "ich",
+      "type": "ch_sound",
+      "question": "\"ich\"의 \"ch\"는?",
+      "answer": "ç"
+    },
+    {
+      "word": "möchte",
+      "type": "ch_sound",
+      "question": "\"möchte\"의 \"ch\"는?",
+      "answer": "ç"
+    },
+    {
+      "word": "Bücher",
+      "type": "ch_sound",
+      "question": "\"Bücher\"의 \"ch\"는?",
+      "answer": "ç"
+    },
+    {
+      "word": "Mädchen",
+      "type": "ch_sound",
+      "question": "\"Mädchen\"의 \"ch\"는?",
+      "answer": "ç"
+    },
+    {
+      "word": "sprechen",
+      "type": "ch_sound",
+      "question": "\"sprechen\"의 \"ch\"는?",
+      "answer": "ç"
+    },
+    {
+      "word": "Buch",
+      "type": "ch_sound",
+      "question": "\"Buch\"의 \"ch\"는?",
+      "answer": "x"
+    },
+    {
+      "word": "Koch",
+      "type": "ch_sound",
+      "question": "\"Koch\"의 \"ch\"는?",
+      "answer": "x"
+    },
+    {
+      "word": "Tochter",
+      "type": "ch_sound",
+      "question": "\"Tochter\"의 \"ch\"는?",
+      "answer": "x"
+    }
+  ],
+  "s_sound": [
+    {
+      "word": "bist",
+      "type": "s_sound",
+      "question": "\"bist\"의 s계열 발음은?",
+      "answer": "s"
+    },
+    {
+      "word": "fast",
+      "type": "s_sound",
+      "question": "\"fast\"의 s계열 발음은?",
+      "answer": "s"
+    },
+    {
+      "word": "sprechen",
+      "type": "s_sound",
+      "question": "\"sprechen\"의 s계열 발음은?",
+      "answer": "ʃ"
+    },
+    {
+      "word": "Sport",
+      "type": "s_sound",
+      "question": "\"Sport\"의 s계열 발음은?",
+      "answer": "ʃ"
+    },
+    {
+      "word": "Stunde",
+      "type": "s_sound",
+      "question": "\"Stunde\"의 s계열 발음은?",
+      "answer": "ʃ"
+    },
+    {
+      "word": "stehen",
+      "type": "s_sound",
+      "question": "\"stehen\"의 s계열 발음은?",
+      "answer": "ʃ"
+    },
+    {
+      "word": "Deutsch",
+      "type": "s_sound",
+      "question": "\"Deutsch\"의 s계열 발음은?",
+      "answer": "tʃ"
+    },
+    {
+      "word": "Dolmetscher",
+      "type": "s_sound",
+      "question": "\"Dolmetscher\"의 s계열 발음은?",
+      "answer": "tʃ"
+    },
+    {
+      "word": "schön",
+      "type": "s_sound",
+      "question": "\"schön\"의 s계열 발음은?",
+      "answer": "ʃ"
+    },
+    {
+      "word": "Schule",
+      "type": "s_sound",
+      "question": "\"Schule\"의 s계열 발음은?",
+      "answer": "ʃ"
+    },
+    {
+      "word": "Schiff",
+      "type": "s_sound",
+      "question": "\"Schiff\"의 s계열 발음은?",
+      "answer": "ʃ"
+    },
+    {
+      "word": "tschüs",
+      "type": "s_sound",
+      "question": "\"tschüs\"의 s계열 발음은?",
+      "answer": "tʃ"
+    },
+    {
+      "word": "was",
+      "type": "s_sound",
+      "question": "\"was\"의 s 발음은?",
+      "answer": "s"
+    },
+    {
+      "word": "schön",
+      "type": "s_sound",
+      "question": "\"schön\"의 sch 발음은?",
+      "answer": "ʃ"
+    },
+    {
+      "word": "Schule",
+      "type": "s_sound",
+      "question": "\"Schule\"의 sch 발음은?",
+      "answer": "ʃ"
+    },
+    {
+      "word": "Flasche",
+      "type": "s_sound",
+      "question": "\"Flasche\"의 sch 발음은?",
+      "answer": "ʃ"
+    },
+    {
+      "word": "Deutsch",
+      "type": "s_sound",
+      "question": "\"Deutsch\"의 sch 발음은?",
+      "answer": "ʃ"
+    },
+    {
+      "word": "Sprache",
+      "type": "s_sound",
+      "question": "\"Sprache\"의 sp/st 발음은?",
+      "answer": "ʃ"
+    },
+    {
+      "word": "spielen",
+      "type": "s_sound",
+      "question": "\"spielen\"의 sp/st 발음은?",
+      "answer": "ʃ"
+    },
+    {
+      "word": "Student",
+      "type": "s_sound",
+      "question": "\"Student\"의 sp/st 발음은?",
+      "answer": "ʃ"
+    },
+    {
+      "word": "Straße",
+      "type": "s_sound",
+      "question": "\"Straße\"의 sp/st 발음은?",
+      "answer": "ʃ"
+    },
+    {
+      "word": "Stadt",
+      "type": "s_sound",
+      "question": "\"Stadt\"의 sp/st 발음은?",
+      "answer": "ʃ"
+    }
+  ],
+  "stress": [
+    {
+      "word": "abfahren",
+      "type": "stress",
+      "question": "\"abfahren\"의 강세는?",
+      "answer": "ab-",
+      "category": "separable"
+    },
+    {
+      "word": "ankommen",
+      "type": "stress",
+      "question": "\"ankommen\"의 강세는?",
+      "answer": "an-",
+      "category": "separable"
+    },
+    {
+      "word": "aussteigen",
+      "type": "stress",
+      "question": "\"aussteigen\"의 강세는?",
+      "answer": "aus-",
+      "category": "separable"
+    },
+    {
+      "word": "einsteigen",
+      "type": "stress",
+      "question": "\"einsteigen\"의 강세는?",
+      "answer": "ein-",
+      "category": "separable"
+    },
+    {
+      "word": "einschlafen",
+      "type": "stress",
+      "question": "\"einschlafen\"의 강세는?",
+      "answer": "ein-",
+      "category": "separable"
+    },
+    {
+      "word": "mitfahren",
+      "type": "stress",
+      "question": "\"mitfahren\"의 강세는?",
+      "answer": "mit-",
+      "category": "separable"
+    },
+    {
+      "word": "vorstellen",
+      "type": "stress",
+      "question": "\"vorstellen\"의 강세는?",
+      "answer": "vor-",
+      "category": "separable"
+    },
+    {
+      "word": "zusagen",
+      "type": "stress",
+      "question": "\"zusagen\"의 강세는?",
+      "answer": "zu-",
+      "category": "separable"
+    },
+    {
+      "word": "bekommen",
+      "type": "stress",
+      "question": "\"bekommen\"의 강세는?",
+      "answer": "-kom-",
+      "category": "inseparable"
+    },
+    {
+      "word": "empfehlen",
+      "type": "stress",
+      "question": "\"empfehlen\"의 강세는?",
+      "answer": "-feh-",
+      "category": "inseparable"
+    },
+    {
+      "word": "entdecken",
+      "type": "stress",
+      "question": "\"entdecken\"의 강세는?",
+      "answer": "-deck-",
+      "category": "inseparable"
+    },
+    {
+      "word": "erzählen",
+      "type": "stress",
+      "question": "\"erzählen\"의 강세는?",
+      "answer": "-zäh-",
+      "category": "inseparable"
+    },
+    {
+      "word": "gefallen",
+      "type": "stress",
+      "question": "\"gefallen\"의 강세는?",
+      "answer": "-fall-",
+      "category": "inseparable"
+    },
+    {
+      "word": "verstehen",
+      "type": "stress",
+      "question": "\"verstehen\"의 강세는?",
+      "answer": "-steh-",
+      "category": "inseparable"
+    },
+    {
+      "word": "Student",
+      "type": "stress",
+      "question": "\"Student\"의 강세는?",
+      "answer": "-dent",
+      "category": "foreign_suffix"
+    },
+    {
+      "word": "Nation",
+      "type": "stress",
+      "question": "\"Nation\"의 강세는?",
+      "answer": "-on",
+      "category": "foreign_suffix"
+    },
+    {
+      "word": "Universität",
+      "type": "stress",
+      "question": "\"Universität\"의 강세는?",
+      "answer": "-tät",
+      "category": "foreign_suffix"
+    },
+    {
+      "word": "Pianist",
+      "type": "stress",
+      "question": "\"Pianist\"의 강세는?",
+      "answer": "-ist",
+      "category": "foreign_suffix"
+    },
+    {
+      "word": "studieren",
+      "type": "stress",
+      "question": "\"studieren\"의 강세는?",
+      "answer": "-ieren",
+      "category": "foreign_suffix"
+    }
+  ]
+};
 const verbsData=[{"verb": "abfahren", "meaning": "출발하다"}, {"verb": "ändern", "meaning": "바꾸다"}, {"verb": "anfangen", "meaning": "시작하다"}, {"verb": "ankommen", "meaning": "도착하다"}, {"verb": "arbeiten", "meaning": "일하다"}, {"verb": "atmen", "meaning": "숨쉬다"}, {"verb": "aufsteigen", "meaning": "올라가다, 승진하다"}, {"verb": "ausgehen", "meaning": "외출하다"}, {"verb": "aussteigen", "meaning": "내리다"}, {"verb": "baden", "meaning": "목욕하다"}, {"verb": "befehlen", "meaning": "명령하다"}, {"verb": "bekommen", "meaning": "받다"}, {"verb": "Bestellen", "meaning": "주문하다"}, {"verb": "bitten", "meaning": "부탁하다"}, {"verb": "denken", "meaning": "생각하다"}, {"verb": "einschlafen", "meaning": "잠들다"}, {"verb": "einsteigen", "meaning": "타다"}, {"verb": "empfehlen", "meaning": "추천하다"}, {"verb": "entdecken", "meaning": "발견하다"}, {"verb": "erzählen", "meaning": "이야기하다"}, {"verb": "essen", "meaning": "먹다"}, {"verb": "fahren", "meaning": "운전하다, 타다"}, {"verb": "fallen", "meaning": "떨어지다"}, {"verb": "finden", "meaning": "찾다"}, {"verb": "fühlen", "meaning": "느끼다"}, {"verb": "füllen", "meaning": "채우다"}, {"verb": "geben", "meaning": "주다"}, {"verb": "gebissen", "meaning": "물다 (과거분사)"}, {"verb": "gefallen", "meaning": "마음에 들다"}, {"verb": "gehen", "meaning": "가다"}, {"verb": "geschehen", "meaning": "일어나다"}, {"verb": "gesehen", "meaning": "보다 (과거분사)"}, {"verb": "getroffen", "meaning": "만나다 (과거분사)"}, {"verb": "halten", "meaning": "멈추다, 잡다"}, {"verb": "heißen", "meaning": "~라고 불리다"}, {"verb": "helfen", "meaning": "돕다"}, {"verb": "holen", "meaning": "가져오다"}, {"verb": "hören", "meaning": "듣다"}, {"verb": "kaufen", "meaning": "사다"}, {"verb": "kennen", "meaning": "알다"}, {"verb": "kennenzulernen", "meaning": "알게 되다"}, {"verb": "kommen", "meaning": "오다"}, {"verb": "Können", "meaning": "할 수 있다"}, {"verb": "laufen", "meaning": "달리다"}, {"verb": "leben", "meaning": "살다"}, {"verb": "lehren", "meaning": "가르치다"}, {"verb": "lernen", "meaning": "배우다"}, {"verb": "lesen", "meaning": "읽다"}, {"verb": "lesen", "meaning": "읽다"}, {"verb": "lieben", "meaning": "사랑하다"}, {"verb": "machen", "meaning": "만들다, 하다"}, {"verb": "mitfahren", "meaning": "함께 타다"}, {"verb": "müssen", "meaning": "~해야 한다"}, {"verb": "nehmen", "meaning": "가지다, 먹다"}, {"verb": "öffnen", "meaning": "열다"}, {"verb": "rechnen", "meaning": "계산하다"}, {"verb": "reisen", "meaning": "여행하다"}, {"verb": "rufen", "meaning": "부르다"}, {"verb": "sagen", "meaning": "말하다"}, {"verb": "sammeln", "meaning": "모으다"}, {"verb": "schlafen", "meaning": "자다"}, {"verb": "schwimmen", "meaning": "수영하다"}, {"verb": "schwmmen", "meaning": "수영하다"}, {"verb": "Sehen", "meaning": "보다"}, {"verb": "singen", "meaning": "노래하다"}, {"verb": "sitzen", "meaning": "앉다"}, {"verb": "spazieren", "meaning": "산책하다"}, {"verb": "spielen", "meaning": "놀다, 연주하다"}, {"verb": "sprechen", "meaning": "말하다"}, {"verb": "Stehen", "meaning": "서다"}, {"verb": "studieren", "meaning": "공부하다"}, {"verb": "tragen", "meaning": "입다, 나르다"}, {"verb": "treffen", "meaning": "만나다"}, {"verb": "trinken", "meaning": "마시다"}, {"verb": "trocknen", "meaning": "말리다"}, {"verb": "verkaufen", "meaning": "팔다"}, {"verb": "vermissen", "meaning": "그리워하다"}, {"verb": "verstehen", "meaning": "이해하다"}, {"verb": "vorstellen", "meaning": "소개하다, 상상하다"}, {"verb": "warten", "meaning": "기다리다"}, {"verb": "waschen", "meaning": "씻다"}, {"verb": "welken", "meaning": "시들다"}, {"verb": "werden", "meaning": "~이 되다"}, {"verb": "wissen", "meaning": "알다"}, {"verb": "wohnen", "meaning": "살다 (거주)"}, {"verb": "zusagen", "meaning": "승낙하다"}, {"verb": "backen", "meaning": "굽다"}, {"verb": "tanzen", "meaning": "춤추다"}];
 const articlesEx=[{q:"______ Stühle sind nicht bequem.",a:"Die"},{q:"Ist er ______ (an American)?",a:"Amerikaner"},{q:"Siehst du? ______ (the baby) spielt mit dem Hund.",a:"Das Baby"},{q:"Das ist ______ gute ______ (idea).",a:"eine Idee"},{q:"Wo ist ______ (the castle)?",a:"das Schloss"},{q:"Können ______ (the boys) gut Fußball spielen?",a:"die Jungen"},{q:"Ist Herr Elster ______ (a doctor)?",a:"Arzt"},{q:"Haben ______ (the two female students) einen Nebenjob?",a:"die zwei Studentinnen"},{q:"______ (the hotels) in der Stadtmitte sind laut.",a:"Die Hotels"},{q:"Ist das ______ (a problem) für Sie?",a:"ein Problem"},{q:"Achtung! ______ (the knife) ist sehr scharf!",a:"Das Messer"},{q:"Wie heißt ______ (the girl)?",a:"das Mädchen"},{q:"Mein Vater ______ (Australian).",a:"ist Australier"},{q:"______ (laptops) sind relativ billig.",a:"Laptops"}];
 const pronounEx=[{q:"Ich glaube, ______ arbeitet zu viel. (she/nom.)",a:"sie"},{q:"Kennst ______ meine Schwester? (you/nom./s./inf.)",a:"du"},{q:"Was kann ______ für ______ tun? (I/nom., you/acc./form.)",a:"ich Sie"},{q:"Die Familie fährt ohne ______ nach Schweinfurt. (her/acc.)",a:"sie"},{q:"Thomas und Janina gehen mit ______ ins Kino. (you/dat./form.)",a:"Ihnen"},{q:"Wohnen ______ in der Nähe? (you/nom./form.)",a:"Sie"},{q:"Wie gefällt ______ der neue Bürgermeister? (you/dat./pl./inf.)",a:"euch"},{q:"Wirklich? Ich dachte, du gehst mit ______. (us/dat.)",a:"uns"},{q:"Mein Bruder braucht ______. (me/acc.)",a:"mich"},{q:"Du sollst mit ______ ausgehen. (her/dat.)",a:"ihr"},{q:"Aber ich möchte mit ______ ausgehen. (you/dat./s./inf.)",a:"dir"}];
 const conjugEx=[{q:"Ich ______ in Berlin. (wohnen)",a:"wohne"},{q:"Er ______ Deutsch. (lernen)",a:"lernt"},{q:"______ du ein Buch? (kaufen)",a:"Kaufst"},{q:"Wir ______ aus Korea. (kommen)",a:"kommen"},{q:"______ du Hunger? (haben)",a:"Hast"},{q:"______ ihr heute einen Schwimmkurs? (haben)",a:"Habt"},{q:"Ich ______ Student. (sein)",a:"bin"},{q:"Markus ______ ein Buch. (lesen)",a:"liest"},{q:"Er ______ sehr laut. (sprechen)",a:"spricht"},{q:"______ du mir, bitte? (helfen)",a:"Hilfst"},{q:"Du ______ das. (nehmen)",a:"nimmst"},{q:"______ Sie aus Italien? (kommen)",a:"Kommen"}];
-let mode='flashcard',idx=0,score=0,total=0,words=[],wrong=[],gramEx=[];
+
+let mode='flashcard',idx=0,score=0,total=0,words=[],wrong=[],gramEx=[],pronType='',pronQuestions=[];
+
 function selectMode(m){
 mode=m;idx=0;score=0;total=0;wrong=[];
 document.querySelectorAll('.mode-card').forEach(c=>c.classList.remove('active'));
@@ -136,7 +1204,172 @@ else if(m==='verb_table')renderVerb();
 else if(m==='articles')renderGram('articles');
 else if(m==='pronouns')renderGram('pronouns');
 else if(m==='conjugation')renderGram('conjugation');
+else if(m==='pronunciation')renderPronSelector();
 }
+
+function renderPronSelector(){
+document.getElementById('study-area').innerHTML=`
+<div class="exercise-container">
+<h2 style="text-align:center;color:#667eea;margin-bottom:20px">🎯 발음 연습 유형 선택</h2>
+<p style="text-align:center;color:#666;margin-bottom:30px">연습하고 싶은 발음 유형을 선택하세요</p>
+<div class="quiz-options">
+<div class="option" onclick="startPronQuiz('vowel_length')" style="cursor:pointer">
+<div style="font-size:1.5em;margin-bottom:10px">📏</div>
+<div style="font-weight:bold">장모음 / 단모음</div>
+<div style="font-size:0.9em;opacity:0.7;margin-top:5px">37 문제</div>
+</div>
+<div class="option" onclick="startPronQuiz('voiced_voiceless')" style="cursor:pointer">
+<div style="font-size:1.5em;margin-bottom:10px">🔊</div>
+<div style="font-weight:bold">유성음 / 무성음</div>
+<div style="font-size:0.9em;opacity:0.7;margin-top:5px">33 문제</div>
+</div>
+<div class="option" onclick="startPronQuiz('diphthong')" style="cursor:pointer">
+<div style="font-size:1.5em;margin-bottom:10px">🎵</div>
+<div style="font-weight:bold">이중모음</div>
+<div style="font-size:0.9em;opacity:0.7;margin-top:5px">24 문제</div>
+</div>
+<div class="option" onclick="startPronQuiz('ch_sound')" style="cursor:pointer">
+<div style="font-size:1.5em;margin-bottom:10px">🗣️</div>
+<div style="font-weight:bold">ch 발음</div>
+<div style="font-size:0.9em;opacity:0.7;margin-top:5px">21 문제</div>
+</div>
+<div class="option" onclick="startPronQuiz('s_sound')" style="cursor:pointer">
+<div style="font-size:1.5em;margin-bottom:10px">💨</div>
+<div style="font-weight:bold">s계열 발음</div>
+<div style="font-size:0.9em;opacity:0.7;margin-top:5px">22 문제</div>
+</div>
+<div class="option" onclick="startPronQuiz('stress')" style="cursor:pointer">
+<div style="font-size:1.5em;margin-bottom:10px">⚡</div>
+<div style="font-weight:bold">강세</div>
+<div style="font-size:0.9em;opacity:0.7;margin-top:5px">19 문제</div>
+</div>
+</div>
+</div>`;
+}
+
+function startPronQuiz(type){
+pronType=type;
+pronQuestions=shuffle([...pronunciationQuizData[type]]);
+total=pronQuestions.length;
+idx=0;score=0;wrong=[];
+renderPronQuestion();
+}
+
+function renderPronQuestion(){
+if(idx>=total){showPronResults();return;}
+const q=pronQuestions[idx];
+const opts=getPronOptions(q);
+const typeNames={
+vowel_length:'장모음/단모음',
+voiced_voiceless:'유성음/무성음',
+diphthong:'이중모음',
+ch_sound:'ch 발음',
+s_sound:'s계열 발음',
+stress:'강세'
+};
+document.getElementById('study-area').innerHTML=`
+<div class="exercise-container">
+<h2 style="text-align:center;color:#667eea;margin-bottom:20px">🎯 ${typeNames[pronType]}</h2>
+<div class="progress-bar"><div class="progress-fill" style="width:${idx/total*100}%"></div></div>
+<div class="score">문제 ${idx+1}/${total} | 점수: ${score}/${total}</div>
+<div class="quiz-question">
+<div class="quiz-word">${q.word}</div>
+<h3>${q.question}</h3>
+</div>
+<div class="quiz-options">
+${opts.map(o=>`<div class="option" onclick="checkPronAnswer('${o.value}','${q.answer}','${q.word}','${q.question}')">${o.label}</div>`).join('')}
+</div>
+</div>`;
+}
+
+function getPronOptions(q){
+switch(q.type){
+case 'vowel_length':
+return [{label:'장모음',value:'long'},{label:'단모음',value:'short'}];
+case 'voiced_voiceless':
+return [{label:'유성음',value:'voiced'},{label:'무성음',value:'voiceless'}];
+case 'diphthong':
+return [{label:'[au]',value:'au'},{label:'[ɔy]',value:'ɔy'},{label:'[ai]',value:'ai'}];
+case 'ch_sound':
+return [{label:'[ç] (연음)',value:'ç'},{label:'[x] (경음)',value:'x'}];
+case 's_sound':
+return [{label:'[s]',value:'s'},{label:'[ʃ]',value:'ʃ'},{label:'[tʃ]',value:'tʃ'}];
+case 'stress':
+return getStressOptions(q);
+default:
+return [];
+}
+}
+
+function getStressOptions(q){
+if(q.category==='separable'){
+const w=q.word;
+const pre=q.answer;
+const rest=w.substring(pre.length-1);
+return [
+{label:pre,value:pre},
+{label:'-'+rest.substring(0,Math.floor(rest.length/2))+'-',value:'-'+rest.substring(0,Math.floor(rest.length/2))+'-'},
+{label:'-'+rest.substring(Math.floor(rest.length/2)),value:'-'+rest.substring(Math.floor(rest.length/2))}
+];
+}else{
+const w=q.word;
+return [
+{label:w.substring(0,2)+'-',value:w.substring(0,2)+'-'},
+{label:q.answer,value:q.answer},
+{label:'-'+w.substring(w.length-2),value:'-'+w.substring(w.length-2)}
+];
+}
+}
+
+function checkPronAnswer(sel,cor,word,question){
+document.querySelectorAll('.option').forEach(o=>{
+o.style.pointerEvents='none';
+const oval=o.onclick.toString().match(/checkPronAnswer\('([^']+)'/)?.[1]||'';
+if(oval===cor)o.classList.add('correct');
+else if(oval===sel&&sel!==cor)o.classList.add('wrong');
+});
+if(sel===cor){
+score++;
+}else{
+wrong.push({question:word+' - '+question,answer:getAnswerLabel(cor,pronQuestions[idx].type),userAnswer:getAnswerLabel(sel,pronQuestions[idx].type)});
+}
+setTimeout(()=>{idx++;renderPronQuestion();},1500);
+}
+
+function getAnswerLabel(val,type){
+const labels={
+long:'장모음',short:'단모음',
+voiced:'유성음',voiceless:'무성음',
+au:'[au]',ɔy:'[ɔy]',ai:'[ai]',
+ç:'[ç]',x:'[x]',
+s:'[s]',ʃ:'[ʃ]',tʃ:'[tʃ]'
+};
+return labels[val]||val;
+}
+
+function showPronResults(){
+const p=Math.round(score/total*100);
+let whtml='';
+if(wrong.length>0){
+whtml=`<div class="wrong-words"><h3>❌ 틀린 문제 (${wrong.length}개)</h3>
+${wrong.map((w,i)=>`<div class="wrong-word-item">
+<div style="margin-bottom:8px"><strong style="color:#333">문제 ${i+1}:</strong> <span style="color:#667eea;font-weight:bold">${w.question}</span></div>
+<div style="margin-bottom:5px;color:#666">내 답: <span style="color:#f44336;font-weight:bold">${w.userAnswer}</span></div>
+<div style="color:#666">정답: <span style="color:#4caf50;font-weight:bold">${w.answer}</span></div>
+</div>`).join('')}</div>`;
+}
+document.getElementById('study-area').innerHTML=`
+<div style="text-align:center;padding:50px 20px">
+<h2 style="font-size:2.5em;color:#667eea;margin-bottom:30px">🎉 연습 완료!</h2>
+<div style="font-size:3em;margin:30px 0">${score}/${total}</div>
+<div style="font-size:1.5em;color:#666;margin-bottom:40px">정답률: ${p}%</div>
+<div class="result-message ${p>=70?'success':'error'}">${p>=90?'🌟 완벽!':p>=70?'👍 잘했어요!':'💪 다시 도전!'}</div>${whtml}
+<div class="controls">
+<button class="btn btn-primary" onclick="startPronQuiz('${pronType}')">🔄 다시</button>
+<button class="btn btn-secondary" onclick="renderPronSelector()">다른 유형 선택</button>
+</div></div>`;
+}
+
 function renderFlash(){
 words=shuffle([...vocabData]).slice(0,50);
 const c=words[idx];
@@ -152,6 +1385,7 @@ ${idx>0?'<button class="btn btn-secondary" onclick="idx--;renderFlash()">⬅️ 
 ${idx<words.length-1?'<button class="btn btn-primary" onclick="idx++;renderFlash()">다음 ➡️</button>':'<button class="btn btn-primary" onclick="renderFlash()">🔄 다시</button>'}
 </div>`;
 }
+
 function renderKoDe(){
 words=shuffle([...vocabData]).slice(0,20);total=words.length;wrong=[];
 if(idx>=words.length){showRes();return;}
@@ -164,6 +1398,7 @@ document.getElementById('study-area').innerHTML=`
 <div class="quiz-question"><h3>다음 한국어를 독일어로? (선택)</h3><div class="quiz-word">${c.meaning}</div></div>
 <div class="quiz-options">${opts.map(o=>`<div class="option" onclick="checkTrans('${o.replace(/'/g,"\\'")}','${cor.replace(/'/g,"\\'")}','${cor.replace(/'/g,"\\'")}','${c.meaning}')">${o}</div>`).join('')}</div>`;
 }
+
 function renderDeKo(){
 words=shuffle([...vocabData]).slice(0,20);total=words.length;wrong=[];
 if(idx>=words.length){showRes();return;}
@@ -176,6 +1411,7 @@ document.getElementById('study-area').innerHTML=`
 <div class="quiz-question"><h3>다음 독일어의 뜻은? (선택)</h3><div class="quiz-word">${w}</div></div>
 <div class="quiz-options">${opts.map(o=>`<div class="option" onclick="checkTrans('${o}','${c.meaning}','${w}','${c.meaning}')">${o}</div>`).join('')}</div>`;
 }
+
 function renderKoDeWrite(){
 words=shuffle([...vocabData]).slice(0,20);total=words.length;wrong=[];
 if(idx>=words.length){showRes();return;}
@@ -190,6 +1426,7 @@ document.getElementById('study-area').innerHTML=`
 <div class="controls"><button class="btn btn-primary" onclick="submitWrite('${cor.replace(/'/g,"\\'")}','${c.meaning}')">제출</button></div>`;
 document.getElementById('win').focus();
 }
+
 function renderDeKoWrite(){
 words=shuffle([...vocabData]).slice(0,20);total=words.length;wrong=[];
 if(idx>=words.length){showRes();return;}
@@ -204,6 +1441,7 @@ document.getElementById('study-area').innerHTML=`
 <div class="controls"><button class="btn btn-primary" onclick="submitWrite('${c.meaning}','${w}')">제출</button></div>`;
 document.getElementById('win').focus();
 }
+
 function submitWrite(cor,question){
 const inp=document.getElementById('win');
 const v=inp.value.trim();
@@ -229,6 +1467,7 @@ inp.parentNode.appendChild(fb);
 setTimeout(()=>{idx++;mode==='ko_to_de_write'?renderKoDeWrite():renderDeKoWrite();},2000);
 }
 }
+
 function checkTrans(sel,cor,de,ko){
 document.querySelectorAll('.option').forEach(o=>{o.style.pointerEvents='none';
 if(o.textContent===cor)o.classList.add('correct');
@@ -240,6 +1479,7 @@ wrong.push({question:q,answer:a,userAnswer:sel});
 }
 setTimeout(()=>{idx++;mode==='ko_to_de'?renderKoDe():renderDeKo();},1500);
 }
+
 function renderArt(){
 const nouns=vocabData.filter(w=>w.article!=='-');
 words=shuffle(nouns).slice(0,30);total=words.length;
@@ -251,6 +1491,7 @@ document.getElementById('study-area').innerHTML=`
 <div class="quiz-question"><h3>다음 단어의 관사는?</h3><div class="quiz-word">${c.word}</div><p style="color:#666;margin-top:10px">${c.meaning}</p></div>
 <div class="quiz-options">${['der','die','das'].map(o=>`<div class="option" onclick="checkAns('${o}','${c.article}')">${o}</div>`).join('')}</div>`;
 }
+
 function checkAns(sel,cor){
 document.querySelectorAll('.option').forEach(o=>{o.style.pointerEvents='none';
 if(o.textContent===cor)o.classList.add('correct');
@@ -258,6 +1499,7 @@ else if(o.textContent===sel&&sel!==cor)o.classList.add('wrong');});
 if(sel===cor)score++;
 setTimeout(()=>{idx++;renderArt();},1500);
 }
+
 function renderPlural(){
 const nouns=vocabData.filter(w=>w.plural&&w.plural!=='');
 words=shuffle(nouns).slice(0,30);total=words.length;
@@ -271,12 +1513,14 @@ document.getElementById('study-area').innerHTML=`
 </div><div class="controls"><button class="btn btn-primary" onclick="submitPlural('${c.plural.replace(/'/g,"\\'")}')">제출</button></div>`;
 document.getElementById('pin').focus();
 }
+
 function submitPlural(cor){
 const v=document.getElementById('pin').value.trim();
 if(!v){alert('답을 입력하세요!');return;}
 if(v.toLowerCase()===cor.toLowerCase()){score++;alert('✅ 정답!');}else alert(`❌ 정답: ${cor}`);
 idx++;renderPlural();
 }
+
 function renderVerb(){
 const vbs=shuffle([...verbsData]).slice(0,10);
 words=vbs;total=vbs.length;
@@ -307,6 +1551,7 @@ document.getElementById('study-area').innerHTML=`
 <button class="btn btn-secondary" onclick="idx++;renderVerb()">건너뛰기</button>
 </div></div>`;
 }
+
 function checkVerb(v){
 const inp={ich:document.getElementById('ich').value.trim(),du:document.getElementById('du').value.trim(),er:document.getElementById('er').value.trim(),wir:document.getElementById('wir').value.trim(),ihr:document.getElementById('ihr').value.trim(),sie:document.getElementById('sie').value.trim()};
 for(let k in inp){if(!inp[k]){alert('모든 칸을 채워주세요!');return;}}
@@ -320,6 +1565,7 @@ el.disabled=true;
 if(cnt===6)score++;
 setTimeout(()=>{idx++;renderVerb();},3000);
 }
+
 function getConj(v){
 const s=v.slice(0,-2);
 if(v==='sein')return{ich:'bin',du:'bist',er:'ist',wir:'sind',ihr:'seid',sie:'sind'};
@@ -327,6 +1573,7 @@ if(v==='haben')return{ich:'habe',du:'hast',er:'hat',wir:'haben',ihr:'habt',sie:'
 if(v==='werden')return{ich:'werde',du:'wirst',er:'wird',wir:'werden',ihr:'werdet',sie:'werden'};
 return{ich:s+'e',du:s+'st',er:s+'t',wir:v,ihr:s+'t',sie:v};
 }
+
 function showVerbRes(){
 const p=Math.round(score/total*100);
 document.getElementById('study-area').innerHTML=`
@@ -337,6 +1584,7 @@ document.getElementById('study-area').innerHTML=`
 <div class="result-message ${p>=70?'success':'error'}">${p>=90?'🌟 완벽!':p>=70?'👍 잘했어요!':'💪 다시 도전!'}</div>
 <div class="controls"><button class="btn btn-primary" onclick="idx=0;score=0;renderVerb()">🔄 다시</button></div></div>`;
 }
+
 function showRes(){
 const p=Math.round(score/total*100);
 let whtml='';
@@ -361,6 +1609,7 @@ mode==='ko_to_de_write'?'renderKoDeWrite()':
 mode==='de_to_ko_write'?'renderDeKoWrite()':'renderArt()'
 }">🔄 다시</button></div></div>`;
 }
+
 function renderGram(t){
 let title='';
 if(t==='articles'){gramEx=shuffle([...articlesEx]);title='📖 관사 문법';}
@@ -369,6 +1618,7 @@ else{gramEx=shuffle([...conjugEx]);title='🔄 동사 변화';}
 total=gramEx.length;idx=0;score=0;
 renderGQ(t,title);
 }
+
 function renderGQ(t,title){
 if(idx>=total){showGramRes(t);return;}
 const c=gramEx[idx];
@@ -385,6 +1635,7 @@ document.getElementById('study-area').innerHTML=`
 <div class="controls"><button class="btn btn-primary" onclick="submitGram('${t}','${title}','${c.a.replace(/'/g,"\\'")}')">제출</button></div></div>`;
 document.getElementById('ain').focus();
 }
+
 function submitGram(t,title,cor){
 const inp=document.getElementById('ain'),fb=document.getElementById('fb'),v=inp.value.trim();
 if(!v){alert('답을 입력하세요!');return;}
@@ -395,6 +1646,7 @@ if(ok){score++;fb.className='feedback correct';fb.textContent='✅ 정답!';inp.
 else{fb.className='feedback wrong';fb.textContent=`❌ 정답: ${cor}`;inp.disabled=true;}
 setTimeout(()=>{idx++;renderGQ(t,title);},2000);
 }
+
 function showGramRes(t){
 const p=Math.round(score/total*100);
 document.getElementById('study-area').innerHTML=`
@@ -405,11 +1657,13 @@ document.getElementById('study-area').innerHTML=`
 <div class="result-message ${p>=70?'success':'error'}">${p>=90?'🌟 완벽!':p>=70?'👍 잘했어요!':'💪 다시 도전!'}</div>
 <div class="controls"><button class="btn btn-primary" onclick="renderGram('${t}')">🔄 다시</button></div></div>`;
 }
+
 function shuffle(a){
 const n=[...a];
 for(let i=n.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[n[i],n[j]]=[n[j],n[i]];}
 return n;
 }
+
 renderFlash();
 </script>
 </body>
