@@ -1591,7 +1591,7 @@ const articleDeclensionEx=[
   },
   {
     "q": "___ Fenster (n., nom.) im Wohnzimmer ist kaputt.",
-    "a": "Ein",
+    "a": "ein",
     "options": [
       "ein",
       "einem",
@@ -1761,7 +1761,7 @@ const articleDeclensionEx=[
   },
   {
     "q": "___ Frau (f., nom.) lacht.",
-    "a": "Die",
+    "a": "die",
     "options": [
       "den",
       "die",
@@ -1791,7 +1791,7 @@ const articleDeclensionEx=[
   },
   {
     "q": "___ Kinder (pl., nom.) spielen.",
-    "a": "Die",
+    "a": "die",
     "options": [
       "der",
       "die",
@@ -1801,7 +1801,7 @@ const articleDeclensionEx=[
   },
   {
     "q": "___ Essen (n., nom.) schmeckt sehr gut.",
-    "a": "Das",
+    "a": "das",
     "options": [
       "der",
       "die",
@@ -1861,7 +1861,7 @@ const articleDeclensionEx=[
   },
   {
     "q": "___ Mann (m., nom.) wartet.",
-    "a": "Der",
+    "a": "der",
     "options": [
       "den",
       "das",
@@ -1881,7 +1881,7 @@ const articleDeclensionEx=[
   },
   {
     "q": "___ Konzert (n., nom.) findet in der Olympiahalle statt.",
-    "a": "Das",
+    "a": "das",
     "options": [
       "den",
       "der",
@@ -1911,7 +1911,7 @@ const articleDeclensionEx=[
   },
   {
     "q": "___ Kind (n., nom.) schläft.",
-    "a": "Das",
+    "a": "das",
     "options": [
       "der",
       "das",
@@ -1971,7 +1971,7 @@ const articleDeclensionEx=[
   },
   {
     "q": "___ Tasche (f., nom.) ist schwer.",
-    "a": "Die",
+    "a": "die",
     "options": [
       "der",
       "die",
@@ -2041,7 +2041,7 @@ const articleDeclensionEx=[
   },
   {
     "q": "___ Studenten (pl., nom.) lernen Deutsch.",
-    "a": "Die",
+    "a": "die",
     "options": [
       "der",
       "die",
@@ -2101,7 +2101,7 @@ const articleDeclensionEx=[
   },
   {
     "q": "___ Zimmer (n., nom.) ist groß.",
-    "a": "Das",
+    "a": "das",
     "options": [
       "der",
       "die",
@@ -2836,10 +2836,17 @@ userAnswer:getAnswerLabel(sel,pronQuestions[idx].type)
 });
 }
 
-setTimeout(()=>{
-idx++;
-renderPronQuestion();
-},1500);
+// 다음 버튼 추가
+const container=document.querySelector('.exercise-container');
+let nextBtn=document.getElementById('nextBtn');
+if(!nextBtn){
+nextBtn=document.createElement('div');
+nextBtn.id='nextBtn';
+nextBtn.className='controls';
+nextBtn.style.marginTop='20px';
+nextBtn.innerHTML='<button class="btn btn-primary" onclick="idx++;renderPronQuestion()">다음 ➡️</button>';
+container.appendChild(nextBtn);
+}
 }
 
 function getAnswerLabel(val,type){
@@ -2983,7 +2990,18 @@ const q=mode==='ko_to_de'?ko:de;
 const a=mode==='ko_to_de'?de:ko;
 wrong.push({question:q,answer:a,userAnswer:sel});
 }
-setTimeout(()=>{idx++;mode==='ko_to_de'?renderKoDe():renderDeKo();},1500);
+
+// 다음 버튼 추가
+const quizArea=document.querySelector('.quiz-question').parentElement;
+let nextBtn=document.getElementById('nextBtn');
+if(!nextBtn){
+nextBtn=document.createElement('div');
+nextBtn.id='nextBtn';
+nextBtn.className='controls';
+nextBtn.innerHTML='<button class="btn btn-primary" onclick="idx++;mode===\'ko_to_de\'?renderKoDe():renderDeKo()">다음 ➡️</button>';
+nextBtn.style.marginTop='20px';
+quizArea.appendChild(nextBtn);
+}
 }
 
 function renderArt(){
@@ -3003,7 +3021,18 @@ document.querySelectorAll('.option').forEach(o=>{o.style.pointerEvents='none';
 if(o.textContent===cor)o.classList.add('correct');
 else if(o.textContent===sel&&sel!==cor)o.classList.add('wrong');});
 if(sel===cor)score++;
-setTimeout(()=>{idx++;renderArt();},1500);
+
+// 다음 버튼 추가
+const quizArea=document.querySelector('.quiz-question').parentElement;
+let nextBtn=document.getElementById('nextBtn');
+if(!nextBtn){
+nextBtn=document.createElement('div');
+nextBtn.id='nextBtn';
+nextBtn.className='controls';
+nextBtn.innerHTML='<button class="btn btn-primary" onclick="idx++;renderArt()">다음 ➡️</button>';
+nextBtn.style.marginTop='20px';
+quizArea.appendChild(nextBtn);
+}
 }
 
 function renderPlural(){
@@ -3200,7 +3229,17 @@ if(o.textContent===cor)o.classList.add('correct');
 else if(o.textContent===sel&&sel!==cor)o.classList.add('wrong');});
 if(sel===cor)score++;
 else{wrong.push({question:gramEx[idx].q,answer:cor,userAnswer:sel});}
-setTimeout(()=>{idx++;renderGQ(t,title);},1500);
+
+// 다음 버튼 추가
+const container=document.querySelector('.exercise-container');
+let nextBtn=document.getElementById('nextBtn');
+if(!nextBtn){
+nextBtn=document.createElement('div');
+nextBtn.id='nextBtn';
+nextBtn.className='controls';
+nextBtn.innerHTML='<button class="btn btn-primary" onclick="idx++;renderGQ(\''+t+'\',\''+title+'\')">다음 ➡️</button>';
+container.appendChild(nextBtn);
+}
 }
 
 function submitGram(t,title,cor){
