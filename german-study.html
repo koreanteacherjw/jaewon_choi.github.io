@@ -115,6 +115,15 @@ body{font-family:system-ui,-apple-system,sans-serif;background:linear-gradient(1
 <div class="mode-card" onclick="selectMode('pronunciation')">
 <div class="icon">🎯</div><h2>발음연습</h2><p>156문제</p>
 </div>
+<div class="mode-card" onclick="selectMode('relative_pronouns')">
+<div class="icon">🔗</div><h2>관계대명사</h2><p>32문제</p>
+</div>
+<div class="mode-card" onclick="selectMode('article_declension')">
+<div class="icon">📐</div><h2>관사 격변화</h2><p>61문제</p>
+</div>
+<div class="mode-card" onclick="selectMode('personal_pronouns')">
+<div class="icon">👥</div><h2>인칭대명사</h2><p>53문제</p>
+</div>
 </div>
 <div class="study-area" id="study-area"></div>
 </div>
@@ -1187,6 +1196,1472 @@ const verbsData=[{"verb": "abfahren", "meaning": "출발하다"}, {"verb": "änd
 const articlesEx=[{q:"______ Stühle sind nicht bequem.",a:"Die"},{q:"Ist er ______ (an American)?",a:"Amerikaner"},{q:"Siehst du? ______ (the baby) spielt mit dem Hund.",a:"Das Baby"},{q:"Das ist ______ gute ______ (idea).",a:"eine Idee"},{q:"Wo ist ______ (the castle)?",a:"das Schloss"},{q:"Können ______ (the boys) gut Fußball spielen?",a:"die Jungen"},{q:"Ist Herr Elster ______ (a doctor)?",a:"Arzt"},{q:"Haben ______ (the two female students) einen Nebenjob?",a:"die zwei Studentinnen"},{q:"______ (the hotels) in der Stadtmitte sind laut.",a:"Die Hotels"},{q:"Ist das ______ (a problem) für Sie?",a:"ein Problem"},{q:"Achtung! ______ (the knife) ist sehr scharf!",a:"Das Messer"},{q:"Wie heißt ______ (the girl)?",a:"das Mädchen"},{q:"Mein Vater ______ (Australian).",a:"ist Australier"},{q:"______ (laptops) sind relativ billig.",a:"Laptops"}];
 const pronounEx=[{q:"Ich glaube, ______ arbeitet zu viel. (she/nom.)",a:"sie"},{q:"Kennst ______ meine Schwester? (you/nom./s./inf.)",a:"du"},{q:"Was kann ______ für ______ tun? (I/nom., you/acc./form.)",a:"ich Sie"},{q:"Die Familie fährt ohne ______ nach Schweinfurt. (her/acc.)",a:"sie"},{q:"Thomas und Janina gehen mit ______ ins Kino. (you/dat./form.)",a:"Ihnen"},{q:"Wohnen ______ in der Nähe? (you/nom./form.)",a:"Sie"},{q:"Wie gefällt ______ der neue Bürgermeister? (you/dat./pl./inf.)",a:"euch"},{q:"Wirklich? Ich dachte, du gehst mit ______. (us/dat.)",a:"uns"},{q:"Mein Bruder braucht ______. (me/acc.)",a:"mich"},{q:"Du sollst mit ______ ausgehen. (her/dat.)",a:"ihr"},{q:"Aber ich möchte mit ______ ausgehen. (you/dat./s./inf.)",a:"dir"}];
 const conjugEx=[{q:"Ich ______ in Berlin. (wohnen)",a:"wohne"},{q:"Er ______ Deutsch. (lernen)",a:"lernt"},{q:"______ du ein Buch? (kaufen)",a:"Kaufst"},{q:"Wir ______ aus Korea. (kommen)",a:"kommen"},{q:"______ du Hunger? (haben)",a:"Hast"},{q:"______ ihr heute einen Schwimmkurs? (haben)",a:"Habt"},{q:"Ich ______ Student. (sein)",a:"bin"},{q:"Markus ______ ein Buch. (lesen)",a:"liest"},{q:"Er ______ sehr laut. (sprechen)",a:"spricht"},{q:"______ du mir, bitte? (helfen)",a:"Hilfst"},{q:"Du ______ das. (nehmen)",a:"nimmst"},{q:"______ Sie aus Italien? (kommen)",a:"Kommen"}];
+const relativePronounsEx=[
+  {
+    "q": "Das Kind, ___ wir ein Geschenk geben, heißt Tim.",
+    "a": "dem",
+    "options": [
+      "die",
+      "den",
+      "dem",
+      "der"
+    ]
+  },
+  {
+    "q": "Die Frau, ___ ich kenne, heißt Maria.",
+    "a": "die",
+    "options": [
+      "das",
+      "die",
+      "den",
+      "der"
+    ]
+  },
+  {
+    "q": "Ich kenne die Frau, ___ du geholfen hast.",
+    "a": "der",
+    "options": [
+      "den",
+      "dem",
+      "der",
+      "die"
+    ]
+  },
+  {
+    "q": "Die Kunden, ___ wir schreiben, wohnen in München.",
+    "a": "denen",
+    "options": [
+      "der",
+      "die",
+      "dem",
+      "denen"
+    ]
+  },
+  {
+    "q": "Das ist das Restaurant, ___ letztes Jahr eröffnet hat.",
+    "a": "das",
+    "options": [
+      "die",
+      "der",
+      "den",
+      "das"
+    ]
+  },
+  {
+    "q": "Die Studenten, ___ wir zuhören, sind sehr klug.",
+    "a": "denen",
+    "options": [
+      "denen",
+      "die",
+      "der",
+      "dem"
+    ]
+  },
+  {
+    "q": "Der Mann, ___ dort steht, ist mein Vater.",
+    "a": "der",
+    "options": [
+      "den",
+      "das",
+      "die",
+      "der"
+    ]
+  },
+  {
+    "q": "Das sind die Schuhe, ___ ich kaufen möchte.",
+    "a": "die",
+    "options": [
+      "das",
+      "die",
+      "denen",
+      "der"
+    ]
+  },
+  {
+    "q": "Die Lehrerin, ___ ich danke, war sehr nett.",
+    "a": "der",
+    "options": [
+      "den",
+      "dem",
+      "die",
+      "der"
+    ]
+  },
+  {
+    "q": "Ich kenne einen Arzt, ___ sehr gut Deutsch spricht.",
+    "a": "der",
+    "options": [
+      "der",
+      "das",
+      "den",
+      "die"
+    ]
+  },
+  {
+    "q": "Das ist der Freund, ___ ich alles erzähle.",
+    "a": "dem",
+    "options": [
+      "den",
+      "der",
+      "dem",
+      "die"
+    ]
+  },
+  {
+    "q": "Der Student, ___ ich helfe, kommt aus Korea.",
+    "a": "dem",
+    "options": [
+      "der",
+      "dem",
+      "den",
+      "die"
+    ]
+  },
+  {
+    "q": "Die Bücher, ___ auf dem Tisch liegen, sind neu.",
+    "a": "die",
+    "options": [
+      "die",
+      "der",
+      "das",
+      "den"
+    ]
+  },
+  {
+    "q": "Das Auto, ___ ich gekauft habe, ist rot.",
+    "a": "das",
+    "options": [
+      "der",
+      "die",
+      "das",
+      "dem"
+    ]
+  },
+  {
+    "q": "Der Lehrer, ___ Unterricht sehr gut ist, heißt Schmidt.",
+    "a": "dessen",
+    "options": [
+      "der",
+      "dessen",
+      "dem",
+      "den"
+    ]
+  },
+  {
+    "q": "Die Frau, ___ Kinder hier spielen, ist meine Nachbarin.",
+    "a": "deren",
+    "options": [
+      "die",
+      "deren",
+      "der",
+      "denen"
+    ]
+  },
+  {
+    "q": "Das Mädchen, ___ ich einen Brief schreibe, wohnt in Berlin.",
+    "a": "dem",
+    "options": [
+      "das",
+      "die",
+      "dem",
+      "der"
+    ]
+  },
+  {
+    "q": "Der Film, ___ wir gestern gesehen haben, war spannend.",
+    "a": "den",
+    "options": [
+      "der",
+      "den",
+      "dem",
+      "das"
+    ]
+  },
+  {
+    "q": "Die Stadt, in ___ ich wohne, ist sehr schön.",
+    "a": "der",
+    "options": [
+      "die",
+      "der",
+      "dem",
+      "den"
+    ]
+  },
+  {
+    "q": "Der Computer, mit ___ ich arbeite, ist sehr alt.",
+    "a": "dem",
+    "options": [
+      "der",
+      "den",
+      "dem",
+      "das"
+    ]
+  },
+  {
+    "q": "Die Menschen, ___ wir getroffen haben, waren sehr freundlich.",
+    "a": "die",
+    "options": [
+      "die",
+      "der",
+      "denen",
+      "den"
+    ]
+  },
+  {
+    "q": "Das Haus, ___ Dach rot ist, gehört meinem Onkel.",
+    "a": "dessen",
+    "options": [
+      "das",
+      "dessen",
+      "dem",
+      "der"
+    ]
+  },
+  {
+    "q": "Die Universität, an ___ ich studiere, ist sehr groß.",
+    "a": "der",
+    "options": [
+      "die",
+      "der",
+      "dem",
+      "denen"
+    ]
+  },
+  {
+    "q": "Der Professor, ___ Vorlesung ich besuche, ist sehr bekannt.",
+    "a": "dessen",
+    "options": [
+      "der",
+      "dessen",
+      "dem",
+      "den"
+    ]
+  },
+  {
+    "q": "Die Kollegen, mit ___ ich arbeite, sind sehr nett.",
+    "a": "denen",
+    "options": [
+      "die",
+      "der",
+      "denen",
+      "dem"
+    ]
+  },
+  {
+    "q": "Das Thema, über ___ wir sprechen, ist sehr interessant.",
+    "a": "das",
+    "options": [
+      "das",
+      "dem",
+      "der",
+      "den"
+    ]
+  },
+  {
+    "q": "Der Brief, ___ ich geschrieben habe, ist sehr lang.",
+    "a": "den",
+    "options": [
+      "der",
+      "den",
+      "dem",
+      "das"
+    ]
+  },
+  {
+    "q": "Die Musik, ___ wir hören, ist sehr schön.",
+    "a": "die",
+    "options": [
+      "die",
+      "der",
+      "den",
+      "das"
+    ]
+  },
+  {
+    "q": "Das Problem, ___ wir diskutiert haben, ist gelöst.",
+    "a": "das",
+    "options": [
+      "das",
+      "der",
+      "dem",
+      "die"
+    ]
+  },
+  {
+    "q": "Der Zug, mit ___ wir fahren, hat Verspätung.",
+    "a": "dem",
+    "options": [
+      "der",
+      "den",
+      "dem",
+      "das"
+    ]
+  },
+  {
+    "q": "Die Aufgabe, ___ ich machen muss, ist schwierig.",
+    "a": "die",
+    "options": [
+      "die",
+      "der",
+      "den",
+      "das"
+    ]
+  },
+  {
+    "q": "Das Kind, ___ Ball verloren hat, weint.",
+    "a": "dessen",
+    "options": [
+      "das",
+      "dessen",
+      "dem",
+      "der"
+    ]
+  }
+];
+const articleDeclensionEx=[
+  {
+    "q": "Lesen Sie ___ Zeitung (f., acc.) online?",
+    "a": "die",
+    "options": [
+      "der",
+      "das",
+      "die",
+      "den"
+    ]
+  },
+  {
+    "q": "___ Kindern (pl., dat.) → den ___",
+    "a": "den",
+    "options": [
+      "das",
+      "den",
+      "der",
+      "die"
+    ]
+  },
+  {
+    "q": "Kennst du ___ Mädchen (n., acc.)?",
+    "a": "das",
+    "options": [
+      "den",
+      "der",
+      "die",
+      "das"
+    ]
+  },
+  {
+    "q": "Ist das ein Problem? — Nein, das ist ___ Problem (n., nom.).",
+    "a": "kein",
+    "options": [
+      "keine",
+      "keinen",
+      "kein",
+      "keiner"
+    ]
+  },
+  {
+    "q": "___ Leute (pl., nom.) sind sehr freundlich.",
+    "a": "Die",
+    "options": [
+      "Der",
+      "Den",
+      "Die",
+      "Das"
+    ]
+  },
+  {
+    "q": "___ Mannes (m., gen.) → des ___",
+    "a": "des",
+    "options": [
+      "den",
+      "dem",
+      "der",
+      "des"
+    ]
+  },
+  {
+    "q": "Hast du ___ Hut (m., acc.)?",
+    "a": "einen",
+    "options": [
+      "einem",
+      "einen",
+      "eine",
+      "ein"
+    ]
+  },
+  {
+    "q": "___ Fenster (n., nom.) im Wohnzimmer ist kaputt.",
+    "a": "Ein",
+    "options": [
+      "ein",
+      "einem",
+      "einen",
+      "eine"
+    ]
+  },
+  {
+    "q": "Ist das ___ Problem (n., nom.) für Sie?",
+    "a": "ein",
+    "options": [
+      "eine",
+      "einer",
+      "ein",
+      "einen"
+    ]
+  },
+  {
+    "q": "Hast du Lust? — Nein, ich habe ___ Lust (f., acc.).",
+    "a": "keine",
+    "options": [
+      "keine",
+      "kein",
+      "keinem",
+      "keinen"
+    ]
+  },
+  {
+    "q": "Hast du Hunger? — Nein, ich habe ___ Hunger (m., acc.).",
+    "a": "keinen",
+    "options": [
+      "kein",
+      "keinen",
+      "keiner",
+      "keine"
+    ]
+  },
+  {
+    "q": "Ich finde ___ Stadt (f., acc.) wunderbar.",
+    "a": "die",
+    "options": [
+      "das",
+      "den",
+      "die",
+      "der"
+    ]
+  },
+  {
+    "q": "Er hat ___ Geschwister (pl., acc.).",
+    "a": "keine",
+    "options": [
+      "keiner",
+      "kein",
+      "keine",
+      "keinen"
+    ]
+  },
+  {
+    "q": "Sehen Sie ___ Vogel? (m., acc.)",
+    "a": "den",
+    "options": [
+      "das",
+      "den",
+      "der",
+      "die"
+    ]
+  },
+  {
+    "q": "Ich mache morgen ___ Prüfung (f., acc.).",
+    "a": "keine",
+    "options": [
+      "keine",
+      "keinen",
+      "keiner",
+      "kein"
+    ]
+  },
+  {
+    "q": "Das Auto ___ Mannes (m., gen.) → eines ___",
+    "a": "eines",
+    "options": [
+      "einer",
+      "ein",
+      "einem",
+      "eines"
+    ]
+  },
+  {
+    "q": "Der Hut ___ Frau (f., gen.) → einer ___",
+    "a": "einer",
+    "options": [
+      "einer",
+      "ein",
+      "eine",
+      "eines"
+    ]
+  },
+  {
+    "q": "Ich gebe ___ Pferd (n., dat.) eine Karotte.",
+    "a": "dem",
+    "options": [
+      "das",
+      "den",
+      "dem",
+      "der"
+    ]
+  },
+  {
+    "q": "Der Hut ___ Frau (f., gen.) ist fantastisch.",
+    "a": "der",
+    "options": [
+      "die",
+      "dem",
+      "des",
+      "der"
+    ]
+  },
+  {
+    "q": "Ich möchte ___ Auto (n., acc.) kaufen.",
+    "a": "das",
+    "options": [
+      "der",
+      "die",
+      "das",
+      "den"
+    ]
+  },
+  {
+    "q": "Sie finden hier ___ Café (n., acc.).",
+    "a": "kein",
+    "options": [
+      "keinen",
+      "keine",
+      "kein",
+      "keiner"
+    ]
+  },
+  {
+    "q": "Hast du ___ Sonnenbrille (f., acc.)?",
+    "a": "eine",
+    "options": [
+      "einem",
+      "ein",
+      "einen",
+      "eine"
+    ]
+  },
+  {
+    "q": "Das ist ___ Freund (m., nom.) meiner Schwester.",
+    "a": "der",
+    "options": [
+      "dem",
+      "das",
+      "die",
+      "der"
+    ]
+  },
+  {
+    "q": "Hat er Kinder? — Nein, er hat ___ Kinder (pl., acc.).",
+    "a": "keine",
+    "options": [
+      "keiner",
+      "kein",
+      "keinen",
+      "keine"
+    ]
+  },
+  {
+    "q": "___ Frau (f., nom.) lacht.",
+    "a": "Die",
+    "options": [
+      "den",
+      "die",
+      "der",
+      "das"
+    ]
+  },
+  {
+    "q": "Hast du ___ Regenschirm (m., acc.)?",
+    "a": "einen",
+    "options": [
+      "einem",
+      "einen",
+      "eine",
+      "ein"
+    ]
+  },
+  {
+    "q": "Das ist ___ gute Idee (f., nom.).",
+    "a": "eine",
+    "options": [
+      "einer",
+      "einen",
+      "ein",
+      "eine"
+    ]
+  },
+  {
+    "q": "___ Kinder (pl., nom.) spielen.",
+    "a": "Die",
+    "options": [
+      "der",
+      "die",
+      "den",
+      "das"
+    ]
+  },
+  {
+    "q": "___ Essen (n., nom.) schmeckt sehr gut.",
+    "a": "Das",
+    "options": [
+      "der",
+      "die",
+      "den",
+      "das"
+    ]
+  },
+  {
+    "q": "Hast du ___ Katze (f., acc.)?",
+    "a": "eine",
+    "options": [
+      "einem",
+      "eine",
+      "ein",
+      "einen"
+    ]
+  },
+  {
+    "q": "Wie findest du ___ Bluse? (die, acc.)",
+    "a": "die",
+    "options": [
+      "der",
+      "den",
+      "die",
+      "das"
+    ]
+  },
+  {
+    "q": "Wie findest du ___ Hut? (der, acc.)",
+    "a": "den",
+    "options": [
+      "den",
+      "der",
+      "die",
+      "das"
+    ]
+  },
+  {
+    "q": "Hast du ___ Kind (n., acc.)?",
+    "a": "ein",
+    "options": [
+      "einen",
+      "ein",
+      "eine",
+      "einem"
+    ]
+  },
+  {
+    "q": "Hast du ___ Taschentuch (n., acc.)?",
+    "a": "ein",
+    "options": [
+      "einem",
+      "einen",
+      "ein",
+      "eine"
+    ]
+  },
+  {
+    "q": "___ Mann (m., nom.) wartet.",
+    "a": "Der",
+    "options": [
+      "den",
+      "das",
+      "der",
+      "die"
+    ]
+  },
+  {
+    "q": "Ich gebe ___ Freund (m., dat.) ein Buch.",
+    "a": "einem",
+    "options": [
+      "ein",
+      "einem",
+      "eine",
+      "einen"
+    ]
+  },
+  {
+    "q": "___ Konzert (n., nom.) findet in der Olympiahalle statt.",
+    "a": "Das",
+    "options": [
+      "den",
+      "der",
+      "das",
+      "die"
+    ]
+  },
+  {
+    "q": "Wie findest du ___ Schuhe? (Plural, acc.)",
+    "a": "die",
+    "options": [
+      "die",
+      "der",
+      "das",
+      "den"
+    ]
+  },
+  {
+    "q": "Hast du ___ Auto (n., acc.)?",
+    "a": "ein",
+    "options": [
+      "einen",
+      "einem",
+      "eine",
+      "ein"
+    ]
+  },
+  {
+    "q": "___ Kind (n., nom.) schläft.",
+    "a": "Das",
+    "options": [
+      "der",
+      "das",
+      "die",
+      "den"
+    ]
+  },
+  {
+    "q": "Das ist ___ Arzt (m., nom.).",
+    "a": "kein",
+    "options": [
+      "kein",
+      "keine",
+      "keinen",
+      "keiner"
+    ]
+  },
+  {
+    "q": "Ich sehe ___ Hund (m., acc.) im Park.",
+    "a": "den",
+    "options": [
+      "der",
+      "den",
+      "dem",
+      "das"
+    ]
+  },
+  {
+    "q": "Das Buch ___ Lehrers (m., gen.) ist interessant.",
+    "a": "des",
+    "options": [
+      "der",
+      "des",
+      "dem",
+      "den"
+    ]
+  },
+  {
+    "q": "Wir helfen ___ Nachbarn (m., dat.).",
+    "a": "dem",
+    "options": [
+      "der",
+      "dem",
+      "den",
+      "des"
+    ]
+  },
+  {
+    "q": "Ich kaufe ___ Brot (n., acc.).",
+    "a": "das",
+    "options": [
+      "der",
+      "die",
+      "das",
+      "den"
+    ]
+  },
+  {
+    "q": "___ Tasche (f., nom.) ist schwer.",
+    "a": "Die",
+    "options": [
+      "der",
+      "die",
+      "das",
+      "den"
+    ]
+  },
+  {
+    "q": "Er gibt ___ Kind (n., dat.) ein Geschenk.",
+    "a": "dem",
+    "options": [
+      "das",
+      "dem",
+      "der",
+      "den"
+    ]
+  },
+  {
+    "q": "Kennst du ___ Lehrer (m., acc.)?",
+    "a": "den",
+    "options": [
+      "der",
+      "den",
+      "dem",
+      "die"
+    ]
+  },
+  {
+    "q": "Das ist das Haus ___ Arztes (m., gen.).",
+    "a": "des",
+    "options": [
+      "der",
+      "des",
+      "dem",
+      "den"
+    ]
+  },
+  {
+    "q": "Ich schreibe ___ Brief (m., acc.).",
+    "a": "einen",
+    "options": [
+      "ein",
+      "einen",
+      "eine",
+      "einem"
+    ]
+  },
+  {
+    "q": "Sie wohnt in ___ Wohnung (f., dat.).",
+    "a": "einer",
+    "options": [
+      "eine",
+      "einer",
+      "einem",
+      "einen"
+    ]
+  },
+  {
+    "q": "Wir brauchen ___ Tisch (m., acc.).",
+    "a": "einen",
+    "options": [
+      "ein",
+      "einen",
+      "eine",
+      "einem"
+    ]
+  },
+  {
+    "q": "___ Studenten (pl., nom.) lernen Deutsch.",
+    "a": "Die",
+    "options": [
+      "der",
+      "die",
+      "das",
+      "den"
+    ]
+  },
+  {
+    "q": "Ich gebe ___ Lehrerin (f., dat.) das Buch.",
+    "a": "der",
+    "options": [
+      "die",
+      "der",
+      "das",
+      "den"
+    ]
+  },
+  {
+    "q": "Er liest ___ Zeitung (f., acc.).",
+    "a": "die",
+    "options": [
+      "der",
+      "die",
+      "das",
+      "den"
+    ]
+  },
+  {
+    "q": "Das ist ___ Bleistift (m., nom.).",
+    "a": "ein",
+    "options": [
+      "ein",
+      "eine",
+      "einen",
+      "einem"
+    ]
+  },
+  {
+    "q": "Hast du ___ Bruder (m., acc.)?",
+    "a": "einen",
+    "options": [
+      "ein",
+      "einen",
+      "eine",
+      "einem"
+    ]
+  },
+  {
+    "q": "Ich höre ___ Musik (f., acc.).",
+    "a": "die",
+    "options": [
+      "der",
+      "die",
+      "das",
+      "den"
+    ]
+  },
+  {
+    "q": "___ Zimmer (n., nom.) ist groß.",
+    "a": "Das",
+    "options": [
+      "der",
+      "die",
+      "das",
+      "den"
+    ]
+  },
+  {
+    "q": "Er wartet auf ___ Bus (m., acc.).",
+    "a": "den",
+    "options": [
+      "der",
+      "den",
+      "dem",
+      "das"
+    ]
+  },
+  {
+    "q": "Das ist die Mutter ___ Kindes (n., gen.).",
+    "a": "des",
+    "options": [
+      "der",
+      "des",
+      "dem",
+      "das"
+    ]
+  }
+];
+const personalPronounsEx=[
+  {
+    "q": "Wohnen ___ in der Nähe? (you/nom./s., form.)",
+    "a": "Sie",
+    "options": [
+      "Sie",
+      "Ihnen",
+      "du",
+      "ihr"
+    ]
+  },
+  {
+    "q": "Ich glaube, ___ arbeitet zu viel. (you/nom./pl., inf.)",
+    "a": "ihr",
+    "options": [
+      "ihr",
+      "euch",
+      "Sie",
+      "sie"
+    ]
+  },
+  {
+    "q": "Nein, ___ arbeiten nicht genug. (we/nom.)",
+    "a": "wir",
+    "options": [
+      "wir",
+      "uns",
+      "ihr",
+      "sie"
+    ]
+  },
+  {
+    "q": "Spielst ___ gern Karten? (you/nom./s., inf.)",
+    "a": "du",
+    "options": [
+      "du",
+      "dir",
+      "Sie",
+      "ihr"
+    ]
+  },
+  {
+    "q": "Ja, ___ spiele gern Poker. (I/nom.)",
+    "a": "ich",
+    "options": [
+      "ich",
+      "mir",
+      "mich",
+      "wir"
+    ]
+  },
+  {
+    "q": "Kennst du ___? (her/acc.)",
+    "a": "sie",
+    "options": [
+      "sie",
+      "ihr",
+      "ihnen",
+      "Sie"
+    ]
+  },
+  {
+    "q": "Ich gehe ohne ___ in die Stadt. (you/acc./pl., inf.)",
+    "a": "euch",
+    "options": [
+      "ihr",
+      "euch",
+      "uns",
+      "Sie"
+    ]
+  },
+  {
+    "q": "Wirklich? Ich dachte, du gehst mit ___. (us/dat.)",
+    "a": "uns",
+    "options": [
+      "wir",
+      "uns",
+      "euch",
+      "ihnen"
+    ]
+  },
+  {
+    "q": "Der neue Chef? Ich finde ___ sehr kompetent. (him/acc.)",
+    "a": "ihn",
+    "options": [
+      "er",
+      "ihm",
+      "ihn",
+      "ihnen"
+    ]
+  },
+  {
+    "q": "Mein Bruder braucht ___. (me/acc.)",
+    "a": "mich",
+    "options": [
+      "ich",
+      "mir",
+      "mich",
+      "uns"
+    ]
+  },
+  {
+    "q": "Du sollst mit ___ ausgehen. (her/dat.)",
+    "a": "ihr",
+    "options": [
+      "sie",
+      "ihr",
+      "ihnen",
+      "Sie"
+    ]
+  },
+  {
+    "q": "Aber ich möchte mit ___ ausgehen. (you/dat./s., inf.)",
+    "a": "dir",
+    "options": [
+      "du",
+      "dir",
+      "dich",
+      "Ihnen"
+    ]
+  },
+  {
+    "q": "Könnte ich bitte mit ___ fahren? (you/dat./s., form.)",
+    "a": "Ihnen",
+    "options": [
+      "Sie",
+      "Ihnen",
+      "dir",
+      "euch"
+    ]
+  },
+  {
+    "q": "Siehst du ___? (me/acc.)",
+    "a": "mich",
+    "options": [
+      "ich",
+      "mir",
+      "mich",
+      "uns"
+    ]
+  },
+  {
+    "q": "___ komme aus Korea. (I/nom.)",
+    "a": "Ich",
+    "options": [
+      "Ich",
+      "Mir",
+      "Mich",
+      "Du"
+    ]
+  },
+  {
+    "q": "Kennst ___ meinen Bruder? (you/nom./s., inf.)",
+    "a": "du",
+    "options": [
+      "du",
+      "dir",
+      "dich",
+      "Sie"
+    ]
+  },
+  {
+    "q": "Ja, ich kenne ___. (him/acc.)",
+    "a": "ihn",
+    "options": [
+      "er",
+      "ihm",
+      "ihn",
+      "ihnen"
+    ]
+  },
+  {
+    "q": "Das Buch gehört ___. (me/dat.)",
+    "a": "mir",
+    "options": [
+      "ich",
+      "mir",
+      "mich",
+      "uns"
+    ]
+  },
+  {
+    "q": "Ich helfe ___ gern. (you/dat./s., inf.)",
+    "a": "dir",
+    "options": [
+      "du",
+      "dir",
+      "dich",
+      "Ihnen"
+    ]
+  },
+  {
+    "q": "Kommst ___ mit uns? (you/nom./s., inf.)",
+    "a": "du",
+    "options": [
+      "du",
+      "dir",
+      "dich",
+      "Sie"
+    ]
+  },
+  {
+    "q": "___ wohnen in Berlin. (we/nom.)",
+    "a": "Wir",
+    "options": [
+      "Wir",
+      "Uns",
+      "Ihr",
+      "Sie"
+    ]
+  },
+  {
+    "q": "Das ist für ___. (you/acc./s., inf.)",
+    "a": "dich",
+    "options": [
+      "du",
+      "dir",
+      "dich",
+      "Sie"
+    ]
+  },
+  {
+    "q": "Ich gebe ___ das Buch. (you/dat./s., form.)",
+    "a": "Ihnen",
+    "options": [
+      "Sie",
+      "Ihnen",
+      "dir",
+      "euch"
+    ]
+  },
+  {
+    "q": "Liebst du ___? (me/acc.)",
+    "a": "mich",
+    "options": [
+      "ich",
+      "mir",
+      "mich",
+      "uns"
+    ]
+  },
+  {
+    "q": "___ sind Studenten. (they/nom.)",
+    "a": "Sie",
+    "options": [
+      "Sie",
+      "Ihnen",
+      "Ihr",
+      "Euch"
+    ]
+  },
+  {
+    "q": "Ich sehe ___ jeden Tag. (them/acc.)",
+    "a": "sie",
+    "options": [
+      "sie",
+      "ihnen",
+      "ihr",
+      "Sie"
+    ]
+  },
+  {
+    "q": "Das gehört ___. (us/dat.)",
+    "a": "uns",
+    "options": [
+      "wir",
+      "uns",
+      "euch",
+      "ihnen"
+    ]
+  },
+  {
+    "q": "___ seid sehr nett. (you/nom./pl., inf.)",
+    "a": "Ihr",
+    "options": [
+      "Ihr",
+      "Euch",
+      "Sie",
+      "Du"
+    ]
+  },
+  {
+    "q": "Ich rufe ___ morgen an. (you/acc./pl., inf.)",
+    "a": "euch",
+    "options": [
+      "ihr",
+      "euch",
+      "Sie",
+      "Ihnen"
+    ]
+  },
+  {
+    "q": "Wie geht es ___? (you/dat./s., form.)",
+    "a": "Ihnen",
+    "options": [
+      "Sie",
+      "Ihnen",
+      "dir",
+      "euch"
+    ]
+  },
+  {
+    "q": "Kannst du ___ helfen? (us/dat.)",
+    "a": "uns",
+    "options": [
+      "wir",
+      "uns",
+      "euch",
+      "ihnen"
+    ]
+  },
+  {
+    "q": "___ ist mein bester Freund. (he/nom.)",
+    "a": "Er",
+    "options": [
+      "Er",
+      "Ihm",
+      "Ihn",
+      "Sie"
+    ]
+  },
+  {
+    "q": "Ich besuche ___ oft. (her/acc.)",
+    "a": "sie",
+    "options": [
+      "sie",
+      "ihr",
+      "ihnen",
+      "Sie"
+    ]
+  },
+  {
+    "q": "Das Geschenk ist für ___. (you/acc./pl., inf.)",
+    "a": "euch",
+    "options": [
+      "ihr",
+      "euch",
+      "Sie",
+      "Ihnen"
+    ]
+  },
+  {
+    "q": "Ich vertraue ___. (you/dat./s., inf.)",
+    "a": "dir",
+    "options": [
+      "du",
+      "dir",
+      "dich",
+      "Ihnen"
+    ]
+  },
+  {
+    "q": "___ lernen Deutsch. (we/nom.)",
+    "a": "Wir",
+    "options": [
+      "Wir",
+      "Uns",
+      "Ihr",
+      "Sie"
+    ]
+  },
+  {
+    "q": "Ich schreibe ___ einen Brief. (him/dat.)",
+    "a": "ihm",
+    "options": [
+      "er",
+      "ihm",
+      "ihn",
+      "ihnen"
+    ]
+  },
+  {
+    "q": "Hörst du ___? (me/acc.)",
+    "a": "mich",
+    "options": [
+      "ich",
+      "mir",
+      "mich",
+      "uns"
+    ]
+  },
+  {
+    "q": "___ ist sehr intelligent. (she/nom.)",
+    "a": "Sie",
+    "options": [
+      "Sie",
+      "Ihr",
+      "Ihnen",
+      "Du"
+    ]
+  },
+  {
+    "q": "Ich danke ___. (you/dat./s., form.)",
+    "a": "Ihnen",
+    "options": [
+      "Sie",
+      "Ihnen",
+      "dir",
+      "euch"
+    ]
+  },
+  {
+    "q": "Magst du ___? (us/acc.)",
+    "a": "uns",
+    "options": [
+      "wir",
+      "uns",
+      "euch",
+      "ihnen"
+    ]
+  },
+  {
+    "q": "___ arbeitet bei BMW. (he/nom.)",
+    "a": "Er",
+    "options": [
+      "Er",
+      "Ihm",
+      "Ihn",
+      "Sie"
+    ]
+  },
+  {
+    "q": "Ich zeige ___ die Stadt. (them/dat.)",
+    "a": "ihnen",
+    "options": [
+      "sie",
+      "ihnen",
+      "ihr",
+      "Sie"
+    ]
+  },
+  {
+    "q": "Verstehst du ___? (me/acc.)",
+    "a": "mich",
+    "options": [
+      "ich",
+      "mir",
+      "mich",
+      "uns"
+    ]
+  },
+  {
+    "q": "Ich glaube ___. (you/dat./s., inf.)",
+    "a": "dir",
+    "options": [
+      "du",
+      "dir",
+      "dich",
+      "Ihnen"
+    ]
+  },
+  {
+    "q": "___ spielen Fußball. (they/nom.)",
+    "a": "Sie",
+    "options": [
+      "Sie",
+      "Ihnen",
+      "Ihr",
+      "Euch"
+    ]
+  },
+  {
+    "q": "Das Auto gehört ___. (him/dat.)",
+    "a": "ihm",
+    "options": [
+      "er",
+      "ihm",
+      "ihn",
+      "ihnen"
+    ]
+  },
+  {
+    "q": "Ich bringe ___ das Buch. (you/dat./pl., inf.)",
+    "a": "euch",
+    "options": [
+      "ihr",
+      "euch",
+      "Sie",
+      "Ihnen"
+    ]
+  },
+  {
+    "q": "Kennst du ___? (them/acc.)",
+    "a": "sie",
+    "options": [
+      "sie",
+      "ihnen",
+      "ihr",
+      "Sie"
+    ]
+  },
+  {
+    "q": "___ ist meine Lehrerin. (she/nom.)",
+    "a": "Sie",
+    "options": [
+      "Sie",
+      "Ihr",
+      "Ihnen",
+      "Du"
+    ]
+  },
+  {
+    "q": "Ich folge ___. (you/dat./s., inf.)",
+    "a": "dir",
+    "options": [
+      "du",
+      "dir",
+      "dich",
+      "Ihnen"
+    ]
+  },
+  {
+    "q": "Wartest du auf ___? (me/acc.)",
+    "a": "mich",
+    "options": [
+      "ich",
+      "mir",
+      "mich",
+      "uns"
+    ]
+  },
+  {
+    "q": "___ haben Hunger. (we/nom.)",
+    "a": "Wir",
+    "options": [
+      "Wir",
+      "Uns",
+      "Ihr",
+      "Sie"
+    ]
+  }
+];
 
 let mode='flashcard',idx=0,score=0,total=0,words=[],wrong=[],gramEx=[],pronType='',pronQuestions=[];
 
@@ -1206,6 +2681,9 @@ else if(m==='articles')renderGram('articles');
 else if(m==='pronouns')renderGram('pronouns');
 else if(m==='conjugation')renderGram('conjugation');
 else if(m==='pronunciation')renderPronSelector();
+else if(m==='relative_pronouns')renderGram('relative_pronouns');
+else if(m==='article_declension')renderGram('article_declension');
+else if(m==='personal_pronouns')renderGram('personal_pronouns');
 }
 
 function renderPronSelector(){
@@ -1672,14 +3150,35 @@ function renderGram(t){
 let title='';
 if(t==='articles'){gramEx=shuffle([...articlesEx]);title='📖 관사 문법';}
 else if(t==='pronouns'){gramEx=shuffle([...pronounEx]);title='👤 대명사';}
+else if(t==='relative_pronouns'){gramEx=shuffle([...relativePronounsEx]);title='🔗 관계대명사';}
+else if(t==='article_declension'){gramEx=shuffle([...articleDeclensionEx]);title='📐 관사 격변화';}
+else if(t==='personal_pronouns'){gramEx=shuffle([...personalPronounsEx]);title='👥 인칭대명사 격변화';}
 else{gramEx=shuffle([...conjugEx]);title='🔄 동사 변화';}
-total=gramEx.length;idx=0;score=0;
+total=gramEx.length;idx=0;score=0;wrong=[];
 renderGQ(t,title);
 }
 
 function renderGQ(t,title){
 if(idx>=total){showGramRes(t);return;}
 const c=gramEx[idx];
+
+// 관계대명사, 관사 격변화, 인칭대명사는 4지선다 객관식
+if(t==='relative_pronouns'||t==='article_declension'||t==='personal_pronouns'){
+const shuffledOpts=shuffle([...c.options]);
+document.getElementById('study-area').innerHTML=`
+<div class="exercise-container">
+<h2 style="text-align:center;color:#667eea;margin-bottom:20px">${title}</h2>
+<div class="score">문제 ${idx+1}/${total} | 점수: ${score}/${total}</div>
+<div class="progress-bar"><div class="progress-fill" style="width:${idx/total*100}%"></div></div>
+<div class="exercise-question">
+<h4>문제 ${idx+1}</h4><p style="font-size:1.3em">${c.q}</p>
+</div>
+<div class="quiz-options">
+${shuffledOpts.map(opt=>`<div class="option" onclick="checkRelPronAnswer('${opt.replace(/'/g,"\\'")}','${c.a.replace(/'/g,"\\'")}','${t}','${title}')">${opt}</div>`).join('')}
+</div>
+</div>`;
+}else{
+// 기존 문법 (주관식)
 document.getElementById('study-area').innerHTML=`
 <div class="exercise-container">
 <h2 style="text-align:center;color:#667eea;margin-bottom:20px">${title}</h2>
@@ -1692,6 +3191,16 @@ document.getElementById('study-area').innerHTML=`
 </div>
 <div class="controls"><button class="btn btn-primary" onclick="submitGram('${t}','${title}','${c.a.replace(/'/g,"\\'")}')">제출</button></div></div>`;
 document.getElementById('ain').focus();
+}
+}
+
+function checkRelPronAnswer(sel,cor,t,title){
+document.querySelectorAll('.option').forEach(o=>{o.style.pointerEvents='none';
+if(o.textContent===cor)o.classList.add('correct');
+else if(o.textContent===sel&&sel!==cor)o.classList.add('wrong');});
+if(sel===cor)score++;
+else{wrong.push({question:gramEx[idx].q,answer:cor,userAnswer:sel});}
+setTimeout(()=>{idx++;renderGQ(t,title);},1500);
 }
 
 function submitGram(t,title,cor){
@@ -1707,12 +3216,21 @@ setTimeout(()=>{idx++;renderGQ(t,title);},2000);
 
 function showGramRes(t){
 const p=Math.round(score/total*100);
+let whtml='';
+if(wrong.length>0){
+whtml=`<div class="wrong-words"><h3>❌ 틀린 문제 (${wrong.length}개)</h3>
+${wrong.map((w,i)=>`<div class="wrong-word-item">
+<div style="margin-bottom:8px"><strong style="color:#333">문제 ${i+1}:</strong> <span style="color:#667eea;font-weight:bold">${w.question}</span></div>
+<div style="margin-bottom:5px;color:#666">내 답: <span style="color:#f44336;font-weight:bold">${w.userAnswer}</span></div>
+<div style="color:#666">정답: <span style="color:#4caf50;font-weight:bold">${w.answer}</span></div>
+</div>`).join('')}</div>`;
+}
 document.getElementById('study-area').innerHTML=`
 <div style="text-align:center;padding:50px 20px">
 <h2 style="font-size:2.5em;color:#667eea;margin-bottom:30px">🎉 완료!</h2>
 <div style="font-size:3em;margin:30px 0">${score}/${total}</div>
 <div style="font-size:1.5em;color:#666;margin-bottom:40px">정답률: ${p}%</div>
-<div class="result-message ${p>=70?'success':'error'}">${p>=90?'🌟 완벽!':p>=70?'👍 잘했어요!':'💪 다시 도전!'}</div>
+<div class="result-message ${p>=70?'success':'error'}">${p>=90?'🌟 완벽!':p>=70?'👍 잘했어요!':'💪 다시 도전!'}</div>${whtml}
 <div class="controls"><button class="btn btn-primary" onclick="renderGram('${t}')">🔄 다시</button></div></div>`;
 }
 
