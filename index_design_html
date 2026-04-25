@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>최이 - 언어학 & 인지과학 연구자</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2c3e50;
+            --accent: #3498db;
+            --accent-light: #5dade2;
+            --secondary: #7f8c8d;
+            --bg: #ffffff;
+            --bg-light: #f8f9fa;
+            --border: #e0e0e0;
+            --shadow: rgba(0,0,0,0.08);
+            --timeline-bg: #ecf0f1;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+            line-height: 1.7;
+            color: var(--primary);
+            background: var(--bg);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+            color: white;
+            padding: 80px 0 60px;
+            margin-bottom: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="rgba(255,255,255,0.05)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header-content h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+        }
+
+        .header-content .subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+            opacity: 0.95;
+        }
+
+        .header-content .affiliation {
+            font-size: 1.05rem;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        nav {
+            display: flex;
+            gap: 24px;
+            margin-top: 32px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 0.95rem;
+            padding: 8px 16px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.15);
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        nav a:hover {
+            background: rgba(255,255,255,0.25);
+            transform: translateY(-2px);
+        }
+
+        /* Sections */
+        section {
+            margin-bottom: 100px;
+        }
+
+        h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 40px;
+            color: var(--primary);
+            position: relative;
+            padding-bottom: 16px;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+
+        /* About */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .about-text p {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            color: var(--secondary);
+        }
+
+        .quick-facts {
+            background: var(--bg-light);
+            padding: 28px;
+            border-radius: 12px;
+            border-left: 4px solid var(--accent);
+        }
+
+        .quick-facts h3 {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+
+        .fact-item {
+            margin-bottom: 16px;
+        }
+
+        .fact-label {
+            font-size: 0.85rem;
+            color: var(--secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .fact-value {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 28px;
+        }
+
+        .keyword {
+            padding: 8px 16px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            color: white;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: transform 0.2s;
+        }
+
+        .keyword:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Timeline Section */
+        .timeline-container {
+            position: relative;
+            padding: 40px 0;
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(to bottom, var(--accent), var(--accent-light));
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            display: grid;
+            grid-template-columns: 1fr 80px 1fr;
+            gap: 0;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .timeline-item:nth-child(even) .timeline-content:first-child {
+            order: 3;
+        }
+
+        .timeline-item:nth-child(even) .timeline-marker {
+            order: 2;
+        }
+
+        .timeline-item:nth-child(even) .timeline-content:last-child {
+            order: 1;
+        }
+
+        .timeline-content {
+            padding: 24px;
+        }
+
+        .timeline-item:nth-child(odd) .timeline-content:first-child {
+            text-align: right;
+            padding-right: 40px;
+        }
+
+        .timeline-item:nth-child(even) .timeline-content:last-child {
+            text-align: left;
+            padding-left: 40px;
+        }
+
+        .timeline-card {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px var(--shadow);
+            border: 2px solid var(--border);
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .timeline-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px var(--shadow);
+            border-color: var(--accent);
+        }
+
+        .timeline-marker {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .timeline-dot {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: white;
+            border: 4px solid var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+
+        .timeline-year {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+
+        .timeline-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .timeline-desc {
+            font-size: 0.95rem;
+            color: var(--secondary);
+            line-height: 1.6;
+        }
+
+        .timeline-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 12px;
+        }
+
+        .timeline-tag {
+            padding: 4px 10px;
+            background: var(--bg-light);
+            border-radius: 12px;
+            font-size: 0.8rem;
+            color: var(--secondary);
+        }
+
+        /* Research */
+        .research-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .research-card {
+            background: white;
+            padding: 32px;
+            border-radius: 12px;
+            border: 2px solid var(--border);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .research-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .research-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .research-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px var(--shadow);
+            border-color: var(--accent);
+        }
+
+        .research-icon {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+        }
+
+        .research-card h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--primary);
+        }
+
+        .research-card p {
+            color: var(--secondary);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        /* Publications */
+        .publication-list {
+            display: grid;
+            gap: 24px;
+        }
+
+        .publication {
+            background: white;
+            padding: 28px;
+            border-radius: 12px;
+            border-left: 4px solid var(--accent);
+            box-shadow: 0 2px 8px var(--shadow);
+            transition: all 0.3s;
+        }
+
+        .publication:hover {
+            box-shadow: 0 6px 16px var(--shadow);
+            transform: translateX(4px);
+        }
+
+        .pub-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+            color: var(--primary);
+        }
+
+        .pub-authors {
+            color: var(--secondary);
+            font-size: 0.95rem;
+            margin-bottom: 6px;
+        }
+
+        .pub-venue {
+            color: var(--accent);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Projects */
+        .project-grid {
+            display: grid;
+            gap: 32px;
+        }
+
+        .project-card {
+            background: white;
+            padding: 36px;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px var(--shadow);
+            border: 2px solid var(--border);
+            transition: all 0.3s;
+        }
+
+        .project-card:hover {
+            box-shadow: 0 8px 32px var(--shadow);
+            border-color: var(--accent);
+            transform: translateY(-4px);
+        }
+
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+            gap: 16px;
+        }
+
+        .project-card h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .project-role {
+            color: var(--accent);
+            font-size: 0.9rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .project-desc {
+            color: var(--secondary);
+            font-size: 1rem;
+            line-height: 1.8;
+            margin-bottom: 16px;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tag {
+            padding: 6px 14px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            color: white;
+            border-radius: 16px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        /* CV Download */
+        .cv-section {
+            text-align: center;
+            padding: 60px 40px;
+            background: linear-gradient(135deg, var(--bg-light) 0%, white 100%);
+            border-radius: 16px;
+            border: 2px dashed var(--border);
+        }
+
+        .cv-section p {
+            color: var(--secondary);
+            margin-bottom: 24px;
+            font-size: 1.05rem;
+        }
+
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 36px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+        }
+
+        /* Contact */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+        }
+
+        .contact-card {
+            background: white;
+            padding: 28px;
+            border-radius: 12px;
+            border: 2px solid var(--border);
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .contact-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-4px);
+            box-shadow: 0 6px 16px var(--shadow);
+        }
+
+        .contact-icon {
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+        }
+
+        .contact-label {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .contact-value {
+            color: var(--secondary);
+            font-size: 0.95rem;
+        }
+
+        .contact-value a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .contact-value a:hover {
+            color: var(--accent-light);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            color: var(--secondary);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border);
+            margin-top: 80px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header {
+                padding: 60px 0 40px;
+            }
+
+            .header-content h1 {
+                font-size: 2.2rem;
+            }
+
+            h2 {
+                font-size: 1.6rem;
+            }
+
+            .about-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .timeline-item {
+                grid-template-columns: 1fr;
+                margin-bottom: 40px;
+            }
+
+            .timeline-line {
+                left: 30px;
+            }
+
+            .timeline-item:nth-child(even) .timeline-content:first-child,
+            .timeline-item:nth-child(even) .timeline-content:last-child {
+                order: initial;
+            }
+
+            .timeline-item:nth-child(even) .timeline-marker {
+                order: initial;
+            }
+
+            .timeline-content {
+                padding-left: 80px !important;
+                text-align: left !important;
+            }
+
+            .timeline-marker {
+                position: absolute;
+                left: 0;
+            }
+
+            .research-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <h1>최이</h1>
+                <p class="subtitle">언어학 & 인지과학 연구자</p>
+                <p class="affiliation">
+                    한양대학교 독어독문학과 석사과정<br>
+                    LBCLAB (Language, Brain, and Cognition Lab)
+                </p>
+                <nav>
+                    <a href="#about">소개</a>
+                    <a href="#journey">연혁</a>
+                    <a href="#research">연구</a>
+                    <a href="#publications">논문</a>
+                    <a href="#projects">프로젝트</a>
+                    <a href="blog.html">블로그</a>
+                    <a href="#cv">이력서</a>
+                    <a href="#contact">연락</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <section id="about">
+            <h2>소개</h2>
+            <div class="about-grid">
+                <div class="about-text">
+                    <p>
+                        한양대학교 LBCLAB (Language, Brain, and Cognition Lab)에서 남윤주 교수님 지도 하에 석사과정을 밟고 있습니다. 언어학, 인지신경과학, 그리고 계산적 방법론을 결합하여 뇌가 언어를 처리하는 메커니즘을 연구하고 있습니다.
+                    </p>
+                    <p>
+                        한국외국어대학교에서 언어공학을 전공하며 계산언어학과 자연어처리에 대한 전문성을 쌓았습니다. 현재는 신경언어학 강의 조교로 활동하며, 한방 언어 코퍼스 구축 프로젝트를 주도하고 있습니다.
+                    </p>
+                    <p>
+                        장기적으로는 EEG와 fMRI 방법론을 결합한 한국어 처리 메커니즘 연구로 박사과정을 진행하여, 언어 구조가 뇌에서 어떻게 표상되고 처리되는지 밝히는 데 기여하고자 합니다.
+                    </p>
+                    
+                    <div class="keywords">
+                        <span class="keyword">신경언어학</span>
+                        <span class="keyword">심리언어학</span>
+                        <span class="keyword">형태론 & 통사론</span>
+                        <span class="keyword">인지신경과학</span>
+                        <span class="keyword">자연어처리</span>
+                        <span class="keyword">EEG/fMRI</span>
+                        <span class="keyword">한국어 처리</span>
+                    </div>
+                </div>
+                
+                <div class="quick-facts">
+                    <h3>Quick Facts</h3>
+                    <div class="fact-item">
+                        <div class="fact-label">현재</div>
+                        <div class="fact-value">석사과정 2년차</div>
+                    </div>
+                    <div class="fact-item">
+                        <div class="fact-label">소속</div>
+                        <div class="fact-value">LBCLAB</div>
+                    </div>
+                    <div class="fact-item">
+                        <div class="fact-label">지도교수</div>
+                        <div class="fact-value">남윤주 교수님</div>
+                    </div>
+                    <div class="fact-item">
+                        <div class="fact-label">학부</div>
+                        <div class="fact-value">언어공학 전공</div>
+                    </div>
+                    <div class="fact-item">
+                        <div class="fact-label">관심분야</div>
+                        <div class="fact-value">뇌-언어 상호작용</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="journey">
+            <h2>나의 학술 여정</h2>
+            <div class="timeline-container">
+                <div class="timeline-line"></div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-year">2017</div>
+                    </div>
+                    <div class="timeline-marker">
+                        <div class="timeline-dot">🎓</div>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="timeline-card">
+                            <div class="timeline-title">한국외국어대학교 입학</div>
+                            <div class="timeline-desc">
+                                언어공학 전공 시작. 컴퓨터과학과 언어학의 교차점에서 자연어처리와 계산언어학의 기초를 다짐
+                            </div>
+                            <div class="timeline-tags">
+                                <span class="timeline-tag">언어공학</span>
+                                <span class="timeline-tag">NLP</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-year">2018-2020</div>
+                    </div>
+                    <div class="timeline-marker">
+                        <div class="timeline-dot">💻</div>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="timeline-card">
+                            <div class="timeline-title">계산언어학 심화</div>
+                            <div class="timeline-desc">
+                                형태소 분석, 구문 분석, 의미 분석 등 NLP 핵심 과정 이수. 한국어 파서 개발 및 코퍼스 분석 프로젝트 수행
+                            </div>
+                            <div class="timeline-tags">
+                                <span class="timeline-tag">파싱</span>
+                                <span class="timeline-tag">형태소분석</span>
+                                <span class="timeline-tag">코퍼스언어학</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-year">2021</div>
+                    </div>
+                    <div class="timeline-marker">
+                        <div class="timeline-dot">✈️</div>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="timeline-card">
+                            <div class="timeline-title">학부 졸업 & 새로운 시작</div>
+                            <div class="timeline-desc">
+                                언어공학 학위 취득. 언어의 계산적 측면을 넘어 인지적·신경학적 기반을 탐구하고자 대학원 진학 결심
+                            </div>
+                            <div class="timeline-tags">
+                                <span class="timeline-tag">학사학위</span>
+                                <span class="timeline-tag">진로탐색</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-year">2023</div>
+                    </div>
+                    <div class="timeline-marker">
+                        <div class="timeline-dot">🧠</div>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="timeline-card">
+                            <div class="timeline-title">한양대학교 대학원 입학</div>
+                            <div class="timeline-desc">
+                                독어독문학과 석사과정 시작. LBCLAB 합류하여 신경언어학 및 뇌인지과학 연구 본격화
+                            </div>
+                            <div class="timeline-tags">
+                                <span class="timeline-tag">대학원</span>
+                                <span class="timeline-tag">LBCLAB</span>
+                                <span class="timeline-tag">신경언어학</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-year">2024</div>
+                    </div>
+                    <div class="timeline-marker">
+                        <div class="timeline-dot">📊</div>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="timeline-card">
+                            <div class="timeline-title">한방 코퍼스 프로젝트 리드</div>
+                            <div class="timeline-desc">
+                                한국 전통의학 언어 코퍼스 구축 프로젝트 총괄. 269+ 용어 사전 구축, 어휘 비대칭 분석, 설명 전략 분류 등 다층 분석 수행. 신경언어학 강의 조교 활동 시작
+                            </div>
+                            <div class="timeline-tags">
+                                <span class="timeline-tag">프로젝트리드</span>
+                                <span class="timeline-tag">코퍼스구축</span>
+                                <span class="timeline-tag">TA</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-year">2025</div>
+                    </div>
+                    <div class="timeline-marker">
+                        <div class="timeline-dot">🚀</div>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="timeline-card">
+                            <div class="timeline-title">박사과정 준비</div>
+                            <div class="timeline-desc">
+                                EEG와 fMRI를 결합한 한국어 처리 연구 계획 수립. 심리언어학 실험 설계 및 IRB 제안서 작성 경험 축적
+                            </div>
+                            <div class="timeline-tags">
+                                <span class="timeline-tag">EEG/fMRI</span>
+                                <span class="timeline-tag">실험설계</span>
+                                <span class="timeline-tag">박사준비</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="research">
+            <h2>연구 관심사</h2>
+            <div class="research-grid">
+                <div class="research-card">
+                    <div class="research-icon">🧠</div>
+                    <h3>언어 처리의 신경 메커니즘</h3>
+                    <p>뇌영상 기법(EEG, fMRI)을 활용하여 뇌가 언어 구조를 처리하는 방식 연구. 특히 한국어 형태론과 통사론에 초점</p>
+                </div>
+                <div class="research-card">
+                    <div class="research-icon">💻</div>
+                    <h3>계산언어학 & 자연어처리</h3>
+                    <p>한국어 분석을 위한 계산 모델 및 도구 개발. 형태소 파싱, 코퍼스언어학, 언어 자원 구축 포함</p>
+                </div>
+                <div class="research-card">
+                    <div class="research-icon">🔬</div>
+                    <h3>언어의 인지신경과학</h3>
+                    <p>실험적 접근과 코퍼스 기반 접근을 통한 언어 이해 및 산출의 인지적·신경적 기반 탐구</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="publications">
+            <h2>논문 & 출판</h2>
+            <div class="publication-list">
+                <div class="publication">
+                    <div class="pub-title">준비 중인 연구</div>
+                    <div class="pub-authors">진행 중인 프로젝트에서 나온 연구 성과가 여기에 표시됩니다</div>
+                    <div class="pub-venue">업데이트를 기다려주세요</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects">
+            <h2>주요 프로젝트</h2>
+            <div class="project-grid">
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3>한방 언어 코퍼스 구축</h3>
+                        <div class="project-role">프로젝트 리드 · 2024–현재</div>
+                    </div>
+                    <div class="project-desc">
+                        한국 전통의학(한방) 담화 분석을 위한 종합 코퍼스 구축 프로젝트 총괄. 269+ 용어 사전 구축 및 어휘 비대칭, 설명 전략, 화용적 NPQ 패턴을 포함한 다층 분석 수행. 교차 범주 중복 제거 로직을 갖춘 네이버 지식iN 웹 크롤링 인프라 개발.
+                    </div>
+                    <div class="project-tags">
+                        <span class="tag">코퍼스언어학</span>
+                        <span class="tag">담화분석</span>
+                        <span class="tag">NLP</span>
+                        <span class="tag">웹크롤링</span>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3>K-EMOTION: 이모티콘 감정 소통 연구</h3>
+                        <div class="project-role">연구보조 · 2024</div>
+                    </div>
+                    <div class="project-desc">
+                        이모티콘 기반 감정 소통 연구를 위한 IRB 제안서 개발 기여 (남윤주, 홍우평 교수 주도). HEXACO 친화성 성격 요인 통합 및 G*Power 표본 크기 정당화를 포함한 3개 실험 구조 설계.
+                    </div>
+                    <div class="project-tags">
+                        <span class="tag">감정소통</span>
+                        <span class="tag">실험설계</span>
+                        <span class="tag">IRB</span>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3>한국어 NLP 규칙 기반 파서 개발</h3>
+                        <div class="project-role">개발자 · 2024</div>
+                    </div>
+                    <div class="project-desc">
+                        동사 결합 규칙, 명사구 결합 로직, 관용구 파싱을 구현한 포괄적인 한국어 NLP 파서 개발 및 디버깅. 영논항 처리, AdnP+N' 순서, 소유 수식어 패턴을 포함한 복잡한 언어 현상 해결.
+                    </div>
+                    <div class="project-tags">
+                        <span class="tag">NLP</span>
+                        <span class="tag">파서개발</span>
+                        <span class="tag">한국어통사론</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="cv">
+            <h2>이력서</h2>
+            <div class="cv-section">
+                <p>학력, 연구 경험, 논문 등에 대한 자세한 정보는 전체 이력서를 다운로드하세요.</p>
+                <a href="#" class="download-btn">
+                    <span>📄</span>
+                    <span>이력서 다운로드 (PDF)</span>
+                </a>
+            </div>
+        </section>
+
+        <section id="contact">
+            <h2>연락처</h2>
+            <div class="contact-grid">
+                <div class="contact-card">
+                    <div class="contact-icon">📧</div>
+                    <div class="contact-label">이메일</div>
+                    <div class="contact-value">
+                        <a href="mailto:your.email@hanyang.ac.kr">your.email@hanyang.ac.kr</a>
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <div class="contact-icon">🔬</div>
+                    <div class="contact-label">연구실</div>
+                    <div class="contact-value">
+                        <a href="https://lbclab.hanyang.ac.kr" target="_blank">LBCLAB 웹사이트</a>
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <div class="contact-icon">🏢</div>
+                    <div class="contact-label">소속</div>
+                    <div class="contact-value">
+                        한양대학교<br>서울, 대한민국
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>© 2024 최이. 학술 소통을 위해 정성껏 제작되었습니다.</p>
+        </footer>
+    </div>
+</body>
+</html>
