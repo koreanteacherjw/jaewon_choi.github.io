@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>덕질 연혁 - 최재원</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2c3e50;
+            --accent: #3498db;
+            --accent-light: #5dade2;
+            --secondary: #7f8c8d;
+            --bg: #ffffff;
+            --bg-light: #f8f9fa;
+            --border: #e0e0e0;
+            --shadow: rgba(0,0,0,0.08);
+            
+            /* 카테고리별 색상 */
+            --idol-girl-pure: #FFB6C1;
+            --idol-girl-energy: #FF69B4;
+            --singer: #9370DB;
+            --actor: #20B2AA;
+            --soloist: #FFA07A;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+            line-height: 1.7;
+            color: var(--primary);
+            background: var(--bg-light);
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+            color: white;
+            padding: 40px 0 30px;
+            margin-bottom: 60px;
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-decoration: none;
+            color: white;
+        }
+
+        nav {
+            display: flex;
+            gap: 24px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 0.95rem;
+            padding: 8px 16px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.15);
+            transition: all 0.3s;
+        }
+
+        nav a:hover {
+            background: rgba(255,255,255,0.25);
+            transform: translateY(-2px);
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .page-header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 16px;
+            color: var(--primary);
+            background: linear-gradient(135deg, var(--accent), #e74c3c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-header p {
+            font-size: 1.15rem;
+            color: var(--secondary);
+        }
+
+        /* Category Legend */
+        .category-legend {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-bottom: 50px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 2px 8px var(--shadow);
+        }
+
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+        }
+
+        .legend-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* Timeline Container */
+        .timeline-wrapper {
+            position: relative;
+            padding: 60px 0;
+            overflow-x: auto;
+        }
+
+        .timeline-container {
+            position: relative;
+            min-width: 1200px;
+        }
+
+        /* Central Timeline Axis */
+        .timeline-axis {
+            position: relative;
+            height: 80px;
+            background: white;
+            border-radius: 40px;
+            box-shadow: 0 4px 16px var(--shadow);
+            display: flex;
+            align-items: center;
+            margin: 0 60px;
+        }
+
+        .timeline-line {
+            position: absolute;
+            top: 50%;
+            left: 40px;
+            right: 40px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent) 0%, var(--accent-light) 100%);
+            transform: translateY(-50%);
+        }
+
+        .year-markers {
+            position: relative;
+            display: flex;
+            width: 100%;
+            padding: 0 40px;
+            z-index: 1;
+        }
+
+        .year-marker {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .year-dot {
+            width: 16px;
+            height: 16px;
+            background: var(--accent);
+            border: 4px solid white;
+            border-radius: 50%;
+            box-shadow: 0 2px 8px var(--shadow);
+        }
+
+        .year-label {
+            position: absolute;
+            top: -35px;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        /* Artist Lanes */
+        .artist-lanes {
+            position: relative;
+        }
+
+        .lane-top, .lane-bottom {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 250px;
+        }
+
+        .lane-top {
+            bottom: 100%;
+            margin-bottom: 40px;
+        }
+
+        .lane-bottom {
+            top: 100%;
+            margin-top: 40px;
+        }
+
+        .lane-row {
+            position: absolute;
+            left: 60px;
+            right: 60px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+        }
+
+        .lane-row.row-1 { top: 0; }
+        .lane-row.row-2 { top: 120px; }
+
+        /* Artist Block */
+        .artist-block {
+            position: absolute;
+            height: 90px;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px var(--shadow);
+            transition: all 0.3s;
+            cursor: pointer;
+            overflow: visible;
+        }
+
+        .artist-block:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            z-index: 10;
+        }
+
+        .artist-block.idol-girl-pure {
+            background: linear-gradient(135deg, var(--idol-girl-pure), #FFD1DC);
+        }
+
+        .artist-block.idol-girl-energy {
+            background: linear-gradient(135deg, var(--idol-girl-energy), #FF85A1);
+        }
+
+        .artist-block.singer {
+            background: linear-gradient(135deg, var(--singer), #B19CD9);
+        }
+
+        .artist-block.actor {
+            background: linear-gradient(135deg, var(--actor), #5FD4C8);
+        }
+
+        .artist-block.soloist {
+            background: linear-gradient(135deg, var(--soloist), #FFB89A);
+        }
+
+        .artist-info {
+            flex: 1;
+        }
+
+        .artist-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 4px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .artist-period {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.9);
+            font-weight: 600;
+        }
+
+        .artist-emoji {
+            font-size: 2rem;
+            margin-left: 12px;
+        }
+
+        /* Category Label */
+        .category-label {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            left: -40px;
+            writing-mode: vertical-rl;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: white;
+            background: var(--secondary);
+            padding: 12px 6px;
+            border-radius: 8px;
+            letter-spacing: 2px;
+        }
+
+        .category-label.idol-girl-pure { background: var(--idol-girl-pure); }
+        .category-label.idol-girl-energy { background: var(--idol-girl-energy); }
+        .category-label.singer { background: var(--singer); }
+        .category-label.actor { background: var(--actor); }
+        .category-label.soloist { background: var(--soloist); }
+
+        /* Works Tooltip */
+        .artist-works {
+            position: absolute;
+            bottom: calc(100% + 15px);
+            left: 50%;
+            transform: translateX(-50%) scale(0.9);
+            background: white;
+            padding: 16px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+            min-width: 220px;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s;
+            z-index: 100;
+        }
+
+        .lane-bottom .artist-works {
+            bottom: auto;
+            top: calc(100% + 15px);
+        }
+
+        .artist-block:hover .artist-works {
+            opacity: 1;
+            transform: translateX(-50%) scale(1);
+        }
+
+        .artist-works::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 8px solid transparent;
+            border-top-color: white;
+        }
+
+        .lane-bottom .artist-works::after {
+            top: auto;
+            bottom: 100%;
+            border-top-color: transparent;
+            border-bottom-color: white;
+        }
+
+        .works-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .works-list {
+            list-style: none;
+        }
+
+        .work-item {
+            padding: 3px 0;
+            font-size: 0.85rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .work-item::before {
+            content: '♪';
+            font-size: 0.7rem;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            color: var(--secondary);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border);
+            background: white;
+            margin-top: 100px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            nav {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .timeline-wrapper {
+                padding: 40px 0;
+            }
+
+            .category-label {
+                font-size: 0.7rem;
+                left: -30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <a href="index.html" class="logo">최재원</a>
+            <nav>
+                <a href="index.html">홈</a>
+                <a href="blog.html">블로그</a>
+                <a href="index.html#contact">연락</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>🎭 덕질 연혁</h1>
+            <p>나의 취향을 만들어온 아티스트들의 바톤 터치</p>
+        </div>
+
+        <div class="category-legend">
+            <div class="legend-item">
+                <div class="legend-color" style="background: var(--idol-girl-pure);"></div>
+                <span class="legend-label">청순 걸그룹</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: var(--idol-girl-energy);"></div>
+                <span class="legend-label">에너지 걸그룹</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: var(--singer);"></div>
+                <span class="legend-label">싱어송라이터</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: var(--actor);"></div>
+                <span class="legend-label">배우</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: var(--soloist);"></div>
+                <span class="legend-label">솔로 가수</span>
+            </div>
+        </div>
+
+        <div class="timeline-wrapper">
+            <div class="timeline-container" id="timelineContainer">
+                <div class="artist-lanes" id="artistLanes"></div>
+                
+                <div class="timeline-axis">
+                    <div class="timeline-line"></div>
+                    <div class="year-markers" id="yearMarkers"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2024 최재원. 덕질은 인생의 양분 🌱</p>
+    </footer>
+
+    <script>
+        // 덕질 데이터
+        const fandomData = {
+            minYear: 2011,
+            maxYear: 2024,
+            lanes: {
+                top: [
+                    {
+                        category: "청순 걸그룹",
+                        color: "idol-girl-pure",
+                        artists: [
+                            {
+                                name: "Apink",
+                                emoji: "🌸",
+                                startYear: 2011,
+                                endYear: 2014,
+                                works: ["I Don't Know", "My My", "NoNoNo", "LUV"]
+                            },
+                            {
+                                name: "여자친구",
+                                emoji: "💫",
+                                startYear: 2015,
+                                endYear: 2019,
+                                works: ["유리구슬", "시간을 달려서", "밤"]
+                            },
+                            {
+                                name: "오마이걸",
+                                emoji: "🌈",
+                                startYear: 2016,
+                                endYear: 2024,
+                                works: ["비밀정원", "Closer", "Dun Dun Dance", "살짝 설렜어"]
+                            }
+                        ]
+                    },
+                    {
+                        category: "싱어송라이터",
+                        color: "singer",
+                        artists: [
+                            {
+                                name: "아이유",
+                                emoji: "🎤",
+                                startYear: 2014,
+                                endYear: 2024,
+                                works: ["금요일에 만나요", "밤편지", "Blueming", "Love wins all"]
+                            },
+                            {
+                                name: "윤하",
+                                emoji: "🎵",
+                                startYear: 2014,
+                                endYear: 2024,
+                                works: ["기다리다", "비가 내리는 날에는", "사건의 지평선"]
+                            }
+                        ]
+                    }
+                ],
+                bottom: [
+                    {
+                        category: "배우",
+                        color: "actor",
+                        artists: [
+                            {
+                                name: "박보영",
+                                emoji: "✨",
+                                startYear: 2015,
+                                endYear: 2024,
+                                works: ["오 나의 귀신님", "청년경찰", "경이로운 소문"]
+                            },
+                            {
+                                name: "김소현",
+                                emoji: "👻",
+                                startYear: 2016,
+                                endYear: 2022,
+                                works: ["싸우자 귀신아", "Radio Romance", "그 해 우리는"]
+                            },
+                            {
+                                name: "신지훈",
+                                emoji: "🎬",
+                                startYear: 2022,
+                                endYear: 2024,
+                                works: ["연애 대행사", "무빙"]
+                            }
+                        ]
+                    },
+                    {
+                        category: "솔로 가수",
+                        color: "soloist",
+                        artists: [
+                            {
+                                name: "한로로",
+                                emoji: "🎙️",
+                                startYear: 2020,
+                                endYear: 2024,
+                                works: ["Atlantis Princess", "경복궁에서"]
+                            },
+                            {
+                                name: "공원",
+                                emoji: "🎧",
+                                startYear: 2020,
+                                endYear: 2024,
+                                works: ["사랑 따윈 모르고 살았어", "고백"]
+                            }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        // 년도 마커 생성
+        function renderYearMarkers() {
+            const container = document.getElementById('yearMarkers');
+            const { minYear, maxYear } = fandomData;
+            
+            for (let year = minYear; year <= maxYear; year++) {
+                const marker = document.createElement('div');
+                marker.className = 'year-marker';
+                marker.innerHTML = `
+                    <div class="year-dot"></div>
+                    <div class="year-label">${year}</div>
+                `;
+                container.appendChild(marker);
+            }
+        }
+
+        // 위치 계산
+        function calculatePosition(startYear, endYear) {
+            const { minYear, maxYear } = fandomData;
+            const totalYears = maxYear - minYear;
+            const left = ((startYear - minYear) / totalYears) * 100;
+            const width = ((endYear - startYear + 1) / totalYears) * 100;
+            return { left: `${left}%`, width: `${width}%` };
+        }
+
+        // 아티스트 레인 렌더링
+        function renderArtistLanes() {
+            const container = document.getElementById('artistLanes');
+            
+            // Top lanes
+            const topSection = document.createElement('div');
+            topSection.className = 'lane-top';
+            
+            fandomData.lanes.top.forEach((lane, laneIndex) => {
+                const row = document.createElement('div');
+                row.className = `lane-row row-${laneIndex + 1}`;
+                
+                const categoryLabel = document.createElement('div');
+                categoryLabel.className = `category-label ${lane.color}`;
+                categoryLabel.textContent = lane.category;
+                row.appendChild(categoryLabel);
+                
+                lane.artists.forEach(artist => {
+                    const pos = calculatePosition(artist.startYear, artist.endYear);
+                    const block = createArtistBlock(artist, lane.color, pos);
+                    row.appendChild(block);
+                });
+                
+                topSection.appendChild(row);
+            });
+            
+            // Bottom lanes
+            const bottomSection = document.createElement('div');
+            bottomSection.className = 'lane-bottom';
+            
+            fandomData.lanes.bottom.forEach((lane, laneIndex) => {
+                const row = document.createElement('div');
+                row.className = `lane-row row-${laneIndex + 1}`;
+                
+                const categoryLabel = document.createElement('div');
+                categoryLabel.className = `category-label ${lane.color}`;
+                categoryLabel.textContent = lane.category;
+                row.appendChild(categoryLabel);
+                
+                lane.artists.forEach(artist => {
+                    const pos = calculatePosition(artist.startYear, artist.endYear);
+                    const block = createArtistBlock(artist, lane.color, pos);
+                    row.appendChild(block);
+                });
+                
+                bottomSection.appendChild(row);
+            });
+            
+            container.appendChild(topSection);
+            container.appendChild(bottomSection);
+        }
+
+        // 아티스트 블록 생성
+        function createArtistBlock(artist, color, position) {
+            const block = document.createElement('div');
+            block.className = `artist-block ${color}`;
+            block.style.left = position.left;
+            block.style.width = position.width;
+            
+            const worksHTML = artist.works.map(work => 
+                `<li class="work-item">${work}</li>`
+            ).join('');
+            
+            block.innerHTML = `
+                <div class="artist-info">
+                    <div class="artist-name">${artist.name}</div>
+                    <div class="artist-period">${artist.startYear} - ${artist.endYear === 2024 ? '현재' : artist.endYear}</div>
+                </div>
+                <div class="artist-emoji">${artist.emoji}</div>
+                <div class="artist-works">
+                    <div class="works-title">대표작</div>
+                    <ul class="works-list">
+                        ${worksHTML}
+                    </ul>
+                </div>
+            `;
+            
+            return block;
+        }
+
+        // 초기화
+        renderYearMarkers();
+        renderArtistLanes();
+    </script>
+</body>
+</html>
