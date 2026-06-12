@@ -35,7 +35,6 @@
             padding: 0 24px;
         }
 
-        /* Header */
         header {
             background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
             color: white;
@@ -93,7 +92,6 @@
             color: var(--secondary);
         }
 
-        /* Filter */
         .filter-container {
             display: flex;
             justify-content: center;
@@ -125,7 +123,6 @@
             border-color: transparent;
         }
 
-        /* Blog Grid */
         .blog-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -152,7 +149,6 @@
         .blog-thumbnail {
             width: 100%;
             height: 200px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -164,28 +160,15 @@
         .blog-thumbnail::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            top: 0; left: 0; right: 0; bottom: 0;
             background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="15" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="70" r="20" fill="rgba(255,255,255,0.08)"/></svg>');
         }
 
-        .blog-thumbnail.research {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-
-        .blog-thumbnail.life {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-        }
-
-        .blog-thumbnail.thoughts {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-        }
-
-        .blog-thumbnail.tutorial {
-            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-        }
+        .blog-thumbnail.research  { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .blog-thumbnail.life      { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .blog-thumbnail.thoughts  { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .blog-thumbnail.tutorial  { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+        .blog-thumbnail.tutorial-final { background: linear-gradient(135deg, #1a1a2e 0%, #e63946 100%); }
 
         .blog-content {
             padding: 24px;
@@ -256,7 +239,6 @@
             gap: 4px;
         }
 
-        /* Empty State */
         .empty-state {
             text-align: center;
             padding: 80px 20px;
@@ -275,7 +257,6 @@
             color: var(--primary);
         }
 
-        /* Footer */
         footer {
             text-align: center;
             padding: 40px 0;
@@ -286,34 +267,13 @@
             margin-top: 60px;
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
-            .blog-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .header-content {
-                flex-direction: column;
-                gap: 20px;
-            }
-
-            nav {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-
-            .blog-header h1 {
-                font-size: 2rem;
-            }
-
-            .filter-container {
-                gap: 8px;
-            }
-
-            .filter-btn {
-                padding: 8px 16px;
-                font-size: 0.85rem;
-            }
+            .blog-grid { grid-template-columns: 1fr; }
+            .header-content { flex-direction: column; gap: 20px; }
+            nav { flex-wrap: wrap; justify-content: center; }
+            .blog-header h1 { font-size: 2rem; }
+            .filter-container { gap: 8px; }
+            .filter-btn { padding: 8px 16px; font-size: 0.85rem; }
         }
     </style>
 </head>
@@ -346,7 +306,8 @@
         </div>
 
         <div class="blog-grid" id="blogGrid">
-            <!-- 🆕 독일어 학습 앱 카드 추가 -->
+
+            <!-- 기초독문법 중간고사 -->
             <div class="blog-card" data-category="tutorial" data-link="german-study.html">
                 <div class="blog-thumbnail tutorial">🇩🇪</div>
                 <div class="blog-content">
@@ -368,7 +329,29 @@
                 </div>
             </div>
 
-            <!-- 일상 포스트 예시 -->
+            <!-- 🆕 기초독문법 기말고사 -->
+            <div class="blog-card" data-category="tutorial" data-link="german-final.html">
+                <div class="blog-thumbnail tutorial-final">🎓</div>
+                <div class="blog-content">
+                    <div class="blog-meta">
+                        <span class="blog-category">튜토리얼</span>
+                        <span class="blog-date">2025.06</span>
+                    </div>
+                    <h3>기초독문법 기말고사 준비</h3>
+                    <p class="blog-excerpt">
+                        어휘, 관사·복수형, 동사 변환표, 관계대명사, 관사 격변화, 인칭대명사, 형용사 어미 변화, 숫자 읽기(일반·시간·단위)까지 기말 범위를 총망라한 인터랙티브 학습 도구.
+                    </p>
+                    <div class="blog-tags">
+                        <span class="blog-tag">독일어</span>
+                        <span class="blog-tag">형용사어미</span>
+                        <span class="blog-tag">숫자읽기</span>
+                        <span class="blog-tag">기말고사</span>
+                    </div>
+                    <span class="read-more">학습 시작하기 →</span>
+                </div>
+            </div>
+
+            <!-- 일상 -->
             <div class="blog-card" data-category="life" data-link="fandom-timeline.html">
                 <div class="blog-thumbnail life">☕</div>
                 <div class="blog-content">
@@ -377,9 +360,7 @@
                         <span class="blog-date">2026.05</span>
                     </div>
                     <h3>덕질</h3>
-                    <p class="blog-excerpt">
-                        나의 덕질 생활
-                    </p>
+                    <p class="blog-excerpt">나의 덕질 생활</p>
                     <div class="blog-tags">
                         <span class="blog-tag">덕질생활</span>
                         <span class="blog-tag">덕질생활</span>
@@ -387,8 +368,8 @@
                     <span class="read-more">더 읽기 →</span>
                 </div>
             </div>
-            
-            <!-- 연구 포스트 예시 -->
+
+            <!-- 연구 1 -->
             <div class="blog-card" data-category="research">
                 <div class="blog-thumbnail research">🧠</div>
                 <div class="blog-content">
@@ -397,9 +378,7 @@
                         <span class="blog-date">2024.11.15</span>
                     </div>
                     <h3>한방 코퍼스에서 발견한 '양방기전형' 설명 패턴</h3>
-                    <p class="blog-excerpt">
-                        text1
-                    </p>
+                    <p class="blog-excerpt">text1</p>
                     <div class="blog-tags">
                         <span class="blog-tag">코퍼스언어학</span>
                         <span class="blog-tag">담화분석</span>
@@ -409,7 +388,7 @@
                 </div>
             </div>
 
-            <!-- 튜토리얼 포스트 예시 -->
+            <!-- 튜토리얼 1 -->
             <div class="blog-card" data-category="tutorial">
                 <div class="blog-thumbnail tutorial">💻</div>
                 <div class="blog-content">
@@ -418,9 +397,7 @@
                         <span class="blog-date">2024.10.28</span>
                     </div>
                     <h3>Google Colab</h3>
-                    <p class="blog-excerpt">
-                        text2
-                    </p>
+                    <p class="blog-excerpt">text2</p>
                     <div class="blog-tags">
                         <span class="blog-tag">음성인식</span>
                         <span class="blog-tag">Whisper</span>
@@ -430,9 +407,7 @@
                 </div>
             </div>
 
-
-
-            <!-- 단상 포스트 예시 -->
+            <!-- 단상 -->
             <div class="blog-card" data-category="thoughts">
                 <div class="blog-thumbnail thoughts">💭</div>
                 <div class="blog-content">
@@ -441,9 +416,7 @@
                         <span class="blog-date">2024.09.20</span>
                     </div>
                     <h3>언어공학에서 신경언어학으로: 전환의 의미</h3>
-                    <p class="blog-excerpt">
-                        text4
-                    </p>
+                    <p class="blog-excerpt">text4</p>
                     <div class="blog-tags">
                         <span class="blog-tag">진로</span>
                         <span class="blog-tag">성찰</span>
@@ -452,7 +425,7 @@
                 </div>
             </div>
 
-            <!-- 연구 포스트 예시 2 -->
+            <!-- 연구 2 -->
             <div class="blog-card" data-category="research">
                 <div class="blog-thumbnail research">📊</div>
                 <div class="blog-content">
@@ -461,9 +434,7 @@
                         <span class="blog-date">2024.08.30</span>
                     </div>
                     <h3>test</h3>
-                    <p class="blog-excerpt">
-                        text5
-                    </p>
+                    <p class="blog-excerpt">text5</p>
                     <div class="blog-tags">
                         <span class="blog-tag">화용론</span>
                         <span class="blog-tag">담화분석</span>
@@ -473,7 +444,7 @@
                 </div>
             </div>
 
-            <!-- 일상 포스트 예시 2 -->
+            <!-- 일상 2 -->
             <div class="blog-card" data-category="life">
                 <div class="blog-thumbnail life">📚</div>
                 <div class="blog-content">
@@ -482,9 +453,7 @@
                         <span class="blog-date">2024.07.12</span>
                     </div>
                     <h3>독일언어학</h3>
-                    <p class="blog-excerpt">
-                        text6
-                    </p>
+                    <p class="blog-excerpt">text6</p>
                     <div class="blog-tags">
                         <span class="blog-tag">번역</span>
                         <span class="blog-tag">독일언어학</span>
@@ -493,7 +462,7 @@
                 </div>
             </div>
 
-            <!-- 튜토리얼 포스트 예시 2 -->
+            <!-- 튜토리얼 2 -->
             <div class="blog-card" data-category="tutorial">
                 <div class="blog-thumbnail tutorial">🔧</div>
                 <div class="blog-content">
@@ -502,9 +471,7 @@
                         <span class="blog-date">2024.06.25</span>
                     </div>
                     <h3>한국어 규칙 기반 파서 디버깅</h3>
-                    <p class="blog-excerpt">
-                        text7
-                    </p>
+                    <p class="blog-excerpt">text7</p>
                     <div class="blog-tags">
                         <span class="blog-tag">NLP</span>
                         <span class="blog-tag">파싱</span>
@@ -514,7 +481,7 @@
                 </div>
             </div>
 
-            <!-- 연구 포스트 예시 3 -->
+            <!-- 연구 3 -->
             <div class="blog-card" data-category="research">
                 <div class="blog-thumbnail research">🎯</div>
                 <div class="blog-content">
@@ -523,9 +490,7 @@
                         <span class="blog-date">2024.05.18</span>
                     </div>
                     <h3>G*Power로 실험 설계</h3>
-                    <p class="blog-excerpt">
-                        text8
-                    </p>
+                    <p class="blog-excerpt">text8</p>
                     <div class="blog-tags">
                         <span class="blog-tag">실험설계</span>
                         <span class="blog-tag">통계</span>
@@ -549,7 +514,6 @@
     </footer>
 
     <script>
-        // 필터링 기능
         const filterBtns = document.querySelectorAll('.filter-btn');
         const blogCards = document.querySelectorAll('.blog-card');
         const emptyState = document.getElementById('emptyState');
@@ -557,13 +521,10 @@
 
         filterBtns.forEach(btn => {
             btn.addEventListener('click', () => {
-                // 활성 버튼 변경
                 filterBtns.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
-
                 const category = btn.dataset.category;
                 let visibleCount = 0;
-
                 blogCards.forEach(card => {
                     if (category === 'all' || card.dataset.category === category) {
                         card.style.display = 'flex';
@@ -572,8 +533,6 @@
                         card.style.display = 'none';
                     }
                 });
-
-                // Empty state 표시
                 if (visibleCount === 0) {
                     blogGrid.style.display = 'none';
                     emptyState.style.display = 'block';
@@ -584,15 +543,12 @@
             });
         });
 
-        // 카드 클릭 이벤트 - 독일어 학습 앱은 실제 페이지로 이동
         blogCards.forEach(card => {
             card.addEventListener('click', () => {
                 const link = card.dataset.link;
                 if (link) {
-                    // 독일어 학습 앱으로 이동
                     window.location.href = link;
                 } else {
-                    // 기존 블로그 포스트
                     alert('실제 운영 시에는 개별 포스트 페이지로 이동합니다!\n\nMarkdown 파일로 각 포스트를 작성하고,\nJekyll이나 Hugo 같은 정적 사이트 생성기를 사용하면\n쉽게 블로그를 운영할 수 있어요.');
                 }
             });
