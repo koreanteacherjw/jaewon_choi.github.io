@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>기초독문법 기말 준비</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:system-ui,-apple-system,sans-serif;background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);min-height:100vh;padding:20px}
+.container{max-width:1200px;margin:0 auto}
+.header{text-align:center;color:white;margin-bottom:30px}
+.header h1{font-size:2.5em;margin-bottom:10px;text-shadow:2px 2px 4px rgba(0,0,0,0.3)}
+.header p{font-size:1.1em;opacity:0.85}
+.badge{display:inline-block;background:rgba(230,57,70,0.25);border:1px solid rgba(230,57,70,0.6);color:#e63946;padding:3px 12px;border-radius:20px;font-size:0.8em;margin-top:8px}
+.mode-selector{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:30px}
+.mode-card{background:rgba(255,255,255,0.07);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.12);border-radius:12px;padding:14px 10px;cursor:pointer;transition:all 0.25s;text-align:center;color:white}
+.mode-card:hover{background:rgba(255,255,255,0.14);transform:translateY(-3px)}
+.mode-card.active{background:rgba(230,57,70,0.3);border-color:rgba(230,57,70,0.7)}
+.mode-card.new-badge::after{content:'NEW';display:block;font-size:0.58em;background:#e63946;color:white;border-radius:8px;padding:1px 6px;margin:4px auto 0;width:fit-content}
+.mode-card .icon{font-size:1.6em;margin-bottom:5px}
+.mode-card h2{font-size:0.82em;margin-bottom:2px;font-weight:600}
+.mode-card p{font-size:0.68em;opacity:0.75}
+.section-divider{grid-column:1/-1;background:rgba(230,57,70,0.12);border-radius:8px;padding:8px 14px;color:#e8a0a5;font-size:0.78em;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;margin-top:6px}
+.study-area{background:rgba(255,255,255,0.97);border-radius:15px;padding:40px;box-shadow:0 8px 32px rgba(0,0,0,0.3);min-height:500px}
+.progress-bar{width:100%;height:7px;background:#e0e0e0;border-radius:10px;margin-bottom:25px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,#e63946,#c1121f);width:0%;transition:width 0.3s}
+.score{text-align:center;font-size:1.2em;color:#e63946;margin-bottom:18px;font-weight:600}
+.flashcard{perspective:1000px;min-height:320px}
+.flashcard-inner{position:relative;width:100%;height:100%;min-height:320px;transition:transform 0.6s;transform-style:preserve-3d;cursor:pointer}
+.flashcard-inner.flipped{transform:rotateY(180deg)}
+.flashcard-front,.flashcard-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:14px;padding:28px}
+.flashcard-front{background:linear-gradient(135deg,#1a1a2e,#0f3460);color:white}
+.flashcard-back{background:white;border:3px solid #e63946;transform:rotateY(180deg)}
+.word{font-size:2.8em;font-weight:bold;margin-bottom:16px}
+.meaning{font-size:2.4em;color:#e63946;margin-bottom:16px}
+.info{font-size:1.1em;color:#666;margin-top:12px}
+.controls{display:flex;justify-content:center;gap:14px;margin-top:28px;flex-wrap:wrap}
+.btn{padding:11px 28px;border:none;border-radius:25px;font-size:1.05em;font-weight:600;cursor:pointer;transition:all 0.25s;box-shadow:0 3px 8px rgba(0,0,0,0.12)}
+.btn-primary{background:linear-gradient(135deg,#e63946,#c1121f);color:white}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 5px 14px rgba(230,57,70,0.4)}
+.btn-secondary{background:white;color:#e63946;border:2px solid #e63946}
+.btn-secondary:hover{background:#e63946;color:white}
+.quiz-question{text-align:center;margin-bottom:28px}
+.quiz-question h3{font-size:1.8em;color:#222;margin-bottom:16px}
+.quiz-word{font-size:2.4em;color:#e63946;font-weight:bold;margin:18px 0}
+.quiz-options{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:13px;margin-top:18px}
+.option{padding:18px;background:#f5f5f5;border-radius:10px;cursor:pointer;transition:all 0.25s;text-align:center;font-size:1.05em;border:2px solid transparent;user-select:none}
+.option:hover{background:#ffe5e7;transform:translateY(-2px)}
+.option.correct{background:#4caf50;color:white;border-color:#4caf50}
+.option.wrong{background:#f44336;color:white;border-color:#f44336}
+.option.disabled{pointer-events:none;opacity:0.7}
+.result-message{font-size:1.7em;text-align:center;padding:18px;border-radius:10px;margin:18px 0}
+.result-message.success{background:#4caf50;color:white}
+.result-message.error{background:#ff9800;color:white}
+.wrong-words{background:#fff8f8;border-left:4px solid #e63946;padding:20px;border-radius:8px;margin:20px auto;max-width:750px}
+.wrong-words h3{color:#c1121f;margin-bottom:14px;font-size:1.35em}
+.wrong-word-item{display:block;padding:14px;margin:10px 0;background:white;border-radius:6px;border-left:3px solid #f44336;box-shadow:0 1px 4px rgba(0,0,0,0.06)}
+.exercise-input{width:100%;padding:14px;border:2px solid #ddd;border-radius:8px;font-size:1.15em;margin-top:14px}
+.exercise-input:focus{outline:none;border-color:#e63946}
+.feedback{margin-top:14px;padding:14px;border-radius:8px;font-weight:600;display:none}
+.feedback.correct{background:#4caf50;color:white;display:block}
+.feedback.wrong{background:#f44336;color:white;display:block}
+.writing-input{width:100%;max-width:480px;padding:18px;border:3px solid #e63946;border-radius:12px;font-size:1.4em;text-align:center;margin:18px auto;display:block}
+.writing-input:focus{outline:none;border-color:#c1121f;box-shadow:0 0 10px rgba(230,57,70,0.25)}
+.verb-table{width:100%;max-width:560px;margin:18px auto;border-collapse:collapse}
+.verb-table th{background:#1a1a2e;color:white;padding:11px;text-align:left}
+.verb-table td{padding:9px;border:1px solid #ddd}
+.verb-table input{width:100%;padding:7px;border:1px solid #ddd;border-radius:4px}
+.verb-table input.correct{background:#e8f5e9;border-color:#4caf50}
+.verb-table input.wrong{background:#ffebee;border-color:#f44336}
+.exercise-container{max-width:820px;margin:0 auto}
+.exercise-question{background:#fafafa;padding:26px;border-radius:10px;margin-bottom:18px;border-left:4px solid #e63946}
+.exercise-question h4{color:#e63946;margin-bottom:16px;font-size:1.25em}
+.exercise-question p{font-size:1.15em;margin-bottom:18px;color:#222}
+.number-display{font-size:3.5em;font-weight:900;color:#1a1a2e;text-align:center;margin:20px 0;letter-spacing:-1px}
+.hint-chip{display:inline-block;background:#fff3cd;border:1px solid #ffc107;border-radius:20px;padding:4px 12px;font-size:0.88em;color:#856404;margin:4px}
+@media(max-width:768px){.mode-selector{grid-template-columns:repeat(3,1fr)}.study-area{padding:22px}}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="header">
+<h1>🇩🇪 기초독문법 기말 준비</h1>
+<p>단어 + 문법 + 발음 + 숫자 + 형용사 어미</p>
+<div class="badge">기말고사 전용</div>
+</div>
+<div class="mode-selector">
+<div class="section-divider">📚 어휘</div>
+<div class="mode-card active" onclick="selectMode('flashcard',event)"><div class="icon">📚</div><h2>플래시카드</h2><p>전체 단어</p></div>
+<div class="mode-card" onclick="selectMode('ko_to_de',event)"><div class="icon">🇰🇷→🇩🇪</div><h2>한→독 선택</h2><p>4지선다</p></div>
+<div class="mode-card" onclick="selectMode('de_to_ko',event)"><div class="icon">🇩🇪→🇰🇷</div><h2>독→한 선택</h2><p>4지선다</p></div>
+<div class="mode-card" onclick="selectMode('ko_to_de_write',event)"><div class="icon">✍️🇩🇪</div><h2>한→독 지필</h2><p>직접 입력</p></div>
+<div class="mode-card" onclick="selectMode('de_to_ko_write',event)"><div class="icon">✍️🇰🇷</div><h2>독→한 지필</h2><p>직접 입력</p></div>
+<div class="mode-card" onclick="selectMode('article_quiz',event)"><div class="icon">📝</div><h2>관사</h2><p>der/die/das</p></div>
+<div class="mode-card" onclick="selectMode('plural_quiz',event)"><div class="icon">🔢</div><h2>복수형</h2><p>복수형</p></div>
+<div class="section-divider">🔄 문법</div>
+<div class="mode-card" onclick="selectMode('verb_table',event)"><div class="icon">📋</div><h2>동사표</h2><p>인칭 변화</p></div>
+<div class="mode-card" onclick="selectMode('articles',event)"><div class="icon">📖</div><h2>관사문법</h2><p>문장 내</p></div>
+<div class="mode-card" onclick="selectMode('pronouns',event)"><div class="icon">👤</div><h2>대명사</h2><p>격변화</p></div>
+<div class="mode-card" onclick="selectMode('conjugation',event)"><div class="icon">🔄</div><h2>동사변화</h2><p>문장 내</p></div>
+<div class="mode-card" onclick="selectMode('relative_pronouns',event)"><div class="icon">🔗</div><h2>관계대명사</h2><p>4지선다</p></div>
+<div class="mode-card" onclick="selectMode('article_declension',event)"><div class="icon">📐</div><h2>관사 격변화</h2><p>4지선다</p></div>
+<div class="mode-card" onclick="selectMode('personal_pronouns',event)"><div class="icon">👥</div><h2>인칭대명사</h2><p>격변화</p></div>
+<div class="mode-card new-badge" onclick="selectMode('adj_endings',event)"><div class="icon">🎨</div><h2>형용사 어미</h2><p>표 채우기</p></div>
+<h2>발음연습</h2><p>유형 선택</p></div>
+<div class="section-divider">🔢 숫자</div>
+<div class="mode-card new-badge" onclick="selectMode('numbers_basic',event)"><div class="icon">🔢</div><h2>숫자 읽기</h2><p>일반 숫자</p></div>
+<div class="mode-card new-badge" onclick="selectMode('numbers_time',event)"><div class="icon">🕐</div><h2>시간·단위</h2><p>시간/단위</p></div>
+</div>
+<div class="study-area" id="study-area"></div>
+</div>
+<script>
+// ============================================================
+// 📌 단어장 — 기말고사 파일로 교체 예정 (이 블록만 바꾸면 됨)
+// ============================================================
+const vocabData=[
+  // TODO: 기말고사 단어장으로 교체
+  {"word":"PLACEHOLDER","meaning":"단어장 교체 예정","pos":"명사","article":"der","plural":"-","gender":"Masculine"}
+];
+
+// ============================================================
+// 📌 동사 데이터 — 교체 예정
+// ============================================================
+const verbsData=[
+  // TODO: 기말고사 동사 목록으로 교체
+  {"verb":"lernen","meaning":"배우다"},
+  {"verb":"gehen","meaning":"가다"},
+  {"verb":"haben","meaning":"가지다"},
+  {"verb":"sein","meaning":"이다"},
+  {"verb":"sprechen","meaning":"말하다"}
+];
+
+// ============================================================
+// 📌 숫자 기반 데이터
+// ============================================================
+const numberWords={0:"null",1:"eins",2:"zwei",3:"drei",4:"vier",5:"fünf",6:"sechs",7:"sieben",8:"acht",9:"neun",10:"zehn",11:"elf",12:"zwölf",13:"dreizehn",14:"vierzehn",15:"fünfzehn",16:"sechzehn",17:"siebzehn",18:"achtzehn",19:"neunzehn",20:"zwanzig",30:"dreißig",40:"vierzig",50:"fünfzig",60:"sechzig",70:"siebzig",80:"achtzig",90:"neunzig",100:"hundert",1000:"tausend"};
+
+const timeUnitQuestions=[
+  {q:"오전 8시 정각",a:"acht Uhr",hint:"Uhr = 시"},
+  {q:"오후 3시 30분",a:"fünfzehn Uhr dreißig",hint:"24시간제 표현"},
+  {q:"12시 45분",a:"zwölf Uhr fünfundvierzig"},
+  {q:"7시 15분 (구어체)",a:"Viertel nach sieben",hint:"Viertel nach = 15분 후"},
+  {q:"8시 30분 (구어체)",a:"halb neun",hint:"halb + 다음 시간"},
+  {q:"9시 45분 (구어체)",a:"Viertel vor zehn",hint:"Viertel vor = 15분 전"},
+  {q:"100 km",a:"hundert Kilometer"},
+  {q:"2024년",a:"zweitausendvierundzwanzig"},
+  {q:"1990년",a:"neunzehnhundertneunzig"},
+  {q:"3.50유로",a:"drei Euro fünfzig"},
+  {q:"0.5 kg",a:"ein halbes Kilogramm"},
+  {q:"1층 (Erdgeschoss 제외, 위층)",a:"das erste Stockwerk"},
+  {q:"3월 5일",a:"der fünfte März"},
+  {q:"21세기",a:"das einundzwanzigste Jahrhundert"},
+];
+
+// ============================================================
+// 📌 문법 문제
+// ============================================================
+const articlesEx=[{q:"______ Stühle sind nicht bequem.",a:"Die"},{q:"Siehst du? ______ (the baby) spielt mit dem Hund.",a:"Das Baby"},{q:"Wo ist ______ (the castle)?",a:"das Schloss"},{q:"Können ______ (the boys) gut Fußball spielen?",a:"die Jungen"},{q:"Ist Herr Elster ______ (a doctor)?",a:"Arzt"},{q:"______ (the hotels) in der Stadtmitte sind laut.",a:"Die Hotels"},{q:"Ist das ______ (a problem) für Sie?",a:"ein Problem"},{q:"Achtung! ______ (the knife) ist sehr scharf!",a:"Das Messer"},{q:"Wie heißt ______ (the girl)?",a:"das Mädchen"},{q:"______ (laptops) sind relativ billig.",a:"Laptops"}];
+const pronounEx=[{q:"Ich glaube, ______ arbeitet zu viel. (she/nom.)",a:"sie"},{q:"Kennst ______ meine Schwester? (you/nom./s./inf.)",a:"du"},{q:"Die Familie fährt ohne ______ nach Schweinfurt. (her/acc.)",a:"sie"},{q:"Thomas und Janina gehen mit ______ ins Kino. (you/dat./form.)",a:"Ihnen"},{q:"Wohnen ______ in der Nähe? (you/nom./form.)",a:"Sie"},{q:"Wie gefällt ______ der neue Bürgermeister? (you/dat./pl./inf.)",a:"euch"},{q:"Mein Bruder braucht ______. (me/acc.)",a:"mich"},{q:"Du sollst mit ______ ausgehen. (her/dat.)",a:"ihr"},{q:"Aber ich möchte mit ______ ausgehen. (you/dat./s./inf.)",a:"dir"}];
+const conjugEx=[{q:"Ich ______ in Berlin. (wohnen)",a:"wohne"},{q:"Er ______ Deutsch. (lernen)",a:"lernt"},{q:"______ du ein Buch? (kaufen)",a:"Kaufst"},{q:"Wir ______ aus Korea. (kommen)",a:"kommen"},{q:"______ du Hunger? (haben)",a:"Hast"},{q:"Ich ______ Student. (sein)",a:"bin"},{q:"Markus ______ ein Buch. (lesen)",a:"liest"},{q:"Er ______ sehr laut. (sprechen)",a:"spricht"},{q:"______ du mir, bitte? (helfen)",a:"Hilfst"},{q:"Du ______ das. (nehmen)",a:"nimmst"}];
+const relativePronounsEx=[{q:"Das Kind, ___ wir ein Geschenk geben, heißt Tim.",a:"dem",options:["die","den","dem","der"]},{q:"Die Frau, ___ ich kenne, heißt Maria.",a:"die",options:["das","die","den","der"]},{q:"Ich kenne die Frau, ___ du geholfen hast.",a:"der",options:["den","dem","der","die"]},{q:"Die Kunden, ___ wir schreiben, wohnen in München.",a:"denen",options:["der","die","dem","denen"]},{q:"Das ist das Restaurant, ___ letztes Jahr eröffnet hat.",a:"das",options:["die","der","den","das"]},{q:"Der Mann, ___ dort steht, ist mein Vater.",a:"der",options:["den","das","die","der"]},{q:"Das sind die Schuhe, ___ ich kaufen möchte.",a:"die",options:["das","die","denen","der"]},{q:"Der Lehrer, ___ Unterricht sehr gut ist, heißt Schmidt.",a:"dessen",options:["der","dessen","dem","den"]},{q:"Die Frau, ___ Kinder hier spielen, ist meine Nachbarin.",a:"deren",options:["die","deren","der","denen"]},{q:"Der Film, ___ wir gestern gesehen haben, war spannend.",a:"den",options:["der","den","dem","das"]},{q:"Die Stadt, in ___ ich wohne, ist sehr schön.",a:"der",options:["die","der","dem","den"]},{q:"Der Computer, mit ___ ich arbeite, ist sehr alt.",a:"dem",options:["der","den","dem","das"]}];
+const articleDeclensionEx=[{q:"Lesen Sie ___ Zeitung (f., acc.) online?",a:"die",options:["der","das","die","den"]},{q:"Kennst du ___ Mädchen (n., acc.)?",a:"das",options:["den","der","die","das"]},{q:"___ Leute (pl., nom.) sind sehr freundlich.",a:"Die",options:["Der","Den","Die","Das"]},{q:"Hast du ___ Hut (m., acc.)?",a:"einen",options:["einem","einen","eine","ein"]},{q:"Ist das ___ Problem (n., nom.) für Sie?",a:"ein",options:["eine","einer","ein","einen"]},{q:"Hast du Lust? — Nein, ich habe ___ Lust (f., acc.).",a:"keine",options:["keine","kein","keinem","keinen"]},{q:"Hast du Hunger? — Nein, ich habe ___ Hunger (m., acc.).",a:"keinen",options:["kein","keinen","keiner","keine"]},{q:"Sehen Sie ___ Vogel? (m., acc.)",a:"den",options:["das","den","der","die"]},{q:"Ich gebe ___ Pferd (n., dat.) eine Karotte.",a:"dem",options:["das","den","dem","der"]},{q:"Ich möchte ___ Auto (n., acc.) kaufen.",a:"das",options:["der","die","das","den"]},{q:"Hast du ___ Sonnenbrille (f., acc.)?",a:"eine",options:["einem","ein","einen","eine"]},{q:"___ Frau (f., nom.) lacht.",a:"die",options:["den","die","der","das"]},{q:"Das ist ___ gute Idee (f., nom.).",a:"eine",options:["einer","einen","ein","eine"]},{q:"___ Mann (m., nom.) wartet.",a:"der",options:["den","das","der","die"]},{q:"Ich schreibe ___ Brief (m., acc.).",a:"einen",options:["ein","einen","eine","einem"]}];
+const personalPronounsEx=[{q:"Wohnen ___ in der Nähe? (you/nom./s., form.)",a:"Sie",options:["Sie","Ihnen","du","ihr"]},{q:"Spielst ___ gern Karten? (you/nom./s., inf.)",a:"du",options:["du","dir","Sie","ihr"]},{q:"Kennst du ___? (her/acc.)",a:"sie",options:["sie","ihr","ihnen","Sie"]},{q:"Ich gehe ohne ___ in die Stadt. (you/acc./pl., inf.)",a:"euch",options:["ihr","euch","uns","Sie"]},{q:"Wirklich? Ich dachte, du gehst mit ___. (us/dat.)",a:"uns",options:["wir","uns","euch","ihnen"]},{q:"Der neue Chef? Ich finde ___ sehr kompetent. (him/acc.)",a:"ihn",options:["er","ihm","ihn","ihnen"]},{q:"Mein Bruder braucht ___. (me/acc.)",a:"mich",options:["ich","mir","mich","uns"]},{q:"Du sollst mit ___ ausgehen. (her/dat.)",a:"ihr",options:["sie","ihr","ihnen","Sie"]},{q:"Könnte ich bitte mit ___ fahren? (you/dat./s., form.)",a:"Ihnen",options:["Sie","Ihnen","dir","euch"]},{q:"Siehst du ___? (me/acc.)",a:"mich",options:["ich","mir","mich","uns"]},{q:"Das Buch gehört ___. (me/dat.)",a:"mir",options:["ich","mir","mich","uns"]},{q:"Ich helfe ___ gern. (you/dat./s., inf.)",a:"dir",options:["du","dir","dich","Ihnen"]},{q:"___ komme aus Korea. (I/nom.)",a:"Ich",options:["Ich","Mir","Mich","Du"]},{q:"Das ist für ___. (you/acc./s., inf.)",a:"dich",options:["du","dir","dich","Sie"]},{q:"Ich gebe ___ das Buch. (you/dat./s., form.)",a:"Ihnen",options:["Sie","Ihnen","dir","euch"]}];
+
+// ============================================================
+// 📌 형용사 어미 변화 문제
+// ============================================================
+const adjEndingsData=[
+  {declType:"강변화 (관사 없음)",adjective:"kalt",noun:"Kaffee (m.)",gender:"m",forms:{nom:"er",acc:"en",dat:"em",gen:"en"}},
+  {declType:"강변화 (관사 없음)",adjective:"frisch",noun:"Milch (f.)",gender:"f",forms:{nom:"e",acc:"e",dat:"er",gen:"er"}},
+  {declType:"강변화 (관사 없음)",adjective:"gut",noun:"Brot (n.)",gender:"n",forms:{nom:"es",acc:"es",dat:"em",gen:"en"}},
+  {declType:"강변화 (관사 없음)",adjective:"kalt",noun:"Wasser (n.)",gender:"n",forms:{nom:"es",acc:"es",dat:"em",gen:"en"}},
+  {declType:"약변화 (정관사 뒤)",adjective:"alt",noun:"Mann (m.)",gender:"m",forms:{nom:"e",acc:"en",dat:"en",gen:"en"}},
+  {declType:"약변화 (정관사 뒤)",adjective:"klein",noun:"Frau (f.)",gender:"f",forms:{nom:"e",acc:"e",dat:"en",gen:"en"}},
+  {declType:"약변화 (정관사 뒤)",adjective:"neu",noun:"Kind (n.)",gender:"n",forms:{nom:"e",acc:"e",dat:"en",gen:"en"}},
+  {declType:"약변화 (정관사 뒤)",adjective:"groß",noun:"Männer (pl.)",gender:"pl",forms:{nom:"en",acc:"en",dat:"en",gen:"en"}},
+  {declType:"혼합변화 (부정관사 뒤)",adjective:"groß",noun:"Mann (m.)",gender:"m",forms:{nom:"er",acc:"en",dat:"en",gen:"en"}},
+  {declType:"혼합변화 (부정관사 뒤)",adjective:"schön",noun:"Frau (f.)",gender:"f",forms:{nom:"e",acc:"e",dat:"en",gen:"en"}},
+  {declType:"혼합변화 (부정관사 뒤)",adjective:"klein",noun:"Kind (n.)",gender:"n",forms:{nom:"es",acc:"es",dat:"en",gen:"en"}},
+];
+
+// ============================================================
+// 발음 데이터
+// ============================================================
+
+
+// ============================================================
+// 전역 상태
+// ============================================================
+let mode='flashcard',idx=0,score=0,total=0,words=[],wrong=[],gramEx=[];
+let adjIdx=0,adjScore=0,adjWrong=[],adjList=[];
+let numMode='basic',numIdx=0,numScore=0,numWrong=[],numList=[];
+
+// ============================================================
+// 숫자 변환
+// ============================================================
+function numberToGerman(n){
+  if(n===0)return "null";
+  if(numberWords[n])return n===1?"eins":numberWords[n];
+  if(n<20)return numberWords[n];
+  if(n<100){const t=Math.floor(n/10)*10,o=n%10;if(o===0)return numberWords[t];return numberWords[o]+"und"+numberWords[t];}
+  if(n<1000){const h=Math.floor(n/100),r=n%100,hs=h===1?"ein":numberWords[h];return hs+"hundert"+(r>0?numberToGerman(r).replace(/^eins$/,"ein"):"");}
+  if(n<1000000){const th=Math.floor(n/1000),r=n%1000,ths=th===1?"ein":numberToGerman(th).replace(/^eins$/,"ein");return ths+"tausend"+(r>0?numberToGerman(r).replace(/^eins$/,"ein"):"");}
+  return String(n);
+}
+function generateNumberQuestions(count=20){
+  const qs=[];
+  const ranges=[{min:1,max:19,w:3},{min:20,max:99,w:4},{min:100,max:999,w:3},{min:1000,max:9999,w:2},{min:10000,max:99999,w:1}];
+  for(let i=0;i<count;i++){
+    const pool=[];ranges.forEach(r=>{for(let w=0;w<r.w;w++)pool.push(r);});
+    const r=pool[Math.floor(Math.random()*pool.length)];
+    const n=Math.floor(Math.random()*(r.max-r.min+1))+r.min;
+    qs.push({number:n,answer:numberToGerman(n)});
+  }
+  return qs;
+}
+
+// ============================================================
+// 모드 선택
+// ============================================================
+function selectMode(m,ev){
+  mode=m;idx=0;score=0;total=0;wrong=[];
+  document.querySelectorAll('.mode-card').forEach(c=>c.classList.remove('active'));
+  if(ev)ev.target.closest('.mode-card').classList.add('active');
+  const fn={flashcard:renderFlash,ko_to_de:()=>{words=[];renderKoDe()},de_to_ko:()=>{words=[];renderDeKo()},ko_to_de_write:()=>{words=[];renderKoDeWrite()},de_to_ko_write:()=>{words=[];renderDeKoWrite()},article_quiz:()=>{words=[];renderArt()},plural_quiz:()=>{words=[];renderPlural()},verb_table:()=>{words=[];renderVerb()},articles:()=>renderGram('articles'),pronouns:()=>renderGram('pronouns'),conjugation:()=>renderGram('conjugation'),relative_pronouns:()=>renderGram('relative_pronouns'),article_declension:()=>renderGram('article_declension'),personal_pronouns:()=>renderGram('personal_pronouns'),adj_endings:startAdjEndings,numbers_basic:()=>startNumbers('basic'),numbers_time:()=>startNumbers('time')};
+  if(fn[m])fn[m]();
+}
+
+function escQ(s){return(s||'').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+function addNextBtn(fn){
+  if(document.getElementById('nxtBtn'))return;
+  const d=document.createElement('div');d.id='nxtBtn';d.className='controls';d.style.marginTop='20px';
+  d.innerHTML='<button class="btn btn-primary">다음 ➡️</button>';
+  d.querySelector('button').addEventListener('click',fn);
+  document.getElementById('study-area').appendChild(d);
+}
+function shuffle(a){const n=[...a];for(let i=n.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[n[i],n[j]]=[n[j],n[i]];}return n;}
+
+// ============================================================
+// 플래시카드
+// ============================================================
+function renderFlash(){
+  if(!words.length)words=shuffle([...vocabData]).slice(0,50);
+  const c=words[idx];
+  const w=c.article&&c.article!=='-'?c.article+' '+c.word:c.word;
+  document.getElementById('study-area').innerHTML=`
+  <div class="progress-bar"><div class="progress-fill" style="width:${idx/words.length*100}%"></div></div>
+  <div class="score">카드 ${idx+1}/${words.length}</div>
+  <div class="flashcard"><div class="flashcard-inner" id="fc" onclick="this.classList.toggle('flipped')">
+  <div class="flashcard-front"><div class="word">${w}</div><p style="opacity:0.7;margin-top:10px">💡 클릭해서 뒤집기</p></div>
+  <div class="flashcard-back"><div class="meaning">${c.meaning}</div><div class="info">${c.pos||''}</div>${c.plural&&c.plural!=='-'?`<div class="info">복수: ${c.plural}</div>`:''}</div>
+  </div></div>
+  <div class="controls">
+  ${idx>0?'<button class="btn btn-secondary" onclick="idx--;renderFlash()">⬅️ 이전</button>':''}
+  ${idx<words.length-1?'<button class="btn btn-primary" onclick="idx++;renderFlash()">다음 ➡️</button>':'<button class="btn btn-primary" onclick="words=[];idx=0;renderFlash()">🔄 다시</button>'}
+  </div>`;
+}
+
+// ============================================================
+// 한→독 / 독→한 선택
+// ============================================================
+function renderKoDe(){
+  if(!words.length){words=shuffle([...vocabData]).slice(0,20);total=words.length;wrong=[];}
+  if(idx>=words.length){showRes();return;}
+  const c=words[idx];
+  const cor=(c.article&&c.article!=='-'?c.article+' ':'')+c.word;
+  const others=shuffle(vocabData.filter(w=>w.word!==c.word)).slice(0,3).map(w=>(w.article&&w.article!=='-'?w.article+' ':'')+w.word);
+  const opts=shuffle([cor,...others]);
+  document.getElementById('study-area').innerHTML=`
+  <div class="progress-bar"><div class="progress-fill" style="width:${idx/total*100}%"></div></div>
+  <div class="score">문제 ${idx+1}/${total} | 점수: ${score}/${total}</div>
+  <div class="quiz-question"><h3>한국어를 독일어로?</h3><div class="quiz-word">${c.meaning}</div></div>
+  <div class="quiz-options" id="opts">${opts.map(o=>`<div class="option" data-val="${escQ(o)}" data-cor="${escQ(cor)}">${o}</div>`).join('')}</div>`;
+  document.querySelectorAll('#opts .option').forEach(el=>el.addEventListener('click',function(){checkTrans(this,'ko_to_de',c.meaning,cor);}));
+}
+function renderDeKo(){
+  if(!words.length){words=shuffle([...vocabData]).slice(0,20);total=words.length;wrong=[];}
+  if(idx>=words.length){showRes();return;}
+  const c=words[idx];
+  const w=(c.article&&c.article!=='-'?c.article+' ':'')+c.word;
+  const others=shuffle(vocabData.filter(v=>v.meaning!==c.meaning)).slice(0,3).map(v=>v.meaning);
+  const opts=shuffle([c.meaning,...others]);
+  document.getElementById('study-area').innerHTML=`
+  <div class="progress-bar"><div class="progress-fill" style="width:${idx/total*100}%"></div></div>
+  <div class="score">문제 ${idx+1}/${total} | 점수: ${score}/${total}</div>
+  <div class="quiz-question"><h3>독일어의 뜻은?</h3><div class="quiz-word">${w}</div></div>
+  <div class="quiz-options" id="opts">${opts.map(o=>`<div class="option" data-val="${escQ(o)}" data-cor="${escQ(c.meaning)}">${o}</div>`).join('')}</div>`;
+  document.querySelectorAll('#opts .option').forEach(el=>el.addEventListener('click',function(){checkTrans(this,'de_to_ko',w,c.meaning);}));
+}
+function checkTrans(el,m,question,cor){
+  const sel=el.dataset.val;
+  document.querySelectorAll('#opts .option').forEach(o=>{o.style.pointerEvents='none';if(o.dataset.val===cor)o.classList.add('correct');else if(o.dataset.val===sel&&sel!==cor)o.classList.add('wrong');});
+  if(sel===cor)score++;else wrong.push({question,answer:cor,userAnswer:sel});
+  addNextBtn(()=>{idx++;m==='ko_to_de'?renderKoDe():renderDeKo();});
+}
+
+// ============================================================
+// 지필 모드
+// ============================================================
+function renderKoDeWrite(){
+  if(!words.length){words=shuffle([...vocabData]).slice(0,20);total=words.length;wrong=[];}
+  if(idx>=words.length){showRes();return;}
+  const c=words[idx];const cor=(c.article&&c.article!=='-'?c.article+' ':'')+c.word;
+  document.getElementById('study-area').innerHTML=`
+  <div class="progress-bar"><div class="progress-fill" style="width:${idx/total*100}%"></div></div>
+  <div class="score">문제 ${idx+1}/${total} | 점수: ${score}/${total}</div>
+  <div class="quiz-question"><h3>✍️ 한국어를 독일어로 쓰세요</h3><div class="quiz-word">${c.meaning}</div>
+  <input type="text" class="writing-input" id="win" placeholder="독일어 입력...">
+  </div><div class="controls"><button class="btn btn-primary" id="sb">제출</button></div>`;
+  const inp=document.getElementById('win');
+  const sub=()=>submitWrite(cor,c.meaning,'ko_to_de_write');
+  inp.addEventListener('keypress',e=>{if(e.key==='Enter')sub();});
+  document.getElementById('sb').addEventListener('click',sub);inp.focus();
+}
+function renderDeKoWrite(){
+  if(!words.length){words=shuffle([...vocabData]).slice(0,20);total=words.length;wrong=[];}
+  if(idx>=words.length){showRes();return;}
+  const c=words[idx];const w=(c.article&&c.article!=='-'?c.article+' ':'')+c.word;
+  document.getElementById('study-area').innerHTML=`
+  <div class="progress-bar"><div class="progress-fill" style="width:${idx/total*100}%"></div></div>
+  <div class="score">문제 ${idx+1}/${total} | 점수: ${score}/${total}</div>
+  <div class="quiz-question"><h3>✍️ 독일어를 한국어로 쓰세요</h3><div class="quiz-word">${w}</div>
+  <input type="text" class="writing-input" id="win" placeholder="한국어 입력...">
+  </div><div class="controls"><button class="btn btn-primary" id="sb">제출</button></div>`;
+  const inp=document.getElementById('win');
+  const sub=()=>submitWrite(c.meaning,w,'de_to_ko_write');
+  inp.addEventListener('keypress',e=>{if(e.key==='Enter')sub();});
+  document.getElementById('sb').addEventListener('click',sub);inp.focus();
+}
+function submitWrite(cor,question,m){
+  const inp=document.getElementById('win'),v=inp.value.trim();
+  if(!v){alert('답을 입력하세요!');return;}
+  const ok=v.toLowerCase().replace(/\s+/g,'')===cor.toLowerCase().replace(/\s+/g,'');
+  if(ok){score++;inp.style.borderColor='#4caf50';inp.style.background='#e8f5e9';}
+  else{wrong.push({question,answer:cor,userAnswer:v});inp.style.borderColor='#f44336';inp.style.background='#ffebee';const fb=document.createElement('div');fb.className='feedback wrong';fb.textContent='❌ 정답: '+cor;inp.parentNode.appendChild(fb);}
+  document.getElementById('sb').textContent='다음 ➡️';
+  document.getElementById('sb').onclick=()=>{idx++;m==='ko_to_de_write'?renderKoDeWrite():renderDeKoWrite();};
+}
+
+// ============================================================
+// 관사 / 복수형
+// ============================================================
+function renderArt(){
+  if(!words.length){const ns=vocabData.filter(w=>w.article&&['der','die','das'].includes(w.article));words=shuffle(ns).slice(0,30);total=words.length;wrong=[];}
+  if(idx>=words.length){showRes();return;}
+  const c=words[idx];
+  document.getElementById('study-area').innerHTML=`
+  <div class="progress-bar"><div class="progress-fill" style="width:${idx/total*100}%"></div></div>
+  <div class="score">문제 ${idx+1}/${total} | 점수: ${score}/${total}</div>
+  <div class="quiz-question"><h3>관사는?</h3><div class="quiz-word">${c.word}</div><p style="color:#666;margin-top:8px">${c.meaning}</p></div>
+  <div class="quiz-options" id="opts">${['der','die','das'].map(o=>`<div class="option" data-val="${o}" data-cor="${c.article}">${o}</div>`).join('')}</div>`;
+  document.querySelectorAll('#opts .option').forEach(el=>el.addEventListener('click',function(){
+    document.querySelectorAll('#opts .option').forEach(o=>{o.style.pointerEvents='none';if(o.dataset.val===c.article)o.classList.add('correct');else if(o.dataset.val===this.dataset.val&&this.dataset.val!==c.article)o.classList.add('wrong');});
+    if(this.dataset.val===c.article)score++;
+    addNextBtn(()=>{idx++;renderArt();});
+  }));
+}
+function renderPlural(){
+  if(!words.length){const ns=vocabData.filter(w=>w.plural&&w.plural!==''&&w.plural!=='-');words=shuffle(ns).slice(0,30);total=words.length;wrong=[];}
+  if(idx>=words.length){showRes();return;}
+  const c=words[idx];
+  document.getElementById('study-area').innerHTML=`
+  <div class="progress-bar"><div class="progress-fill" style="width:${idx/total*100}%"></div></div>
+  <div class="score">문제 ${idx+1}/${total} | 점수: ${score}/${total}</div>
+  <div class="quiz-question"><h3>복수형을 입력하세요</h3><div class="quiz-word">${c.article||''} ${c.word}</div>
+  <input type="text" class="writing-input" id="pin" placeholder="복수형...">
+  </div><div class="controls"><button class="btn btn-primary" id="sb">제출</button></div>`;
+  const inp=document.getElementById('pin');
+  const sub=()=>{const v=inp.value.trim();if(!v){alert('입력하세요!');return;}
+    if(v.toLowerCase()===c.plural.toLowerCase()){score++;inp.style.borderColor='#4caf50';inp.style.background='#e8f5e9';}
+    else{inp.style.borderColor='#f44336';inp.style.background='#ffebee';const fb=document.createElement('div');fb.className='feedback wrong';fb.textContent='❌ 정답: '+c.plural;inp.parentNode.appendChild(fb);}
+    document.getElementById('sb').textContent='다음 ➡️';document.getElementById('sb').onclick=()=>{idx++;renderPlural();};};
+  inp.addEventListener('keypress',e=>{if(e.key==='Enter')sub();});
+  document.getElementById('sb').addEventListener('click',sub);inp.focus();
+}
+
+// ============================================================
+// 동사 변환표
+// ============================================================
+function renderVerb(){
+  if(!words.length){words=shuffle([...verbsData]).slice(0,10);total=words.length;}
+  if(idx>=words.length){showVerbRes();return;}
+  const c=words[idx];
+  document.getElementById('study-area').innerHTML=`
+  <div class="exercise-container">
+  <h2 style="text-align:center;color:#e63946;margin-bottom:16px">📋 동사 변환표</h2>
+  <div class="score">동사 ${idx+1}/${total}</div>
+  <div class="progress-bar"><div class="progress-fill" style="width:${idx/total*100}%"></div></div>
+  <div style="text-align:center;margin:16px 0"><div style="font-size:2em;color:#e63946;font-weight:bold">${c.verb}</div><div style="color:#666;margin-top:6px">${c.meaning}</div></div>
+  <table class="verb-table"><thead><tr><th>인칭</th><th>변형</th></tr></thead><tbody>
+  <tr><td>ich</td><td><input type="text" id="vi"></td></tr>
+  <tr><td>du</td><td><input type="text" id="vd"></td></tr>
+  <tr><td>er/sie/es</td><td><input type="text" id="ve"></td></tr>
+  <tr><td>wir</td><td><input type="text" id="vw"></td></tr>
+  <tr><td>ihr</td><td><input type="text" id="vh"></td></tr>
+  <tr><td>sie/Sie</td><td><input type="text" id="vs"></td></tr>
+  </tbody></table>
+  <div class="controls"><button class="btn btn-primary" id="vbtn">제출</button><button class="btn btn-secondary" onclick="idx++;renderVerb()">건너뛰기</button></div></div>`;
+  document.getElementById('vbtn').addEventListener('click',()=>{
+    const inp={ich:document.getElementById('vi').value.trim(),du:document.getElementById('vd').value.trim(),er:document.getElementById('ve').value.trim(),wir:document.getElementById('vw').value.trim(),ihr:document.getElementById('vh').value.trim(),sie:document.getElementById('vs').value.trim()};
+    for(let k in inp){if(!inp[k]){alert('모든 칸을 채워주세요!');return;}}
+    const ans=getConj(c.verb);let cnt=0;
+    const ids={ich:'vi',du:'vd',er:'ve',wir:'vw',ihr:'vh',sie:'vs'};
+    for(let k in inp){const el=document.getElementById(ids[k]);if(inp[k].toLowerCase()===ans[k].toLowerCase()){el.classList.add('correct');cnt++;}else{el.classList.add('wrong');el.value=inp[k]+' → '+ans[k];}el.disabled=true;}
+    if(cnt===6)score++;
+    document.getElementById('vbtn').textContent='다음 ➡️';document.getElementById('vbtn').onclick=()=>{idx++;renderVerb();};
+  });
+}
+function getConj(v){
+  const ir={sein:{ich:'bin',du:'bist',er:'ist',wir:'sind',ihr:'seid',sie:'sind'},haben:{ich:'habe',du:'hast',er:'hat',wir:'haben',ihr:'habt',sie:'haben'},werden:{ich:'werde',du:'wirst',er:'wird',wir:'werden',ihr:'werdet',sie:'werden'},geben:{ich:'gebe',du:'gibst',er:'gibt',wir:'geben',ihr:'gebt',sie:'geben'},nehmen:{ich:'nehme',du:'nimmst',er:'nimmt',wir:'nehmen',ihr:'nehmt',sie:'nehmen'},lesen:{ich:'lese',du:'liest',er:'liest',wir:'lesen',ihr:'lest',sie:'lesen'},sehen:{ich:'sehe',du:'siehst',er:'sieht',wir:'sehen',ihr:'seht',sie:'sehen'},essen:{ich:'esse',du:'isst',er:'isst',wir:'essen',ihr:'esst',sie:'essen'},sprechen:{ich:'spreche',du:'sprichst',er:'spricht',wir:'sprechen',ihr:'sprecht',sie:'sprechen'},helfen:{ich:'helfe',du:'hilfst',er:'hilft',wir:'helfen',ihr:'helft',sie:'helfen'},treffen:{ich:'treffe',du:'triffst',er:'trifft',wir:'treffen',ihr:'trefft',sie:'treffen'},fahren:{ich:'fahre',du:'fährst',er:'fährt',wir:'fahren',ihr:'fahrt',sie:'fahren'},fallen:{ich:'falle',du:'fällst',er:'fällt',wir:'fallen',ihr:'fallt',sie:'fallen'},laufen:{ich:'laufe',du:'läufst',er:'läuft',wir:'laufen',ihr:'lauft',sie:'laufen'},schlafen:{ich:'schlafe',du:'schläfst',er:'schläft',wir:'schlafen',ihr:'schlaft',sie:'schlafen'},halten:{ich:'halte',du:'hältst',er:'hält',wir:'halten',ihr:'haltet',sie:'halten'},waschen:{ich:'wasche',du:'wäschst',er:'wäscht',wir:'waschen',ihr:'wascht',sie:'waschen'},tragen:{ich:'trage',du:'trägst',er:'trägt',wir:'tragen',ihr:'tragt',sie:'tragen'},wissen:{ich:'weiß',du:'weißt',er:'weiß',wir:'wissen',ihr:'wisst',sie:'wissen'},können:{ich:'kann',du:'kannst',er:'kann',wir:'können',ihr:'könnt',sie:'können'},müssen:{ich:'muss',du:'musst',er:'muss',wir:'müssen',ihr:'müsst',sie:'müssen'},sollen:{ich:'soll',du:'sollst',er:'soll',wir:'sollen',ihr:'sollt',sie:'sollen'},wollen:{ich:'will',du:'willst',er:'will',wir:'wollen',ihr:'wollt',sie:'wollen'},mögen:{ich:'mag',du:'magst',er:'mag',wir:'mögen',ihr:'mögt',sie:'mögen'}};
+  const vl=v.toLowerCase();if(ir[vl])return ir[vl];
+  const s=v.slice(0,-2);return{ich:s+'e',du:s+'st',er:s+'t',wir:v,ihr:s+'t',sie:v};
+}
+function showVerbRes(){
+  const p=Math.round(score/total*100);
+  document.getElementById('study-area').innerHTML=`<div style="text-align:center;padding:50px 20px">
+  <h2 style="font-size:2.5em;color:#e63946;margin-bottom:28px">🎉 완료!</h2>
+  <div style="font-size:3em;margin:28px 0">${score}/${total}</div>
+  <div class="result-message ${p>=70?'success':'error'}">${p>=90?'🌟 완벽!':p>=70?'👍 잘했어요!':'💪 다시 도전!'}</div>
+  <div class="controls"><button class="btn btn-primary" onclick="words=[];idx=0;score=0;renderVerb()">🔄 다시</button></div></div>`;
+}
+
+// ============================================================
+// 문법 (관사/대명사/동사변화/관계대명사/관사격변화/인칭대명사)
+// ============================================================
+function renderGram(t){
+  const map={articles:[articlesEx,'📖 관사 문법'],pronouns:[pronounEx,'👤 대명사'],relative_pronouns:[relativePronounsEx,'🔗 관계대명사'],article_declension:[articleDeclensionEx,'📐 관사 격변화'],personal_pronouns:[personalPronounsEx,'👥 인칭대명사'],conjugation:[conjugEx,'🔄 동사 변화']};
+  gramEx=shuffle([...map[t][0]]);total=gramEx.length;idx=0;score=0;wrong=[];
+  renderGQ(t,map[t][1]);
+}
+function renderGQ(t,title){
+  if(idx>=total){showGramRes(t,title);return;}
+  const c=gramEx[idx];
+  const mc=['relative_pronouns','article_declension','personal_pronouns'].includes(t);
+  if(mc){
+    const opts=shuffle([...c.options]);
+    document.getElementById('study-area').innerHTML=`
+    <div class="exercise-container">
+    <h2 style="text-align:center;color:#e63946;margin-bottom:16px">${title}</h2>
+    <div class="score">문제 ${idx+1}/${total} | 점수: ${score}/${total}</div>
+    <div class="progress-bar"><div class="progress-fill" style="width:${idx/total*100}%"></div></div>
+    <div class="exercise-question"><h4>문제 ${idx+1}</h4><p>${c.q}</p></div>
+    <div class="quiz-options" id="opts">${opts.map(o=>`<div class="option" data-val="${escQ(o)}" data-cor="${escQ(c.a)}">${o}</div>`).join('')}</div></div>`;
+    document.querySelectorAll('#opts .option').forEach(el=>el.addEventListener('click',function(){
+      document.querySelectorAll('#opts .option').forEach(o=>{o.style.pointerEvents='none';if(o.dataset.val===c.a)o.classList.add('correct');else if(o.dataset.val===this.dataset.val&&this.dataset.val!==c.a)o.classList.add('wrong');});
+      if(this.dataset.val===c.a)score++;else wrong.push({question:c.q,answer:c.a,userAnswer:this.dataset.val});
+      addNextBtn(()=>{idx++;renderGQ(t,title);});
+    }));
+  }else{
+    document.getElementById('study-area').innerHTML=`
+    <div class="exercise-container">
+    <h2 style="text-align:center;color:#e63946;margin-bottom:16px">${title}</h2>
+    <div class="score">문제 ${idx+1}/${total} | 점수: ${score}/${total}</div>
+    <div class="progress-bar"><div class="progress-fill" style="width:${idx/total*100}%"></div></div>
+    <div class="exercise-question"><h4>문제 ${idx+1}</h4><p>${c.q}</p>
+    <input type="text" class="exercise-input" id="ain" placeholder="답 입력...">
+    <div class="feedback" id="fb"></div></div>
+    <div class="controls"><button class="btn btn-primary" id="gsb">제출</button></div></div>`;
+    const inp=document.getElementById('ain');
+    const sub=()=>{const v=inp.value.trim();if(!v){alert('답을 입력하세요!');return;}
+      const cors=c.a.split('/').map(a=>a.trim().toLowerCase().replace(/\s+/g,''));
+      const ok=cors.some(a=>v.toLowerCase().replace(/\s+/g,'')===a);
+      const fb=document.getElementById('fb');
+      if(ok){score++;fb.className='feedback correct';fb.textContent='✅ 정답!';inp.disabled=true;}
+      else{wrong.push({question:c.q,answer:c.a,userAnswer:v});fb.className='feedback wrong';fb.textContent='❌ 정답: '+c.a;inp.disabled=true;}
+      document.getElementById('gsb').textContent='다음 ➡️';document.getElementById('gsb').onclick=()=>{idx++;renderGQ(t,title);};};
+    inp.addEventListener('keypress',e=>{if(e.key==='Enter')sub();});
+    document.getElementById('gsb').addEventListener('click',sub);inp.focus();
+  }
+}
+function showGramRes(t,title){
+  const p=Math.round(score/total*100);
+  let whtml='';
+  if(wrong.length>0)whtml=`<div class="wrong-words"><h3>❌ 틀린 문제 (${wrong.length}개)</h3>${wrong.map((w,i)=>`<div class="wrong-word-item"><strong>문제 ${i+1}:</strong> <span style="color:#e63946">${w.question}</span><br>내 답: <span style="color:#f44336">${w.userAnswer}</span> / 정답: <span style="color:#4caf50">${w.answer}</span></div>`).join('')}</div>`;
+  document.getElementById('study-area').innerHTML=`<div style="text-align:center;padding:50px 20px">
+  <h2 style="font-size:2.5em;color:#e63946;margin-bottom:28px">🎉 완료!</h2>
+  <div style="font-size:3em;margin:28px 0">${score}/${total}</div>
+  <div class="result-message ${p>=70?'success':'error'}">${p>=90?'🌟 완벽!':p>=70?'👍 잘했어요!':'💪 다시 도전!'}</div>${whtml}
+  <div class="controls"><button class="btn btn-primary" onclick="renderGram('${t}')">🔄 다시</button></div></div>`;
+}
+
+// ============================================================
+// 공통 결과
+// ============================================================
+function showRes(){
+  const p=Math.round(score/total*100);
+  let whtml='';
+  if(wrong.length>0)whtml=`<div class="wrong-words"><h3>❌ 틀린 문제 (${wrong.length}개)</h3>${wrong.map((w,i)=>`<div class="wrong-word-item"><strong>문제 ${i+1}:</strong> <span style="color:#e63946">${w.question}</span><br>내 답: <span style="color:#f44336">${w.userAnswer}</span> / 정답: <span style="color:#4caf50">${w.answer}</span></div>`).join('')}</div>`;
+  const replayMap={ko_to_de:"words=[];idx=0;score=0;renderKoDe()",de_to_ko:"words=[];idx=0;score=0;renderDeKo()",ko_to_de_write:"words=[];idx=0;score=0;renderKoDeWrite()",de_to_ko_write:"words=[];idx=0;score=0;renderDeKoWrite()",plural_quiz:"words=[];idx=0;score=0;renderPlural()",article_quiz:"words=[];idx=0;score=0;renderArt()"};
+  document.getElementById('study-area').innerHTML=`<div style="text-align:center;padding:50px 20px">
+  <h2 style="font-size:2.5em;color:#e63946;margin-bottom:28px">🎉 완료!</h2>
+  <div style="font-size:3em;margin:28px 0">${score}/${total}</div>
+  <div class="result-message ${p>=70?'success':'error'}">${p>=90?'🌟 완벽!':p>=70?'👍 잘했어요!':'💪 다시 도전!'}</div>${whtml}
+  <div class="controls"><button class="btn btn-primary" onclick="${replayMap[mode]||''}">🔄 다시</button></div></div>`;
+}
+
+// ==============================================================
+// 형용사 어미 변화
+// ============================================================
+function startAdjEndings(){adjList=shuffle([...adjEndingsData]);adjIdx=0;adjScore=0;adjWrong=[];renderAdjQ();}
+function renderAdjQ(){
+  if(adjIdx>=adjList.length){showAdjRes();return;}
+  const c=adjList[adjIdx];
+  document.getElementById('study-area').innerHTML=`<div class="exercise-container">
+  <h2 style="text-align:center;color:#e63946;margin-bottom:14px">🎨 형용사 어미 변화</h2>
+  <div class="progress-bar"><div class="progress-fill" style="width:${adjIdx/adjList.length*100}%"></div></div>
+  <div class="score">문제 ${adjIdx+1}/${adjList.length} | 점수: ${adjScore}/${adjList.length}</div>
+  <div style="text-align:center;margin:16px 0">
+    <div style="font-size:1.9em;color:#e63946;font-weight:bold">${c.adjective}-</div>
+    <div style="font-size:0.95em;color:#888;margin-top:5px">${c.declType} | ${c.noun}</div>
+  </div>
+  <div style="text-align:center;margin-bottom:12px;color:#888;font-size:0.9em">어미만 입력하세요 (예: "er", "en", "e", "em", "es")</div>
+  <table style="width:100%;max-width:500px;margin:0 auto;border-collapse:collapse">
+  <thead><tr><th style="background:#1a1a2e;color:white;padding:10px;text-align:left">격</th><th style="background:#1a1a2e;color:white;padding:10px">어미</th><th style="background:#1a1a2e;color:white;padding:10px;text-align:left">형태</th></tr></thead>
+  <tbody>
+  <tr><td style="padding:8px;border:1px solid #ddd;font-weight:600">Nom.</td><td style="padding:8px;border:1px solid #ddd"><input type="text" id="an" style="width:100%;padding:6px;border:1px solid #ddd;border-radius:4px;text-align:center"></td><td style="padding:8px;border:1px solid #ddd;color:#888;font-size:0.9em" id="pn">${c.adjective}<b style="color:#e63946">___</b> ${c.noun.split('(')[0].trim()}</td></tr>
+  <tr><td style="padding:8px;border:1px solid #ddd;font-weight:600">Akk.</td><td style="padding:8px;border:1px solid #ddd"><input type="text" id="ak" style="width:100%;padding:6px;border:1px solid #ddd;border-radius:4px;text-align:center"></td><td style="padding:8px;border:1px solid #ddd;color:#888;font-size:0.9em" id="pk">${c.adjective}<b style="color:#e63946">___</b> ${c.noun.split('(')[0].trim()}</td></tr>
+  <tr><td style="padding:8px;border:1px solid #ddd;font-weight:600">Dat.</td><td style="padding:8px;border:1px solid #ddd"><input type="text" id="ad" style="width:100%;padding:6px;border:1px solid #ddd;border-radius:4px;text-align:center"></td><td style="padding:8px;border:1px solid #ddd;color:#888;font-size:0.9em" id="pd">${c.adjective}<b style="color:#e63946">___</b> ${c.noun.split('(')[0].trim()}</td></tr>
+  <tr><td style="padding:8px;border:1px solid #ddd;font-weight:600">Gen.</td><td style="padding:8px;border:1px solid #ddd"><input type="text" id="ag" style="width:100%;padding:6px;border:1px solid #ddd;border-radius:4px;text-align:center"></td><td style="padding:8px;border:1px solid #ddd;color:#888;font-size:0.9em" id="pg">${c.adjective}<b style="color:#e63946">___</b> ${c.noun.split('(')[0].trim()}</td></tr>
+  </tbody></table>
+  <div class="controls"><button class="btn btn-primary" id="asb">제출</button><button class="btn btn-secondary" onclick="adjIdx++;renderAdjQ()">건너뛰기</button></div></div>`;
+  ['an','ak','ad','ag'].forEach((id,i)=>{
+    const el=document.getElementById(id);
+    const pids=['pn','pk','pd','pg'];const keys=['nom','acc','dat','gen'];
+    el.addEventListener('input',()=>{document.getElementById(pids[i]).innerHTML=c.adjective+'<b style="color:#e63946">'+el.value+'</b> '+c.noun.split('(')[0].trim();});
+    el.addEventListener('keypress',ev=>{if(ev.key==='Enter'){const nids=['ak','ad','ag'];if(i<3)document.getElementById(nids[i]).focus();else document.getElementById('asb').click();}});
+  });
+  document.getElementById('asb').addEventListener('click',()=>{
+    const ids={nom:'an',acc:'ak',dat:'ad',gen:'ag'};let cnt=0;
+    for(let k in ids){const el=document.getElementById(ids[k]);const v=el.value.trim().toLowerCase();
+      if(v===c.forms[k]||v===c.adjective+c.forms[k]){el.style.border='2px solid #4caf50';el.style.background='#e8f5e9';cnt++;}
+      else{el.style.border='2px solid #f44336';el.style.background='#ffebee';el.value=v+' → '+c.forms[k];}
+      el.disabled=true;}
+    if(cnt===4)adjScore++;else adjWrong.push({q:`${c.adjective}- (${c.declType}, ${c.noun})`,forms:c.forms});
+    document.getElementById('asb').textContent='다음 ➡️';document.getElementById('asb').onclick=()=>{adjIdx++;renderAdjQ();};
+  });
+  document.getElementById('an').focus();
+}
+function showAdjRes(){
+  const p=Math.round(adjScore/adjList.length*100);
+  let whtml='';if(adjWrong.length>0)whtml=`<div class="wrong-words"><h3>❌ 틀린 문제 (${adjWrong.length}개)</h3>${adjWrong.map((w,i)=>`<div class="wrong-word-item"><strong>문제 ${i+1}:</strong> ${w.q}<br><span style="color:#4caf50">Nom:${w.forms.nom} / Akk:${w.forms.acc} / Dat:${w.forms.dat} / Gen:${w.forms.gen}</span></div>`).join('')}</div>`;
+  document.getElementById('study-area').innerHTML=`<div style="text-align:center;padding:50px 20px">
+  <h2 style="font-size:2.5em;color:#e63946;margin-bottom:28px">🎉 완료!</h2>
+  <div style="font-size:3em;margin:28px 0">${adjScore}/${adjList.length}</div>
+  <div class="result-message ${p>=70?'success':'error'}">${p>=90?'🌟 완벽!':p>=70?'👍 잘했어요!':'💪 다시 도전!'}</div>${whtml}
+  <div class="controls"><button class="btn btn-primary" onclick="startAdjEndings()">🔄 다시</button></div></div>`;
+}
+
+// ============================================================
+// 숫자 읽기
+// ============================================================
+function startNumbers(m){numMode=m;numIdx=0;numScore=0;numWrong=[];numList=m==='basic'?generateNumberQuestions(20):shuffle([...timeUnitQuestions]);total=numList.length;renderNumQ();}
+function renderNumQ(){
+  if(numIdx>=numList.length){showNumRes();return;}
+  const q=numList[numIdx];const isB=numMode==='basic';
+  document.getElementById('study-area').innerHTML=`<div class="exercise-container">
+  <h2 style="text-align:center;color:#e63946;margin-bottom:14px">${isB?'🔢 숫자 읽기':'🕐 시간·단위 읽기'}</h2>
+  <div class="progress-bar"><div class="progress-fill" style="width:${numIdx/total*100}%"></div></div>
+  <div class="score">문제 ${numIdx+1}/${total} | 점수: ${numScore}/${total}</div>
+  ${isB?`<div class="number-display">${q.number.toLocaleString()}</div><div style="text-align:center;color:#888;margin-bottom:10px">독일어로 읽으면?</div>`:`<div class="quiz-word" style="font-size:2em;margin:20px 0">${q.q}</div>${q.hint?`<div style="text-align:center"><span class="hint-chip">💡 ${q.hint}</span></div>`:''}`}
+  <input type="text" class="writing-input" id="ni" placeholder="독일어 입력...">
+  <div class="controls"><button class="btn btn-primary" id="nsb">제출</button></div></div>`;
+  const inp=document.getElementById('ni');
+  const sub=()=>{const v=inp.value.trim().toLowerCase();if(!v){alert('입력하세요!');return;}
+    const cor=q.answer.toLowerCase();const ok=v===cor||v.replace(/\s/g,'')===cor.replace(/\s/g,'');
+    if(ok){numScore++;inp.style.borderColor='#4caf50';inp.style.background='#e8f5e9';const f=document.createElement('div');f.style.cssText='text-align:center;color:#4caf50;font-weight:bold;margin-top:10px';f.textContent='✅ 정답!';inp.parentNode.appendChild(f);}
+    else{numWrong.push({question:isB?String(q.number):q.q,answer:q.answer,userAnswer:v});inp.style.borderColor='#f44336';inp.style.background='#ffebee';const f=document.createElement('div');f.className='feedback wrong';f.textContent='❌ 정답: '+q.answer;inp.parentNode.appendChild(f);}
+    document.getElementById('nsb').textContent='다음 ➡️';document.getElementById('nsb').onclick=()=>{numIdx++;renderNumQ();};};
+  inp.addEventListener('keypress',e=>{if(e.key==='Enter')sub();});
+  document.getElementById('nsb').addEventListener('click',sub);inp.focus();
+}
+function showNumRes(){
+  const p=Math.round(numScore/total*100);
+  let whtml='';if(numWrong.length>0)whtml=`<div class="wrong-words"><h3>❌ 틀린 문제 (${numWrong.length}개)</h3>${numWrong.map((w,i)=>`<div class="wrong-word-item"><strong>문제 ${i+1}:</strong> <span style="color:#e63946">${w.question}</span><br>내 답: <span style="color:#f44336">${w.userAnswer}</span><br>정답: <span style="color:#4caf50">${w.answer}</span></div>`).join('')}</div>`;
+  document.getElementById('study-area').innerHTML=`<div style="text-align:center;padding:50px 20px">
+  <h2 style="font-size:2.5em;color:#e63946;margin-bottom:28px">🎉 완료!</h2>
+  <div style="font-size:3em;margin:28px 0">${numScore}/${total}</div>
+  <div class="result-message ${p>=70?'success':'error'}">${p>=90?'🌟 완벽!':p>=70?'👍 잘했어요!':'💪 다시 도전!'}</div>${whtml}
+  <div class="controls">
+  <button class="btn btn-primary" onclick="startNumbers('${numMode}')">🔄 다시</button>
+  <button class="btn btn-secondary" onclick="startNumbers('${numMode==='basic'?'time':'basic'}')">${numMode==='basic'?'시간·단위 연습':'숫자 읽기 연습'}</button>
+  </div></div>`;
+}
+
+renderFlash();
+</script>
+</body>
+</html>
