@@ -600,17 +600,16 @@ function renderNumQ(){
     :`<div class="quiz-word" style="font-size:1.8em;margin:20px 0;text-align:center">${q.q}</div>${q.hint?`<div style="text-align:center"><span class="hint-chip">💡 ${q.hint}</span></div>`:''}`
   }
   <input type="text" class="writing-input" id="ni" placeholder="독일어 입력...">
-  <div class="controls"><button class="btn btn-primary" id="nsb">제출</button></div></div>`;
+  <div class="controls" id="numCtrl"><button class="btn btn-primary" id="nsb">제출</button></div></div>`;
   const inp=document.getElementById('ni');
   let submitted=false;
-  const sub=()=>{
+  function doSubmit(){
     if(submitted)return;
     const v=inp.value.trim().toLowerCase();
     if(!v){alert('입력하세요!');return;}
     submitted=true;
     inp.disabled=true;
     const cor=q.answer.toLowerCase();
-    // 슬래시 구분 복수 정답 허용, 공백 무시 비교
     const answers=cor.split('/').map(a=>a.trim().replace(/\s+/g,''));
     const vn=v.replace(/\s+/g,'');
     const ok=answers.some(a=>vn===a);
@@ -621,18 +620,18 @@ function renderNumQ(){
       f.style.cssText='text-align:center;color:#4caf50;font-weight:bold;font-size:1.1em;margin-top:12px';
       f.textContent='✅ 정답!';inp.parentNode.appendChild(f);
     }else{
-      numWrong.push({question:isB?String(q.number):q.q,answer:q.answer,userAnswer:v});
+      numWrong.push({question:isB?(q.display||String(q.number)):q.q,answer:q.answer,userAnswer:v});
       inp.style.borderColor='#f44336';inp.style.background='#ffebee';
       const f=document.createElement('div');f.className='feedback wrong';
       f.textContent='❌ 정답: '+q.answer;inp.parentNode.appendChild(f);
     }
-    const btn=document.getElementById('nsb');
-    btn.textContent='다음 ➡️';
-    btn.replaceWith(btn.cloneNode(true)); // 기존 리스너 완전 제거
-    document.getElementById('nsb').addEventListener('click',()=>{numIdx++;renderNumQ();});
-  };
-  inp.addEventListener('keypress',e=>{if(e.key==='Enter')sub();});
-  document.getElementById('nsb').addEventListener('click',sub);
+    // 버튼 완전 교체: 다음 버튼으로 스왑
+    const ctrl=document.getElementById('numCtrl');
+    ctrl.innerHTML='<button class="btn btn-primary" id="nnb">다음 ➡️</button>';
+    document.getElementById('nnb').addEventListener('click',()=>{numIdx++;renderNumQ();});
+  }
+  inp.addEventListener('keypress',e=>{if(e.key==='Enter')doSubmit();});
+  document.getElementById('nsb').addEventListener('click',doSubmit);
   inp.focus();
 }
 function showNumRes(){
