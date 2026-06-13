@@ -577,7 +577,17 @@ function showAdjRes(){
 // ============================================================
 // 숫자 읽기
 // ============================================================
-function startNumbers(m){numMode=m;numIdx=0;numScore=0;numWrong=[];numList=m==='basic'?generateNumberQuestions(20):shuffle([...timeUnitQuestions]);total=numList.length;renderNumQ();}
+function startNumbers(m){
+  numMode=m;numIdx=0;numScore=0;numWrong=[];
+  // 숫자: 매번 20개 랜덤 / 시간·단위: 61개에서 15~20개 랜덤 추출
+  if(m==='basic'){
+    numList=generateNumberQuestions(20);
+  }else{
+    const count=15+Math.floor(Math.random()*6); // 15~20개
+    numList=shuffle([...timeUnitQuestions]).slice(0,count);
+  }
+  total=numList.length;renderNumQ();
+}
 function renderNumQ(){
   if(numIdx>=numList.length){showNumRes();return;}
   const q=numList[numIdx];const isB=numMode==='basic';
@@ -585,17 +595,45 @@ function renderNumQ(){
   <h2 style="text-align:center;color:#e63946;margin-bottom:14px">${isB?'🔢 숫자 읽기':'🕐 시간·단위 읽기'}</h2>
   <div class="progress-bar"><div class="progress-fill" style="width:${numIdx/total*100}%"></div></div>
   <div class="score">문제 ${numIdx+1}/${total} | 점수: ${numScore}/${total}</div>
-  ${isB?`<div class="number-display">${q.display||q.number.toLocaleString()}</div><div style="text-align:center;color:#888;margin-bottom:10px">독일어로 읽으면?</div>`:`<div class="quiz-word" style="font-size:2em;margin:20px 0">${q.q}</div>${q.hint?`<div style="text-align:center"><span class="hint-chip">💡 ${q.hint}</span></div>`:''}`}
+  ${isB
+    ?`<div class="number-display">${q.display||q.number.toLocaleString()}</div><div style="text-align:center;color:#888;margin-bottom:10px">독일어로 읽으면?</div>`
+    :`<div class="quiz-word" style="font-size:1.8em;margin:20px 0;text-align:center">${q.q}</div>${q.hint?`<div style="text-align:center"><span class="hint-chip">💡 ${q.hint}</span></div>`:''}`
+  }
   <input type="text" class="writing-input" id="ni" placeholder="독일어 입력...">
   <div class="controls"><button class="btn btn-primary" id="nsb">제출</button></div></div>`;
   const inp=document.getElementById('ni');
-  const sub=()=>{const v=inp.value.trim().toLowerCase();if(!v){alert('입력하세요!');return;}
-    const cor=q.answer.toLowerCase();const ok=v===cor||v.replace(/\s/g,'')===cor.replace(/\s/g,'');
-    if(ok){numScore++;inp.style.borderColor='#4caf50';inp.style.background='#e8f5e9';const f=document.createElement('div');f.style.cssText='text-align:center;color:#4caf50;font-weight:bold;margin-top:10px';f.textContent='✅ 정답!';inp.parentNode.appendChild(f);}
-    else{numWrong.push({question:isB?String(q.number):q.q,answer:q.answer,userAnswer:v});inp.style.borderColor='#f44336';inp.style.background='#ffebee';const f=document.createElement('div');f.className='feedback wrong';f.textContent='❌ 정답: '+q.answer;inp.parentNode.appendChild(f);}
-    document.getElementById('nsb').textContent='다음 ➡️';document.getElementById('nsb').onclick=()=>{numIdx++;renderNumQ();};};
+  let submitted=false;
+  const sub=()=>{
+    if(submitted)return;
+    const v=inp.value.trim().toLowerCase();
+    if(!v){alert('입력하세요!');return;}
+    submitted=true;
+    inp.disabled=true;
+    const cor=q.answer.toLowerCase();
+    // 슬래시 구분 복수 정답 허용, 공백 무시 비교
+    const answers=cor.split('/').map(a=>a.trim().replace(/\s+/g,''));
+    const vn=v.replace(/\s+/g,'');
+    const ok=answers.some(a=>vn===a);
+    if(ok){
+      numScore++;
+      inp.style.borderColor='#4caf50';inp.style.background='#e8f5e9';
+      const f=document.createElement('div');
+      f.style.cssText='text-align:center;color:#4caf50;font-weight:bold;font-size:1.1em;margin-top:12px';
+      f.textContent='✅ 정답!';inp.parentNode.appendChild(f);
+    }else{
+      numWrong.push({question:isB?String(q.number):q.q,answer:q.answer,userAnswer:v});
+      inp.style.borderColor='#f44336';inp.style.background='#ffebee';
+      const f=document.createElement('div');f.className='feedback wrong';
+      f.textContent='❌ 정답: '+q.answer;inp.parentNode.appendChild(f);
+    }
+    const btn=document.getElementById('nsb');
+    btn.textContent='다음 ➡️';
+    btn.replaceWith(btn.cloneNode(true)); // 기존 리스너 완전 제거
+    document.getElementById('nsb').addEventListener('click',()=>{numIdx++;renderNumQ();});
+  };
   inp.addEventListener('keypress',e=>{if(e.key==='Enter')sub();});
-  document.getElementById('nsb').addEventListener('click',sub);inp.focus();
+  document.getElementById('nsb').addEventListener('click',sub);
+  inp.focus();
 }
 function showNumRes(){
   const p=Math.round(numScore/total*100);
