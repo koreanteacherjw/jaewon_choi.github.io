@@ -125,22 +125,7 @@ const verbsData=[{"verb":"abwaschen","meaning":"설거지하다"},{"verb":"ände
 // ============================================================
 const numberWords={0:"null",1:"eins",2:"zwei",3:"drei",4:"vier",5:"fünf",6:"sechs",7:"sieben",8:"acht",9:"neun",10:"zehn",11:"elf",12:"zwölf",13:"dreizehn",14:"vierzehn",15:"fünfzehn",16:"sechzehn",17:"siebzehn",18:"achtzehn",19:"neunzehn",20:"zwanzig",30:"dreißig",40:"vierzig",50:"fünfzig",60:"sechzig",70:"siebzig",80:"achtzig",90:"neunzig",100:"hundert",1000:"tausend"};
 
-const timeUnitQuestions=[
-  {q:"오전 8시 정각",a:"acht Uhr",hint:"Uhr = 시"},
-  {q:"오후 3시 30분",a:"fünfzehn Uhr dreißig",hint:"24시간제 표현"},
-  {q:"12시 45분",a:"zwölf Uhr fünfundvierzig"},
-  {q:"7시 15분 (구어체)",a:"Viertel nach sieben",hint:"Viertel nach = 15분 후"},
-  {q:"8시 30분 (구어체)",a:"halb neun",hint:"halb + 다음 시간"},
-  {q:"9시 45분 (구어체)",a:"Viertel vor zehn",hint:"Viertel vor = 15분 전"},
-  {q:"100 km",a:"hundert Kilometer"},
-  {q:"2024년",a:"zweitausendvierundzwanzig"},
-  {q:"1990년",a:"neunzehnhundertneunzig"},
-  {q:"3.50유로",a:"drei Euro fünfzig"},
-  {q:"0.5 kg",a:"ein halbes Kilogramm"},
-  {q:"1층 (Erdgeschoss 제외, 위층)",a:"das erste Stockwerk"},
-  {q:"3월 5일",a:"der fünfte März"},
-  {q:"21세기",a:"das einundzwanzigste Jahrhundert"},
-];
+const timeUnitQuestions=[{"q":"01.03.2000 를 독일어로","a":"der erste März zweitausend","hint":"서수 + 월 이름 + 연도","cat":"날짜"},{"q":"05.07.1999 를 독일어로","a":"der fünfte Juli neunzehnhundertneunundneunzig","cat":"날짜"},{"q":"12.12.2024 를 독일어로","a":"der zwölfte Dezember zweitausendvierundzwanzig","cat":"날짜"},{"q":"20.02.2000 를 독일어로","a":"der zwanzigste Februar zweitausend","cat":"날짜"},{"q":"31.10.1989 를 독일어로","a":"der einunddreißigste Oktober neunzehnhundertneunundachtzig","cat":"날짜"},{"q":"15.08.1945 를 독일어로","a":"der fünfzehnte August neunzehnhundertfünfundvierzig","cat":"날짜"},{"q":"오늘 날짜 묻는 표현","a":"Welches Datum ist heute? / Der Wievielte ist heute?","hint":"두 가지 모두 가능","cat":"날짜"},{"q":"'3월 5일입니다' 를 독일어로","a":"Heute ist der fünfte März.","cat":"날짜"},{"q":"'생일이 언제예요?' 를 독일어로","a":"Wann haben Sie Geburtstag?","cat":"날짜"},{"q":"7:15 (구어체)","a":"Viertel nach sieben","hint":"Viertel nach = 15분 후","cat":"시간_구어"},{"q":"8:30 (구어체)","a":"halb neun","hint":"halb + 다음 시간 (9시 30분 전)","cat":"시간_구어"},{"q":"9:45 (구어체)","a":"Viertel vor zehn","hint":"Viertel vor = 15분 전","cat":"시간_구어"},{"q":"3:15 (구어체)","a":"Viertel nach drei","cat":"시간_구어"},{"q":"5:30 (구어체)","a":"halb sechs","cat":"시간_구어"},{"q":"11:45 (구어체)","a":"Viertel vor zwölf","cat":"시간_구어"},{"q":"6:20 (구어체)","a":"zwanzig nach sechs","hint":"분 + nach + 시","cat":"시간_구어"},{"q":"4:40 (구어체)","a":"zwanzig vor fünf","hint":"분 + vor + 다음 시","cat":"시간_구어"},{"q":"2:10 (구어체)","a":"zehn nach zwei","cat":"시간_구어"},{"q":"1:50 (구어체)","a":"zehn vor zwei","cat":"시간_구어"},{"q":"12:00 (정오, 구어체)","a":"Mittag / zwölf Uhr","cat":"시간_구어"},{"q":"'몇 시예요?' 독일어로","a":"Wie spät ist es? / Wie viel Uhr ist es?","hint":"두 표현 모두 가능","cat":"시간_구어"},{"q":"8:00 (24시간제)","a":"acht Uhr","hint":"숫자 + Uhr","cat":"시간_24"},{"q":"13:30 (24시간제)","a":"dreizehn Uhr dreißig","cat":"시간_24"},{"q":"15:15 (24시간제)","a":"fünfzehn Uhr fünfzehn","cat":"시간_24"},{"q":"20:45 (24시간제)","a":"zwanzig Uhr fünfundvierzig","cat":"시간_24"},{"q":"09:05 (24시간제)","a":"neun Uhr fünf","cat":"시간_24"},{"q":"22:00 (24시간제)","a":"zweiundzwanzig Uhr","cat":"시간_24"},{"q":"00:30 (24시간제)","a":"null Uhr dreißig","cat":"시간_24"},{"q":"14:20 (24시간제)","a":"vierzehn Uhr zwanzig","cat":"시간_24"},{"q":"'수업은 9시에 시작해요' 독일어로","a":"Der Unterricht beginnt um neun Uhr.","hint":"um + 시간 + Uhr","cat":"시간_24"},{"q":"'기차는 17:42에 출발해요' 독일어로","a":"Der Zug fährt um siebzehn Uhr zweiundvierzig ab.","cat":"시간_24"},{"q":"1월 독일어로","a":"Januar","hint":"der Januar / im Januar","cat":"월"},{"q":"2월 독일어로","a":"Februar","cat":"월"},{"q":"3월 독일어로","a":"März","cat":"월"},{"q":"4월 독일어로","a":"April","cat":"월"},{"q":"5월 독일어로","a":"Mai","cat":"월"},{"q":"6월 독일어로","a":"Juni","cat":"월"},{"q":"7월 독일어로","a":"Juli","cat":"월"},{"q":"8월 독일어로","a":"August","cat":"월"},{"q":"9월 독일어로","a":"September","cat":"월"},{"q":"10월 독일어로","a":"Oktober","cat":"월"},{"q":"11월 독일어로","a":"November","cat":"월"},{"q":"12월 독일어로","a":"Dezember","cat":"월"},{"q":"'5월에' 독일어로","a":"im Mai","hint":"월 앞에는 im","cat":"월"},{"q":"'12월에' 독일어로","a":"im Dezember","cat":"월"},{"q":"'3월부터 5월까지' 독일어로","a":"von März bis Mai","cat":"월"},{"q":"1번째 서수 어간","a":"erst-","hint":"불규칙: erst-","cat":"서수"},{"q":"2번째 서수 어간","a":"zweit-","cat":"서수"},{"q":"3번째 서수 어간","a":"dritt-","hint":"불규칙: dritt-","cat":"서수"},{"q":"4번째 서수 어간","a":"viert-","cat":"서수"},{"q":"7번째 서수 어간","a":"siebt-","hint":"불규칙: siebt- (sieben→siebt)","cat":"서수"},{"q":"8번째 서수 어간","a":"acht-","hint":"불규칙: acht- (achte 아닌 achte)","cat":"서수"},{"q":"10번째 서수 어간","a":"zehnt-","cat":"서수"},{"q":"19번째 서수 어간","a":"neunzehnt-","hint":"2~19: 기본형 + -t-","cat":"서수"},{"q":"20번째 서수 어간","a":"zwanzigst-","hint":"20이상: 기본형 + -st-","cat":"서수"},{"q":"21번째 서수 어간","a":"einundzwanzigst-","cat":"서수"},{"q":"100번째 서수 어간","a":"hundertst-","cat":"서수"},{"q":"서수 어미 규칙 2~19","a":"-te / -ten / -tem / -ter / -tes","hint":"형용사 약·혼합·강변화 적용","cat":"서수"},{"q":"서수 어미 규칙 20 이상","a":"-ste / -sten / -stem / -ster / -stes","cat":"서수"},{"q":"'오늘은 3월 5일입니다' (서수)","a":"Heute ist der fünfte März.","hint":"남성 1격 → -e 어미","cat":"서수"},{"q":"'그는 21번째입니다' (서수)","a":"Er ist der einundzwanzigste.","cat":"서수"},{"q":"'두 번째 문' 독일어로 (여성 1격)","a":"die zweite Tür","hint":"여성 1격·4격 → -e","cat":"서수"}];
 
 // ============================================================
 // 📌 문법 문제
@@ -191,18 +176,65 @@ function numberToGerman(n){
   if(n<100){const t=Math.floor(n/10)*10,o=n%10;if(o===0)return numberWords[t];return numberWords[o]+"und"+numberWords[t];}
   if(n<1000){const h=Math.floor(n/100),r=n%100,hs=h===1?"ein":numberWords[h];return hs+"hundert"+(r>0?numberToGerman(r).replace(/^eins$/,"ein"):"");}
   if(n<1000000){const th=Math.floor(n/1000),r=n%1000,ths=th===1?"ein":numberToGerman(th).replace(/^eins$/,"ein");return ths+"tausend"+(r>0?numberToGerman(r).replace(/^eins$/,"ein"):"");}
-  return String(n);
+  if(n<1000000000){
+    const m=Math.floor(n/1000000),r=n%1000000;
+    const ms=m===1?"eine Million":numberToGerman(m).replace(/^eins$/,"ein")+" Millionen";
+    return ms+(r>0?" "+numberToGerman(r):"");
+  }
+  if(n<1000000000000){
+    const md=Math.floor(n/1000000000),r=n%1000000000;
+    const ms=md===1?"eine Milliarde":numberToGerman(md).replace(/^eins$/,"ein")+" Milliarden";
+    return ms+(r>0?" "+numberToGerman(r):"");
+  }
+  // Billion (10^12)
+  const bl=Math.floor(n/1000000000000),r=n%1000000000000;
+  const bs=bl===1?"eine Billion":numberToGerman(bl).replace(/^eins$/,"ein")+" Billionen";
+  return bs+(r>0?" "+numberToGerman(r):"");
 }
+
+// Million/Milliarde/Billion 전용 문제 생성
+function generateLargeNumberQuestion(){
+  const type=Math.floor(Math.random()*3); // 0=Million, 1=Milliarde, 2=Billion
+  if(type===0){
+    // 1~9 Million (단순 배수, 소수점 제외)
+    const m=Math.floor(Math.random()*9)+1;
+    const n=m*1000000;
+    return {number:n, answer:numberToGerman(n), large:true,
+      display: m===1?"1.000.000":m+".000.000"};
+  }else if(type===1){
+    const m=Math.floor(Math.random()*9)+1;
+    const n=m*1000000000;
+    return {number:n, answer:numberToGerman(n), large:true,
+      display: m===1?"1.000.000.000":m+".000.000.000"};
+  }else{
+    const m=Math.floor(Math.random()*9)+1;
+    const n=m*1000000000000;
+    return {number:n, answer:numberToGerman(n), large:true,
+      display: m===1?"1.000.000.000.000":m+".000.000.000.000"};
+  }
+}
+
 function generateNumberQuestions(count=20){
   const qs=[];
+  // 일반 문제: count-2개 (18개)
   const ranges=[{min:1,max:19,w:3},{min:20,max:99,w:4},{min:100,max:999,w:3},{min:1000,max:9999,w:2},{min:10000,max:99999,w:1}];
-  for(let i=0;i<count;i++){
+  for(let i=0;i<count-2;i++){
     const pool=[];ranges.forEach(r=>{for(let w=0;w<r.w;w++)pool.push(r);});
     const r=pool[Math.floor(Math.random()*pool.length)];
     const n=Math.floor(Math.random()*(r.max-r.min+1))+r.min;
     qs.push({number:n,answer:numberToGerman(n)});
   }
-  return qs;
+  // 대형 숫자: 1~2개 랜덤 삽입 (총 count개 맞추기 위해 나머지 일반 문제로 채움)
+  const largeCount=Math.random()<0.5?1:2; // 50% 확률로 1개 또는 2개
+  for(let i=0;i<largeCount;i++) qs.push(generateLargeNumberQuestion());
+  // 부족분 일반 문제로 보충 (총 count개)
+  while(qs.length<count){
+    const pool=[];ranges.forEach(r=>{for(let w=0;w<r.w;w++)pool.push(r);});
+    const r=pool[Math.floor(Math.random()*pool.length)];
+    const n=Math.floor(Math.random()*(r.max-r.min+1))+r.min;
+    qs.push({number:n,answer:numberToGerman(n)});
+  }
+  return shuffle(qs); // 대형 숫자가 끝에 몰리지 않도록 섞기
 }
 
 // ============================================================
@@ -553,7 +585,7 @@ function renderNumQ(){
   <h2 style="text-align:center;color:#e63946;margin-bottom:14px">${isB?'🔢 숫자 읽기':'🕐 시간·단위 읽기'}</h2>
   <div class="progress-bar"><div class="progress-fill" style="width:${numIdx/total*100}%"></div></div>
   <div class="score">문제 ${numIdx+1}/${total} | 점수: ${numScore}/${total}</div>
-  ${isB?`<div class="number-display">${q.number.toLocaleString()}</div><div style="text-align:center;color:#888;margin-bottom:10px">독일어로 읽으면?</div>`:`<div class="quiz-word" style="font-size:2em;margin:20px 0">${q.q}</div>${q.hint?`<div style="text-align:center"><span class="hint-chip">💡 ${q.hint}</span></div>`:''}`}
+  ${isB?`<div class="number-display">${q.display||q.number.toLocaleString()}</div><div style="text-align:center;color:#888;margin-bottom:10px">독일어로 읽으면?</div>`:`<div class="quiz-word" style="font-size:2em;margin:20px 0">${q.q}</div>${q.hint?`<div style="text-align:center"><span class="hint-chip">💡 ${q.hint}</span></div>`:''}`}
   <input type="text" class="writing-input" id="ni" placeholder="독일어 입력...">
   <div class="controls"><button class="btn btn-primary" id="nsb">제출</button></div></div>`;
   const inp=document.getElementById('ni');
